@@ -20,7 +20,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f5f7ff; /* Light blue background */
+  background-color: #f5f7ff;
+  /* Light blue background */
 }
 
 main {
@@ -32,11 +33,10 @@ main {
 }
 
 .bg-gradient-light {
-  background: linear-gradient(
-    to right,
-    #e0e7ff,
-    #ede9fe
-  ); /* Light blue to light purple gradient */
+  background: linear-gradient(to right,
+      #e0e7ff,
+      #ede9fe);
+  /* Light blue to light purple gradient */
 }
 
 .text-gradient {
@@ -69,7 +69,9 @@ main {
   border-color: transparent;
 }
 
+
 .btn-burgundy {
+  /* burgundy XD */
   background-color: #9f1239;
   color: white;
   transition: all 0.3s ease;
@@ -93,10 +95,10 @@ main {
   transition: all 0.3s ease;
 }
 
-.navbar-scrolled {
+/* .navbar-scrolled {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.9);
-}
+} */
 
 .navbar-top {
   display: flex;
@@ -112,10 +114,14 @@ main {
 }
 
 .logo-img {
-  height: auto; /* Remove fixed height */
-  max-height: 50px; /* Increase max height */
-  max-width: 180px; /* Increase max width */
-  object-fit: contain; /* Maintain aspect ratio */
+  height: auto;
+  /* Remove fixed height */
+  max-height: 50px;
+  /* Increase max height */
+  max-width: 180px;
+  /* Increase max width */
+  object-fit: contain;
+  /* Maintain aspect ratio */
 }
 
 .navbar-brand {
@@ -123,7 +129,8 @@ main {
   align-items: center;
   padding: 0;
   margin-right: 1rem;
-  overflow: visible; /* Allow logo to overflow if needed */
+  overflow: visible;
+  /* Allow logo to overflow if needed */
 }
 
 .nav-buttons {
@@ -180,11 +187,9 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0.7)
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.7));
 }
 
 .hero-content {
@@ -198,6 +203,7 @@ main {
   max-width: 600px;
   margin: 2rem auto 0;
 }
+
 .carousel-item {
   height: 500px;
 }
@@ -219,18 +225,22 @@ main {
 /* Category scrolling */
 .categories-container {
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
+
 @media (max-width: 768px) {
   .categories-container {
     justify-content: flex-start;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
 }
 
 .categories-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 /* Interest tags */
@@ -438,7 +448,8 @@ main {
 /* Footer styles */
 footer {
   width: 100%;
-  background-color: #111827; /* bg-gray-900 */
+  background-color: #111827;
+  /* bg-gray-900 */
   color: white;
 }
 
