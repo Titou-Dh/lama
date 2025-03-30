@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Login Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./assets/css/auth.css">
+    <link rel="stylesheet" href="../styles/css/auth.css">
 </head>
 
 <body>
     <div class="auth-container">
         <!-- Left Section - Event Image and Text -->
         <div class="left-section">
-            <img src="./assets/images/auth-img.png" alt="Concert event with blue lighting and crowd" class="bg-image">
+            <img src="../assets/images/auth-img.png" alt="Concert event with blue lighting and crowd" class="bg-image">
             <div class="content">
                 <h1 class="title">Start Your <br> Journey <br />with Us</h1>
                 <div class="footer">
-                    <img class="logo" src="./assets/images/logo.png" alt="Logo" />
+                    <img class="logo" src="../assets/images/logo.png" alt="Logo" />
                     <p class="tagline">Lama – Uniting Events, Elevating Experiences!</p>
                 </div>
             </div>
@@ -89,37 +89,7 @@
         </div>
     </div>
 
-    <script>
-        const passwordInput = document.getElementById('password');
-        const passwordToggle = document.getElementById('passwordToggle');
-        const passwordToggleIcon = passwordToggle.querySelector('i');
-
-        passwordToggle.addEventListener('click', function () {
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordToggleIcon.classList.remove('fa-eye');
-                passwordToggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                passwordToggleIcon.classList.remove('fa-eye-slash');
-                passwordToggleIcon.classList.add('fa-eye');
-            }
-        });
-
-        // Form submission
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
-
-            console.log('Form submitted:', { email, password, remember });
-            // Here you would typically send the data to your server
-            alert('Login form submitted!');
-        });
-    </script>
+    <script src="../scripts/auth.js"></script>
 </body>
 
 </html>
