@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Tickets - Lamma</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/view/styles/Checkout.css" />
+    <!-- Configure Tailwind -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              blue: {
+                light: "#4F46E5",
+                DEFAULT: "#3730A3",
+                dark: "#312E81",
+              },
+              purple: {
+                light: "#A78BFA",
+                DEFAULT: "#8B5CF6",
+                dark: "#7C3AED",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header/Navigation -->
+    <header class="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
+      <div class="container mx-auto px-4">
+        <nav class="flex items-center justify-between py-4">
+          <a href="/index.php" class="flex items-center space-x-2">
+            <img
+              src="/view/assets/images/logo.png"
+              alt="Lamma Logo"
+              class="h-8 w-8"
+            />
+          </a>
+          <div class="hidden md:flex items-center space-x-6">
+            <a
+              href="/view/pages/dashboard.php"
+              class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500"
+            >
+              <i class="fas fa-home mr-2"></i>
+              <span>Dashboard</span>
+            </a>
+            <a
+              href="/view/pages/events.php"
+              class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500"
+            >
+              <i class="fas fa-calendar mr-2"></i>
+              <span>Events</span>
+            </a>
+            <a
+              href="/view/pages/messages.php"
+              class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500"
+            >
+              <i class="fas fa-comment mr-2"></i>
+              <span>Messages</span>
+            </a>
+            <a
+              href="/view/pages/profile.php"
+              class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500"
+            >
+              <i class="fas fa-user mr-2"></i>
+              <span>Profile</span>
+            </a>
+            <a
+              href="/view/pages/create-event.php"
+              class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500"
+            >
+              <i class="fas fa-plus-circle mr-2"></i>
+              <span>Create Event</span>
+            </a>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <button
+                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center"
+                id="userMenuButton"
+              >
+                <img
+                  src="/view/assets/images/aziz.jpg"
+                  alt="User"
+                  class="h-8 w-8 rounded-full"
+                />
+              </button>
+              <div
+                class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden"
+                id="userMenu"
+              >
+                <div class="py-1">
+                  <div class="px-4 py-2 text-sm text-gray-700">
+                    <p class="font-medium">Username</p>
+                    <p class="text-xs text-gray-500">user@example.com</p>
+                  </div>
+                  <hr />
+                  <a
+                    href="/view/pages/profile.php"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >Profile</a
+                  >
+                  <a
+                    href="/view/pages/settings.php"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >Settings</a
+                  >
+                  <hr />
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >Log out</a
+                  >
+                </div>
+              </div>
+            </div>
+            <button class="md:hidden" id="mobileMenuButton">
+              <i class="fas fa-bars text-gray-500"></i>
+            </button>
+          </div>
+        </nav>
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden" id="mobileMenu">
+          <div class="px-2 pt-2 pb-3 space-y-1">
+            <a
+              href="/view/pages/dashboard.php"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+            >
+              <i class="fas fa-home mr-2"></i>
+              Dashboard
+            </a>
+            <a
+              href="/view/pages/events.php"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+            >
+              <i class="fas fa-calendar mr-2"></i>
+              Events
+            </a>
+            <a
+              href="/view/pages/messages.php"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+            >
+              <i class="fas fa-comment mr-2"></i>
+              Messages
+            </a>
+            <a
+              href="/view/pages/profile.php"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+            >
+              <i class="fas fa-user mr-2"></i>
+              Profile
+            </a>
+            <a
+              href="/view/pages/create-event.php"
+              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+            >
+              <i class="fas fa-plus-circle mr-2"></i>
+              Create Event
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-10">
+      <h1 class="text-3xl font-bold mb-6">My Tickets</h1>
+
+      <div class="mb-6">
+        <ul class="flex flex-wrap border-b border-gray-200">
+          <li class="mr-2">
+            <a
+              href="#"
+              class="inline-block py-2 px-4 text-sm font-medium text-center border-b-2 border-blue-500 text-blue-600 rounded-t-lg active"
+              aria-current="page"
+              >Upcoming</a
+            >
+          </li>
+          <li class="mr-2">
+            <a
+              href="#"
+              class="inline-block py-2 px-4 text-sm font-medium text-center text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg"
+              >Past</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Ticket 1 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative">
+            <img
+              src="/view/assets/images/abed2.jpg"
+              alt="Tech Conference"
+              class="w-full h-48 object-cover rounded-t-lg"
+            />
+            <div
+              class="absolute top-4 right-4 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded"
+            >
+              General Admission
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="text-xl font-bold mb-2">Tech Conference 2025</h3>
+            <div class="flex items-center text-gray-600 mb-1">
+              <i class="fas fa-calendar-day mr-2 text-blue-500"></i>
+              May 15-17, 2025
+            </div>
+            <div class="flex items-center text-gray-600 mb-1">
+              <i class="fas fa-clock mr-2 text-blue-500"></i>
+              9:00 AM - 6:00 PM
+            </div>
+            <div class="flex items-center text-gray-600 mb-4">
+              <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
+              sousse
+            </div>
+
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-2"
+                >
+                  <i class="fas fa-user text-gray-500"></i>
+                </div>
+                <span class="text-sm">John Doe</span>
+              </div>
+              <span class="text-sm text-gray-500">#12345678</span>
+            </div>
+
+            <div class="flex justify-between">
+              <button
+                class="btn btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#viewTicketModal"
+              >
+                <i class="fas fa-eye mr-2"></i> View
+              </button>
+              <div class="dropdown">
+                <button
+                  class="btn btn-outline-secondary dropdown-toggle"
+                  type="button"
+                  id="ticketActions1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="ticketActions1"
+                >
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-download mr-2"></i> Download</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-print mr-2"></i> Print</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-paper-plane mr-2"></i> Transfer</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="#"
+                      ><i class="fas fa-times mr-2"></i> Cancel Ticket</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticket 2 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative">
+            <img
+              src="/view/assets/images/music.jpg"
+              alt="Music Festival"
+              class="w-full h-48 object-cover rounded-t-lg"
+            />
+            <div
+              class="absolute top-4 right-4 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded"
+            >
+              VIP Access
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="text-xl font-bold mb-2">Music Festival</h3>
+            <div class="flex items-center text-gray-600 mb-1">
+              <i class="fas fa-calendar-day mr-2 text-blue-500"></i>
+              June 10-12, 2025
+            </div>
+            <div class="flex items-center text-gray-600 mb-1">
+              <i class="fas fa-clock mr-2 text-blue-500"></i>
+              12:00 PM - 11:00 PM
+            </div>
+            <div class="flex items-center text-gray-600 mb-4">
+              <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
+              carthageland
+            </div>
+
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-2"
+                >
+                  <i class="fas fa-user text-gray-500"></i>
+                </div>
+                <span class="text-sm">John Doe</span>
+              </div>
+              <span class="text-sm text-gray-500">#23456789</span>
+            </div>
+
+            <div class="flex justify-between">
+              <button
+                class="btn btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#viewTicketModal"
+              >
+                <i class="fas fa-eye mr-2"></i> View
+              </button>
+              <div class="dropdown">
+                <button
+                  class="btn btn-outline-secondary dropdown-toggle"
+                  type="button"
+                  id="ticketActions2"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="ticketActions2"
+                >
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-download mr-2"></i> Download</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-print mr-2"></i> Print</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-paper-plane mr-2"></i> Transfer</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="#"
+                      ><i class="fas fa-times mr-2"></i> Cancel Ticket</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticket 3 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative">
+            <img
+              src="/view/assets/images/photography.jpg"
+              alt="Photography Workshop"
+              class="w-full h-48 object-cover rounded-t-lg"
+            />
+            <div
+              class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded"
+            >
+              Workshop Pass
+            </div>
+          </div>
+          <div class="card-body">
+            <h3 class="text-xl font-bold mb-2">Photography Workshop</h3>
+            <div class="flex items-center text-gray-600 mb-1">
+              <i class="fas fa-calendar-day mr-2 text-blue-500"></i>
+              April 15, 2025
+            </div>
+            <div class="flex items-center text-gray-600 mb-1">
+              <i class="fas fa-clock mr-2 text-blue-500"></i>
+              10:00 AM - 4:00 PM
+            </div>
+            <div class="flex items-center text-gray-600 mb-4">
+              <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>
+              centre
+            </div>
+
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-2"
+                >
+                  <i class="fas fa-user text-gray-500"></i>
+                </div>
+                <span class="text-sm">John Doe</span>
+              </div>
+              <span class="text-sm text-gray-500">#34567890</span>
+            </div>
+
+            <div class="flex justify-between">
+              <button
+                class="btn btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#viewTicketModal"
+              >
+                <i class="fas fa-eye mr-2"></i> View
+              </button>
+              <div class="dropdown">
+                <button
+                  class="btn btn-outline-secondary dropdown-toggle"
+                  type="button"
+                  id="ticketActions3"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="ticketActions3"
+                >
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-download mr-2"></i> Download</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-print mr-2"></i> Print</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"
+                      ><i class="fas fa-paper-plane mr-2"></i> Transfer</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="#"
+                      ><i class="fas fa-times mr-2"></i> Cancel Ticket</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View Ticket Modal -->
+      <div
+        class="modal fade"
+        id="viewTicketModal"
+        tabindex="-1"
+        aria-labelledby="viewTicketModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="viewTicketModalLabel">
+                Ticket Details
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body p-0">
+              <div class="ticket-container bg-white rounded-lg overflow-hidden">
+                <!-- Ticket Header -->
+                <div
+                  class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6"
+                >
+                  <div class="flex justify-between items-center">
+                    <div>
+                      <h3 class="text-2xl font-bold">Tech Conference 2025</h3>
+                      <p class="text-white/80">General Admission</p>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-sm text-white/80">Order #12345678</p>
+                      <p class="text-sm text-white/80">May 15-17, 2025</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Ticket Body -->
+                <div class="p-6">
+                  <div class="flex flex-col md:flex-row">
+                    <div class="md:w-2/3 pr-0 md:pr-6">
+                      <div class="mb-6">
+                        <h4 class="text-lg font-bold mb-2">Event Details</h4>
+                        <div class="flex items-center text-gray-600 mb-1">
+                          <i class="fas fa-calendar-day mr-2 text-blue-500"></i>
+                          May 15-17, 2025
+                        </div>
+                        <div class="flex items-center text-gray-600 mb-1">
+                          <i class="fas fa-clock mr-2 text-blue-500"></i>
+                          9:00 AM - 6:00 PM
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                          <i
+                            class="fas fa-map-marker-alt mr-2 text-blue-500"
+                          ></i>
+                          San Francisco Convention Center
+                        </div>
+                      </div>
+
+                      <div class="mb-6">
+                        <h4 class="text-lg font-bold mb-2">
+                          Attendee Information
+                        </h4>
+                        <p><strong>Name:</strong> John Doe</p>
+                        <p><strong>Email:</strong> john.doe@example.com</p>
+                      </div>
+
+                      <div>
+                        <h4 class="text-lg font-bold mb-2">
+                          Additional Information
+                        </h4>
+                        <p class="text-gray-600 text-sm">
+                          Please arrive 30 minutes before the event starts for
+                          check-in. Bring a valid ID that matches the name on
+                          your ticket.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="md:w-1/3 mt-6 md:mt-0">
+                      <div class="bg-gray-50 p-4 rounded-lg text-center">
+                        <div class="mb-4">
+                          <img
+                            src="/view/assets/images/qr.png"
+                            alt="QR Code"
+                            class="w-48 h-48 mx-auto"
+                          />
+                        </div>
+                        <p class="text-sm text-gray-500">
+                          Scan this QR code at the event entrance
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Ticket Footer -->
+                <div class="border-t p-6">
+                  <div class="flex flex-wrap justify-between">
+                    <button class="btn btn-outline-primary mb-2 sm:mb-0">
+                      <i class="fas fa-download mr-2"></i> Download
+                    </button>
+                    <button class="btn btn-outline-primary mb-2 sm:mb-0">
+                      <i class="fas fa-print mr-2"></i> Print
+                    </button>
+                    <button class="btn btn-outline-primary mb-2 sm:mb-0">
+                      <i class="fas fa-paper-plane mr-2"></i> Transfer
+                    </button>
+                    <button class="btn btn-outline-danger mb-2 sm:mb-0">
+                      <i class="fas fa-times mr-2"></i> Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-8 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <a href="/index.php" class="flex items-center space-x-2">
+              <img
+                src="/view/assets/images/logo.png"
+                alt="Lamma Logo"
+                class="h-8 w-8"
+              />
+            </a>
+            <p class="text-gray-600 mt-2">Live in the Moment</p>
+          </div>
+          <div class="flex space-x-6">
+            <a href="#" class="text-gray-600 hover:text-blue-500">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-blue-500">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-blue-500">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-blue-500">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+        <div class="mt-8 pt-8 border-t text-center">
+          <p class="text-gray-600">© 2025 Lamma. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="/view/scripts/script.js"></script>
+  </body>
+</html>
