@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technology Events - Lamma</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- Custom CSS -->
+<link rel="stylesheet" href="/view/styles/css/categories.css">
+<!-- Configure Tailwind -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          blue: {
+            light: '#4F46E5',
+            DEFAULT: '#3730A3',
+            dark: '#312E81',
+          },
+          purple: {
+            light: '#A78BFA',
+            DEFAULT: '#8B5CF6',
+            dark: '#7C3AED',
+          },
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body class="bg-gray-50">
+<!-- Header/Navigation with blur effect -->
+<header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60 shadow-sm">
+  <div class="container mx-auto px-4">
+    <nav class="flex items-center justify-between py-4">
+      <a href="/index.php" class="flex items-center space-x-2">
+        <img src="/view/assets/images/logo.png" alt="Lamma Logo" class="h-8 w-8">
+        </a>
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="/view/pages/dashboard.php" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
+          <i class="fas fa-home mr-2"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="/view/pages/events.php" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
+          <i class="fas fa-calendar mr-2"></i>
+          <span>Events</span>
+        </a>
+        <a href="/view/pages/messages.php" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
+          <i class="fas fa-comment mr-2"></i>
+          <span>Messages</span>
+        </a>
+        <a href="/view/pages/profile.php" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
+          <i class="fas fa-user mr-2"></i>
+          <span>Profile</span>
+        </a>
+        <a href="/view/pages/create-event.php" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
+          <i class="fas fa-plus-circle mr-2"></i>
+          <span>Create Event</span>
+        </a>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <button class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center" id="userMenuButton">
+            <img src="/view/assets/images/aziz.jpg" alt="User" class="h-8 w-8 rounded-full">
+          </button>
+          <div class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" id="userMenu">
+            <div class="py-1">
+              <div class="px-4 py-2 text-sm text-gray-700">
+                <p class="font-medium">Username</p>
+                <p class="text-xs text-gray-500">user@example.com</p>
+              </div>
+              <hr>
+              <a href="/view/pages/profile.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+              <a href="/view/pages/settings.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+              <hr>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log out</a>
+            </div>
+          </div>
+        </div>
+        <button class="md:hidden" id="mobileMenuButton">
+          <i class="fas fa-bars text-gray-500"></i>
+        </button>
+      </div>
+    </nav>
+    <!-- Mobile menu -->
+    <div class="md:hidden hidden" id="mobileMenu">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="/view/pages/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+          <i class="fas fa-home mr-2"></i>
+          Dashboard
+        </a>
+        <a href="/view/pages/events.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+          <i class="fas fa-calendar mr-2"></i>
+          Events
+        </a>
+        <a href="/view/pages/messages.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+          <i class="fas fa-comment mr-2"></i>
+          Messages
+        </a>
+        <a href="/view/pages/profile.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:  class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+          <i class="fas fa-user mr-2"></i>
+          Profile
+        </a>
+        <a href="/view/pages/create-event.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+          <i class="fas fa-plus-circle mr-2"></i>
+          Create Event
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container mx-auto px-4 py-10">
+  <!-- Category Header -->
+  <div class="relative rounded-xl overflow-hidden mb-10">
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-500/80 to-purple-600/80 z-10"></div>
+    <img src="/view/assets/images/tech-banner.jpg" alt="Technology Events" class="w-full h-64 object-cover">
+    <div class="absolute inset-0 z-20 flex items-center">
+      <div class="container mx-auto px-4">
+        <div class="flex items-center">
+          <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-4">
+            <i class="fas fa-laptop-code text-blue-500 text-2xl"></i>
+          </div>
+          <div>
+            <h1 class="text-white text-3xl md:text-4xl font-bold">Technology Events</h1>
+            <p class="text-white/80">Conferences, workshops, hackathons, and more</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <nav class="flex mb-6" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+      <li class="inline-flex items-center">
+        <a href="/index.php" class="text-gray-700 hover:text-blue-500">
+          <i class="fas fa-home mr-2"></i>
+          Home
+        </a>
+      </li>
+      <li>
+        <div class="flex items-center">
+          <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+          <a href="/view/pages/categories.html" class="text-gray-700 hover:text-blue-500">Categories</a>
+        </div>
+      </li>
+      <li aria-current="page">
+        <div class="flex items-center">
+          <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+          <span class="text-gray-500">Technology</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- Sidebar -->
+    <div class="lg:col-span-1">
+      <div class="card shadow-sm mb-6">
+        <div class="card-header bg-white">
+          <h3 class="font-bold">Filter Events</h3>
+        </div>
+        <div class="card-body">
+          <form>
+            <!-- Date Filter -->
+            <div class="mb-4">
+              <label class="font-medium mb-2 block">Date</label>
+              <div class="space-y-2">
+                <div class="flex items-center">
+                  <input type="radio" id="dateToday" name="date" class="mr-2">
+                  <label for="dateToday">Today</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="dateWeekend" name="date" class="mr-2">
+                  <label for="dateWeekend">This weekend</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="dateWeek" name="date" class="mr-2">
+                  <label for="dateWeek">This week</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="dateMonth" name="date" class="mr-2">
+                  <label for="dateMonth">This month</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="dateCustom" name="date" class="mr-2">
+                  <label for="dateCustom">Custom date</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Filter -->
+            <div class="mb-4">
+              <label class="font-medium mb-2 block">Price</label>
+              <div class="space-y-2">
+                <div class="flex items-center">
+                  <input type="checkbox" id="priceFree" class="mr-2">
+                  <label for="priceFree">Free</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="checkbox" id="pricePaid" class="mr-2">
+                  <label for="pricePaid">Paid</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Format Filter -->
+            <div class="mb-4">
+              <label class="font-medium mb-2 block">Format</label>
+              <div class="space-y-2">
+                <div class="flex items-center">
+                  <input type="checkbox" id="formatInPerson" class="mr-2">
+                  <label for="formatInPerson">In Person</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="checkbox" id="formatOnline" class="mr-2">
+                  <label for="formatOnline">Online</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="checkbox" id="formatHybrid" class="mr-2">
+                  <label for="formatHybrid">Hybrid</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location Filter -->
+            <div class="mb-4">
+              <label class="font-medium mb-2 block">Location</label>
+              <input type="text" class="form-control" placeholder="Enter city or zip code">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">Apply Filters</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Related Categories -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h3 class="font-bold">Related Categories</h3>
+        </div>
+        <div class="card-body p-0">
+          <ul class="divide-y">
+            <li>
+              <a href="/view/pages/category.php?id=business" class="flex items-center p-3 hover:bg-gray-50">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <i class="fas fa-briefcase text-blue-500"></i>
+                </div>
+                <span>Business</span>
+              </a>
+            </li>
+            <li>
+              <a href="/view/pages/category.php?id=education" class="flex items-center p-3 hover:bg-gray-50">
+                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                  <i class="fas fa-graduation-cap text-green-500"></i>
+                </div>
+                <span>Education</span>
+              </a>
+            </li>
+            <li>
+              <a href="/view/pages/category.php?id=science" class="flex items-center p-3 hover:bg-gray-50">
+                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                  <i class="fas fa-flask text-purple-500"></i>
+                </div>
+                <span>Science</span>
+              </a>
+            </li>
+            <li>
+              <a href="/view/pages/category.php?id=networking" class="flex items-center p-3 hover:bg-gray-50">
+                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                  <i class="fas fa-network-wired text-red-500"></i>
+                </div>
+                <span>Networking</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:col-span-3">
+      <!-- Popular Topics -->
+      <div class="mb-6">
+        <h2 class="text-xl font-bold mb-4">Popular Topics</h2>
+        <div class="flex flex-wrap gap-2">
+          <a href="/view/pages/topic.php?id=ai" class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm transition-colors">
+            Artificial Intelligence
+          </a>
+          <a href="/view/pages/topic.php?id=blockchain" class="bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm transition-colors">
+            Blockchain
+          </a>
+          <a href="/view/pages/topic.php?id=webdev" class="bg-green-50 hover:bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm transition-colors">
+            Web Development
+          </a>
+          <a href="/view/pages/topic.php?id=cybersecurity" class="bg-red-50 hover:bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm transition-colors">
+            Cybersecurity
+          </a>
+          <a href="/view/pages/topic.php?id=datascience" class="bg-yellow-50 hover:bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm transition-colors">
+            Data Science
+          </a>
+        </div>
+      </div>
+
+      <!-- Sort Options -->
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <div class="mb-3 sm:mb-0">
+          <p class="text-gray-600"><span class="font-medium">186</span> events found</p>
+        </div>
+        <div class="flex items-center">
+          <label class="mr-2 text-gray-600">Sort by:</label>
+          <select class="form-select">
+            <option>Relevance</option>
+            <option>Date: Soonest first</option>
+            <option>Date: Latest first</option>
+            <option>Price: Low to high</option>
+            <option>Price: High to low</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Events List -->
+      <div class="space-y-6">
+        <!-- Event 1 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow">
+          <div class="md:flex">
+            <div class="md:w-1/3 relative">
+              <img src="/view/assets/images/abed2.jpg" alt="Tech Conference" class="w-full h-48 md:h-full object-cover">
+              <div class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+                Featured
+              </div>
+            </div>
+            <div class="md:w-2/3 p-4">
+              <h3 class="text-xl font-bold mb-1">
+                <a href="/view/pages/event-details.php?id=1" class="hover:text-blue-500 transition-colors">Tech Conference 2025</a>
+              </h3>
+              <p class="text-sm text-gray-500 flex items-center mb-3">
+                <i class="fas fa-map-marker-alt mr-1"></i>
+                tunis Convention Center
+              </p>
+              <p class="text-sm mb-4">Join us for the biggest tech conference of the year featuring keynotes from industry leaders, workshops, and networking opportunities.</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-calendar-day mr-1"></i>
+                  May 15-17, 2025
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-clock mr-1"></i>
+                  9:00 AM - 6:00 PM
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-tag mr-1"></i>
+                  100 dt
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-users mr-1"></i>
+                  1,200+ attendees
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full">Conference</span>
+                <span class="bg-purple-50 text-purple-700 text-xs px-2 py-1 rounded-full">Networking</span>
+                <span class="bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">AI</span>
+              </div>
+              <a href="/view/pages/event-details.php?id=1" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 2 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow">
+          <div class="md:flex">
+            <div class="md:w-1/3">
+              <img src="/view/assets/images/Hackathon.jpg" alt="Hackathon" class="w-full h-48 md:h-full object-cover">
+            </div>
+            <div class="md:w-2/3 p-4">
+              <h3 class="text-xl font-bold mb-1">
+                <a href="/view/pages/event-details.php?id=2" class="hover:text-blue-500 transition-colors">Global Hackathon Challenge</a>
+              </h3>
+              <p class="text-sm text-gray-500 flex items-center mb-3">
+                <i class="fas fa-map-marker-alt mr-1"></i>
+                Tech Hub, sousse
+              </p>
+              <p class="text-sm mb-4">A 24-hour hackathon where developers, designers, and entrepreneurs collaborate to build innovative solutions to real-world problems.</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-calendar-day mr-1"></i>
+                  June 3-5, 2025
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-clock mr-1"></i>
+                  Starts at 6:00 PM
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-tag mr-1"></i>
+                  Free
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-users mr-1"></i>
+                  500+ attendees
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full">Hackathon</span>
+                <span class="bg-purple-50 text-purple-700 text-xs px-2 py-1 rounded-full">Coding</span>
+                <span class="bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">Innovation</span>
+              </div>
+              <a href="/view/pages/event-details.php?id=2" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 3 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow">
+          <div class="md:flex">
+            <div class="md:w-1/3">
+              <img src="/view/assets/images/ai.jpg" alt="AI Workshop" class="w-full h-48 md:h-full object-cover">
+            </div>
+            <div class="md:w-2/3 p-4">
+              <h3 class="text-xl font-bold mb-1">
+                <a href="/view/pages/event-details.php?id=3" class="hover:text-blue-500 transition-colors">AI & Machine Learning Workshop</a>
+              </h3>
+              <p class="text-sm text-gray-500 flex items-center mb-3">
+                <i class="fas fa-map-marker-alt mr-1"></i>
+                Online Event
+              </p>
+              <p class="text-sm mb-4">Learn the fundamentals of AI and machine learning in this hands-on workshop led by industry experts.</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-calendar-day mr-1"></i>
+                  April 12, 2025
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-clock mr-1"></i>
+                  10:00 AM - 4:00 PM
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-tag mr-1"></i>
+                  30 dt
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-users mr-1"></i>
+                  200+ attendees
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full">Workshop</span>
+                <span class="bg-purple-50 text-purple-700 text-xs px-2 py-1 rounded-full">AI</span>
+                <span class="bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">Online</span>
+              </div>
+              <a href="/view/pages/event-details.php?id=3" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 4 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow">
+          <div class="md:flex">
+            <div class="md:w-1/3">
+              <img src="/view/assets/images/485751224_9312920395471497_3766321075298091807_n.jpg" alt="Startup Pitch" class="w-full h-48 md:h-full object-cover">
+            </div>
+            <div class="md:w-2/3 p-4">
+              <h3 class="text-xl font-bold mb-1">
+                <a href="/view/pages/event-details.php?id=4" class="hover:text-blue-500 transition-colors">Startup Pitch Night</a>
+              </h3>
+              <p class="text-sm text-gray-500 flex items-center mb-3">
+                <i class="fas fa-map-marker-alt mr-1"></i>
+                centre innovative, tunis
+              </p>
+              <p class="text-sm mb-4">Watch innovative startups pitch their ideas to investors and network with entrepreneurs.</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-4">
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-calendar-day mr-1"></i>
+                  May 5, 2025
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-clock mr-1"></i>
+                  6:00 PM - 9:00 PM
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-tag mr-1"></i>
+                  free
+                </div>
+                <div class="flex items-center text-gray-500">
+                  <i class="fas fa-users mr-1"></i>
+                  150+ attendees
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full">Startup</span>
+                <span class="bg-purple-50 text-purple-700 text-xs px-2 py-1 rounded-full">Networking</span>
+                <span class="bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">Business</span>
+              </div>
+              <a href="/view/pages/event-details.php?id=4" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="mt-8 flex justify-center">
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-white border-t py-8 mt-12">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-4 md:mb-0">
+        <a href="/index.php" class="flex items-center space-x-2">
+          <img src="/view/assets/images/logo.png" alt="Lamma Logo" class="h-8 w-8">
+          </a>
+        <p class="text-gray-600 mt-2">Live in the Moment</p>
+      </div>
+      <div class="flex space-x-6">
+        <a href="#" class="text-gray-600 hover:text-blue-500">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="text-gray-600 hover:text-blue-500">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="text-gray-600 hover:text-blue-500">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="text-gray-600 hover:text-blue-500">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </div>
+    </div>
+    <div class="mt-8 pt-8 border-t text-center">
+      <p class="text-gray-600">© 2025 Lamma. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JavaScript -->
+<script src="/view/assets/js/script.js"></script>
+</body>
+</html>
