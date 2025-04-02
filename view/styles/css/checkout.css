@@ -1,0 +1,87 @@
+/* Custom styles for Lamma Event Management App */
+
+/* Custom button styles */
+.btn-primary {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+    }
+    
+    .btn-primary:hover {
+    background-color: #3730a3;
+    border-color: #3730a3;
+    }
+    
+    .btn-outline-primary {
+    color: #4f46e5;
+    border-color: #4f46e5;
+    }
+    
+    .btn-outline-primary:hover {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+    color: white;
+    }
+    
+    /* Custom carousel styles */
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 10px;
+    }
+    
+    .carousel-item {
+    padding: 0.5rem;
+    }
+    
+    /* Card hover effects */
+    .card {
+    transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Custom gradient text */
+    .gradient-text {
+    background: linear-gradient(to right, #4f46e5, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    }
+    
+    /* Hero section overlay */
+    .hero-overlay {
+    position: relative;
+    }
+    
+    .hero-overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(79, 70, 229, 0.8), rgba(139, 92, 246, 0.8));
+    z-index: -1;
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+    width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+    background: #4f46e5;
+    border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+    background: #3730a3;
+    }
