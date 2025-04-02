@@ -2,7 +2,6 @@
 include_once '../../config/database.php';
 include_once '../../controller/auth.php';
 
-// Start session at the beginning
 session_start();
 
 if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
