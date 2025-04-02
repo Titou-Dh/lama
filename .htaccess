@@ -1,0 +1,22 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Redirect to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Prevent Directory Listing
+Options -Indexes
+
+# Set Default Index File
+DirectoryIndex index.html index.php
+
+# Deny Access to .htaccess
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Custom Error Pages
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
