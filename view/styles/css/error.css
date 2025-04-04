@@ -1,0 +1,261 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: white;
+    line-height: 1.6;
+}
+
+.container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px dashed #e1e1e1;
+}
+
+.logo img {
+    height:auto;
+    width: 50%;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.login-btn {
+    background: transparent;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 16px;
+}
+
+.signup-btn {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.signup-btn:hover {
+    background-color: #0b5ed7;
+}
+
+/* Main Content Styles */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 0;
+}
+
+.error-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.error-image {
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    border: 1px solid ;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.error-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.home-btn {
+    display: inline-block;
+    background-color: #5569fe;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.home-btn:hover {
+    background-color:#5569fe;
+}
+
+/* Social Media Section */
+.social-section {
+    margin-top: 40px;
+}
+
+.social-section p {
+    margin-bottom: 15px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #5569fe;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.social-icon:hover {
+    background-color:#5569fe;
+    color: white;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #2b2fd7;
+    color: white;
+    padding: 4px 0 2px;
+    margin-top: auto;
+    width:100%;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.footer-logo img{
+    height:auto;
+    width: 50%;
+    left:50%;
+    align-items: center;
+    position: relative;
+    margin-top: 10px;
+    transform: translateX(-50%);
+}
+
+
+
+.subscribe {
+    display: flex;
+    max-width: 400px;
+    width: 100%;
+}
+
+.subscribe input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    font-size: 14px;
+}
+
+.subscribe-btn {
+    background-color: #5569fe;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.subscribe-btn:hover {
+    background-color:#5569fe;
+}
+
+.footer-links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+.footer-social {
+    display: flex;
+    gap: 15px;
+}
+
+.footer-social a {
+    color: white;
+    font-size: 18px;
+}
+
+.copyright {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    margin-bottom: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .error-image {
+        max-width: 90%;
+    }
+    
+    .subscribe {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .subscribe input,
+    .subscribe-btn {
+        width: 100%;
+        border-radius: 4px;
+    }
+}
