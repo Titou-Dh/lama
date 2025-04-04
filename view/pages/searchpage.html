@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Events - Lamma</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Swiper CSS for carousel -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+  <link rel="stylesheet" href="searchpage.css">
+  <!-- Configure Tailwind -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            blue: {
+              light: '#4F46E5',
+              DEFAULT: '#3730A3',
+              dark: '#312E81',
+            },
+            purple: {
+              light: '#A78BFA',
+              DEFAULT: '#8B5CF6',
+              dark: '#7C3AED',
+            },
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50">
+  <!-- Header/Navigation with blur effect -->
+  <nav class="box-shadow-lg sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60" id="mainNav">
+    <div class="max-w-screen-xl flex flex-wrap py-2 items-center justify-between mx-auto px-4">
+      <a href="/index.php" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img src="https://placeholder.svg?height=40&width=120" class="w-24" alt="Lamma Logo">
+      </a>
+      <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse mr-2">
+        <div class="relative">
+          <button class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center" id="userMenuButton">
+            <i class="fas fa-user text-gray-500"></i>
+          </button>
+          <div class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" id="userMenu">
+            <div class="py-1">
+              <div class="px-4 py-2 text-sm text-gray-700">
+                <p class="font-medium">Username</p>
+                <p class="text-xs text-gray-500">user@example.com</p>
+              </div>
+              <hr>
+              <a href="/view/pages/profile.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+              <a href="/view/pages/settings.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+              <hr>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log out</a>
+            </div>
+          </div>
+        </div>
+        <button data-collapse-toggle="navbar-cta" type="button" id="mobileMenuButton" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 border border-2 border-blue-500 rounded-lg md:hidden focus:outline-none hover:border-blue-600" aria-controls="navbar-cta" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="#2563eb" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+          </svg>
+        </button>
+      </div>
+      <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 transition-all duration-300" id="navbar-cta">
+        <ul class="flex flex-col font-medium px-2 py-3 md:p-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+          <li>
+            <a href="/view/pages/dashboard.php" class="flex items-center py-2 px-3 md:p-0 text-gray-500 hover:text-blue-500">
+              <i class="fas fa-home mr-2"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="/view/pages/events.php" class="flex items-center py-2 px-3 md:p-0 text-blue-500 font-bold">
+              <i class="fas fa-calendar mr-2"></i>
+              <span>Events</span>
+            </a>
+          </li>
+          <li>
+            <a href="/view/pages/messages.php" class="flex items-center py-2 px-3 md:p-0 text-gray-500 hover:text-blue-500">
+              <i class="fas fa-comment mr-2"></i>
+              <span>Messages</span>
+            </a>
+          </li>
+          <li>
+            <a href="/view/pages/profile.php" class="flex items-center py-2 px-3 md:p-0 text-gray-500 hover:text-blue-500">
+              <i class="fas fa-user mr-2"></i>
+              <span>Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="/view/pages/create-event.php" class="flex items-center py-2 px-3 md:p-0 text-gray-500 hover:text-blue-500">
+              <i class="fas fa-plus-circle mr-2"></i>
+              <span>Create Event</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div class="md:hidden hidden px-2 pt-2 pb-3" id="mobileMenu">
+      <ul class="space-y-1">
+        <li>
+          <a href="/view/pages/dashboard.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+            <i class="fas fa-home mr-2"></i>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="/view/pages/events.php" class="block px-3 py-2 rounded-md text-base font-medium text-blue-700 bg-blue-50">
+            <i class="fas fa-calendar mr-2"></i>
+            Events
+          </a>
+        </li>
+        <li>
+          <a href="/view/pages/messages.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+            <i class="fas fa-comment mr-2"></i>
+            Messages
+          </a>
+        </li>
+        <li>
+          <a href="/view/pages/profile.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+            <i class="fas fa-user mr-2"></i>
+            Profile
+          </a>
+        </li>
+        <li>
+          <a href="/view/pages/create-event.php" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
+            <i class="fas fa-plus-circle mr-2"></i>
+            Create Event
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero-gradient text-white py-12 md:py-20">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto text-center">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4">Discover Student Events in Tunisia</h1>
+        <p class="text-xl opacity-90 mb-8">Find and join events organized by student organizations and colleges across Tunisia</p>
+        <div class="bg-white rounded-lg p-2 md:p-3 shadow-lg max-w-2xl mx-auto">
+          <div class="flex flex-col md:flex-row gap-2">
+            <div class="flex-grow relative">
+              <input type="text" class="form-control pl-10 py-3 w-full" placeholder="Search events...">
+              <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <i class="fas fa-search text-gray-400"></i>
+              </div>
+            </div>
+            <div class="md:w-1/4">
+              <select class="form-select py-3 w-full">
+                <option value="">All Categories</option>
+                <option value="tech">Technology</option>
+                <option value="arts">Arts & Culture</option>
+                <option value="business">Business</option>
+                <option value="education">Education</option>
+                <option value="sports">Sports</option>
+              </select>
+            </div>
+            <button class="btn btn-primary py-3 px-6">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-10">
+    <!-- Filter Section -->
+    <div class="mb-10 bg-white rounded-lg shadow-sm p-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-wrap gap-2">
+          <button class="btn btn-sm btn-outline-primary active">All Events</button>
+          <button class="btn btn-sm btn-outline-secondary">Today</button>
+          <button class="btn btn-sm btn-outline-secondary">This Week</button>
+          <button class="btn btn-sm btn-outline-secondary">This Month</button>
+          <button class="btn btn-sm btn-outline-secondary">Free Events</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-sm text-gray-600 whitespace-nowrap">Sort by:</label>
+          <select class="form-select form-select-sm">
+            <option>Date: Upcoming</option>
+            <option>Date: Latest</option>
+            <option>Popularity</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Events -->
+    <div class="mb-12">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Featured Events</h2>
+        <a href="#" class="text-blue-500 hover:text-blue-700 flex items-center">
+          <span>View all</span>
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Featured Event 1 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Tech Summit" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+              Featured
+            </div>
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Technology</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Tunisia Tech Summit 2025</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Tunis Convention Center
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                May 15-17, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                500+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Join the biggest tech event for students in Tunisia with workshops, competitions, and networking opportunities.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">50 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Event 2 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Art Exhibition" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+              Featured
+            </div>
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Arts & Culture</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Student Art Exhibition</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Carthage Art Gallery, Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                April 10-20, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                300+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Showcasing the best artwork from university students across Tunisia. Come support young artists!</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-green-500">Free</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Event 3 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Business Competition" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
+              Featured
+            </div>
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Business</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Startup Challenge 2025</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Business School of Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                June 5-7, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                200+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Pitch your business idea and win funding! Open to all university students with innovative startup concepts.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">20 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events You May Like (Carousel) -->
+    <div class="mb-12">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Events You May Like</h2>
+        <a href="#" class="text-blue-500 hover:text-blue-700 flex items-center">
+          <span>View all</span>
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <!-- Carousel Item 1 -->
+          <div class="swiper-slide">
+            <div class="card shadow-sm hover:shadow-md transition-shadow event-card h-full">
+              <div class="relative">
+                <img src="https://placeholder.svg?height=200&width=400" alt="Hackathon" class="w-full h-48 object-cover rounded-t-lg">
+                <div class="absolute bottom-2 left-2">
+                  <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">Technology</span>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">
+                  <a href="#" class="hover:text-blue-500 transition-colors">National Student Hackathon</a>
+                </h3>
+                <p class="text-sm text-gray-500 flex items-center mb-3">
+                  <i class="fas fa-map-marker-alt mr-1"></i>
+                  INSAT, Tunis
+                </p>
+                <div class="flex items-center justify-between text-sm mb-3">
+                  <div class="flex items-center text-gray-500">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    April 22-24, 2025
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600 mb-4 line-clamp-2">48-hour coding challenge for students to build innovative solutions to real-world problems.</p>
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-green-500">Free</span>
+                  <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Carousel Item 2 -->
+          <div class="swiper-slide">
+            <div class="card shadow-sm hover:shadow-md transition-shadow event-card h-full">
+              <div class="relative">
+                <img src="https://placeholder.svg?height=200&width=400" alt="Music Festival" class="w-full h-48 object-cover rounded-t-lg">
+                <div class="absolute bottom-2 left-2">
+                  <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Music</span>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">
+                  <a href="#" class="hover:text-blue-500 transition-colors">Campus Music Festival</a>
+                </h3>
+                <p class="text-sm text-gray-500 flex items-center mb-3">
+                  <i class="fas fa-map-marker-alt mr-1"></i>
+                  University of Carthage
+                </p>
+                <div class="flex items-center justify-between text-sm mb-3">
+                  <div class="flex items-center text-gray-500">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    May 5, 2025
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600 mb-4 line-clamp-2">Annual music festival featuring performances by talented student musicians and bands.</p>
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-blue-500">15 DT</span>
+                  <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Carousel Item 3 -->
+          <div class="swiper-slide">
+            <div class="card shadow-sm hover:shadow-md transition-shadow event-card h-full">
+              <div class="relative">
+                <img src="https://placeholder.svg?height=200&width=400" alt="Workshop" class="w-full h-48 object-cover rounded-t-lg">
+                <div class="absolute bottom-2 left-2">
+                  <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Workshop</span>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">
+                  <a href="#" class="hover:text-blue-500 transition-colors">Digital Marketing Workshop</a>
+                </h3>
+                <p class="text-sm text-gray-500 flex items-center mb-3">
+                  <i class="fas fa-map-marker-alt mr-1"></i>
+                  IHEC Carthage
+                </p>
+                <div class="flex items-center justify-between text-sm mb-3">
+                  <div class="flex items-center text-gray-500">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    April 15, 2025
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600 mb-4 line-clamp-2">Learn digital marketing strategies from industry experts. Certificate provided.</p>
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-blue-500">25 DT</span>
+                  <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Carousel Item 4 -->
+          <div class="swiper-slide">
+            <div class="card shadow-sm hover:shadow-md transition-shadow event-card h-full">
+              <div class="relative">
+                <img src="https://placeholder.svg?height=200&width=400" alt="Sports Tournament" class="w-full h-48 object-cover rounded-t-lg">
+                <div class="absolute bottom-2 left-2">
+                  <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">Sports</span>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">
+                  <a href="#" class="hover:text-blue-500 transition-colors">Inter-University Sports Tournament</a>
+                </h3>
+                <p class="text-sm text-gray-500 flex items-center mb-3">
+                  <i class="fas fa-map-marker-alt mr-1"></i>
+                  Sports City, Tunis
+                </p>
+                <div class="flex items-center justify-between text-sm mb-3">
+                  <div class="flex items-center text-gray-500">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    May 20-25, 2025
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600 mb-4 line-clamp-2">Annual sports competition between universities across Tunisia. Multiple sports categories.</p>
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-blue-500">10 DT</span>
+                  <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Carousel Item 5 -->
+          <div class="swiper-slide">
+            <div class="card shadow-sm hover:shadow-md transition-shadow event-card h-full">
+              <div class="relative">
+                <img src="https://placeholder.svg?height=200&width=400" alt="Career Fair" class="w-full h-48 object-cover rounded-t-lg">
+                <div class="absolute bottom-2 left-2">
+                  <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Career</span>
+                </div>
+              </div>
+              <div class="p-4">
+                <h3 class="text-lg font-bold mb-2">
+                  <a href="#" class="hover:text-blue-500 transition-colors">National Student Career Fair</a>
+                </h3>
+                <p class="text-sm text-gray-500 flex items-center mb-3">
+                  <i class="fas fa-map-marker-alt mr-1"></i>
+                  El Kram Exhibition Center
+                </p>
+                <div class="flex items-center justify-between text-sm mb-3">
+                  <div class="flex items-center text-gray-500">
+                    <i class="fas fa-calendar-day mr-1"></i>
+                    June 10-12, 2025
+                  </div>
+                </div>
+                <p class="text-sm text-gray-600 mb-4 line-clamp-2">Connect with top employers, attend workshops, and find internship and job opportunities.</p>
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-green-500">Free</span>
+                  <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination mt-4"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </div>
+
+    <!-- All Events -->
+    <div class="mb-12">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">All Events</h2>
+        <div class="flex items-center gap-2">
+          <span class="text-gray-500">Showing 1-9 of 124 events</span>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Event 1 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Conference" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">Education</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Student Leadership Conference</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              University of Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                April 8, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                150+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Develop your leadership skills and network with student leaders from across Tunisia.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">15 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 2 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Debate Competition" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Competition</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">National Debate Championship</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Faculty of Law, Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                May 12-14, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                200+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Annual debate competition for university students with prizes for top performers.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">20 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 3 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Cultural Festival" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Cultural</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">International Cultural Festival</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Medina of Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                April 25-27, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                500+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Celebrate cultural diversity with performances, food, and exhibitions from around the world.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-green-500">Free</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 4 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Workshop" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">Workshop</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">UI/UX Design Workshop</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Digital Design School, Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                May 8, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                50+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Hands-on workshop on UI/UX design principles and tools. Perfect for beginners.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">30 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 5 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Networking" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">Networking</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Student Entrepreneurs Meetup</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Startup Hub, Sousse
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                April 18, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                100+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Connect with fellow student entrepreneurs and share ideas in this informal networking event.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-green-500">Free</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 6 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Seminar" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">Seminar</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Future of AI in Education</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Polytechnic School, Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                May 22, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                120+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Explore how AI is transforming education with expert speakers and panel discussions.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">25 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 7 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Volunteer" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Volunteer</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Beach Cleanup Initiative</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              La Marsa Beach, Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                April 29, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                200+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Join fellow students in cleaning up our beaches. Equipment and refreshments provided.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-green-500">Free</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 8 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Competition" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Competition</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Robotics Competition</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Engineering School, Sfax
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                June 15, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                150+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Annual robotics competition for engineering students with cash prizes for winners.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">40 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event 9 -->
+        <div class="card shadow-sm hover:shadow-md transition-shadow event-card">
+          <div class="relative">
+            <img src="https://placeholder.svg?height=200&width=400" alt="Festival" class="w-full h-48 object-cover rounded-t-lg">
+            <div class="absolute bottom-2 left-2">
+              <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">Festival</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-bold mb-2">
+              <a href="#" class="hover:text-blue-500 transition-colors">Student Film Festival</a>
+            </h3>
+            <p class="text-sm text-gray-500 flex items-center mb-3">
+              <i class="fas fa-map-marker-alt mr-1"></i>
+              Cinema Palace, Tunis
+            </p>
+            <div class="flex items-center justify-between text-sm mb-3">
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-calendar-day mr-1"></i>
+                May 28-30, 2025
+              </div>
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-users mr-1"></i>
+                300+
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4 line-clamp-2">Showcasing short films created by film students across Tunisia. Awards ceremony on final day.</p>
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-blue-500">15 DT</span>
+              <a href="#" class="btn btn-sm btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="mt-8 flex justify-center">
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Event Categories -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Browse by Category</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <a href="#" class="category-badge bg-white p-4 rounded-lg shadow-sm text-center hover:shadow-md transition-all">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-laptop-code text-blue-500"></i>
+          </div>
+          <h3 class="font-bold">Technology</h3>
+          <p class="text-sm text-gray-500">42 events</p>
+        </a>
+        
+        <a href="#" class="category-badge bg-white p-4 rounded-lg shadow-sm text-center hover:shadow-md transition-all">
+          <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-palette text-purple-500"></i>
+          </div>
+          <h3 class="font-bold">Arts & Culture</h3>
+          <p class="text-sm text-gray-500">28 events</p>
+        </a>
+        
+        <a href="#" class="category-badge bg-white p-4 rounded-lg shadow-sm text-center hover:shadow-md transition-all">
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-briefcase text-green-500"></i>
+          </div>
+          <h3 class="font-bold">Business</h3>
+          <p class="text-sm text-gray-500">19 events</p>
+        </a>
+        
+        <a href="#" class="category-badge bg-white p-4 rounded-lg shadow-sm text-center hover:shadow-md transition-all">
+          <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-graduation-cap text-red-500"></i>
+          </div>
+          <h3 class="font-bold">Education</h3>
+          <p class="text-sm text-gray-500">35 events</p>
+        </a>
+        
+        <a href="#" class="category-badge bg-white p-4 rounded-lg shadow-sm text-center hover:shadow-md transition-all">
+          <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-running text-yellow-600"></i>
+          </div>
+          <h3 class="font-bold">Sports</h3>
+          <p class="text-sm text-gray-500">22 events</p>
+        </a>
+        
+        <a href="#" class="category-badge bg-white p-4 rounded-lg shadow-sm text-center hover:shadow-md transition-all">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-music text-blue-500"></i>
+          </div>
+          <h3 class="font-bold">Music</h3>
+          <p class="text-sm text-gray-500">31 events</p>
+        </a>
+      </div>
+    </div>
+
+    <!-- Popular Topics -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Popular Topics</h2>
+      <div class="flex flex-wrap gap-3">
+        <a href="#" class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-full transition-colors">
+          Workshops
+        </a>
+        <a href="#" class="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-full transition-colors">
+          Hackathons
+        </a>
+        <a href="#" class="bg-green-50 hover:bg-green-100 text-green-700 px-4 py-2 rounded-full transition-colors">
+          Conferences
+        </a>
+        <a href="#" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-full transition-colors">
+          Competitions
+        </a>
+        <a href="#" class="bg-yellow-50 hover:bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full transition-colors">
+          Networking
+        </a>
+        <a href="#" class="bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-full transition-colors">
+          Career Fairs
+        </a>
+        <a href="#" class="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-full transition-colors">
+          Festivals
+        </a>
+        <a href="#" class="bg-green-50 hover:bg-green-100 text-green-700 px-4 py-2 rounded-full transition-colors">
+          Seminars
+        </a>
+        <a href="#" class="bg-red-50 hover:bg-red-100 text-red-700 px-4 py-2 rounded-full transition-colors">
+          Volunteer
+        </a>
+        <a href="#" class="bg-yellow-50 hover:bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full transition-colors">
+          Cultural Events
+        </a>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-8 mb-12 text-white">
+      <div class="md:flex items-center justify-between">
+        <div class="md:w-1/2 mb-6 md:mb-0">
+          <h3 class="text-2xl font-bold mb-2">Stay Updated</h3>
+          <p class="opacity-90">Subscribe to our newsletter to get the latest updates on student events in Tunisia.</p>
+        </div>
+        <div class="md:w-1/2">
+          <form class="flex flex-col sm:flex-row gap-2">
+            <input type="email" class="form-control text-gray-800" placeholder="Your email address">
+            <button type="submit" class="btn bg-white text-blue-600 hover:bg-gray-100">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t py-8 mt-12">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <a href="/index.php" class="flex items-center space-x-2">
+            <img src="https://placeholder.svg?height=40&width=40" alt="Lamma Logo" class="h-8 w-8">
+          </a>
+          <p class="text-gray-600 mt-2">Live in the Moment</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-600 hover:text-blue-500">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-600 hover:text-blue-500">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-gray-600 hover:text-blue-500">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-600 hover:text-blue-500">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t text-center">
+        <p class="text-gray-600">© 2025 Lamma. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <!-- Custom JavaScript -->
+  <script>
+    // User menu toggle
+    const userMenuButton = document.getElementById('userMenuButton');
+    const userMenu = document.getElementById('userMenu');
+    
+    userMenuButton.addEventListener('click', () => {
+      userMenu.classList.toggle('hidden');
+    });
+    
+    // Close the menu when clicking outside
+    document.addEventListener('click', (event) => {
+      if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+        userMenu.classList.add('hidden');
+      }
+    });
+    
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // Initialize Swiper carousel
+    const swiper = new Swiper('.mySwiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+      },
+    });
+  </script>
+</body>
+</html>
