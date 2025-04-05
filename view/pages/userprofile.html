@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lama - User Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="view\styles\css\usersprofiles.css">
+    <link rel="icon" type="image/png" href="view\assets\images\logo.png">
+
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="view\assets\images\logo.png" class="logo-img" alt="Logo">
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </li>
+            <li class="nav-item">
+                <i class="bi bi-calendar-event"></i>
+                <span>Events</span>
+            </li>
+            <li class="nav-item">
+                <i class="bi bi-chat-left-text"></i>
+                <span>Messages</span>
+            </li>
+            <li class="nav-item active">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center text-md-start mb-4 mb-md-0">
+                        <img src="https://previews.123rf.com/images/balagur78/balagur781804/balagur78180400052/100161752-female-avatar-without-a-face-portrait-of-a-woman-girl-with-long-curly-black-hair-vector-flat.jpg" alt="User avatar" class="profile-avatar">
+                    </div>
+                    <div class="col-md-8">
+                        <h2 class="mb-1">Fatma Ezzahra Ghomrasni</h2>
+                        <p class="text-muted mb-2"><i class="bi bi-mortarboard-fill me-2"></i>Computer Science, 2nd Year</p>
+                        <p class="text-muted mb-3"><i class="bi bi-geo-alt me-2"></i>University of Technology</p>
+                        <div class="mb-3">
+                            <span class="interest-badge">Technology</span>
+                            <span class="interest-badge">AI & Machine Learning</span>
+                            <span class="interest-badge">Web Development</span>
+                            <span class="interest-badge">Hackathons</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat-item">
+                        <div class="number">18</div>
+                        <div class="label">Events Attended</div>
+                    </div>
+                    <div class="profile-stat-item">
+                        <div class="number">7</div>
+                        <div class="label">This Semester</div>
+                    </div>
+                    <div class="profile-stat-item">
+                        <div class="number">5</div>
+                        <div class="label">Upcoming</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-lg-4">
+                    <!-- Personal Information -->
+                    <div class="info-card">
+                        <h3 class="section-title">Personal Information</h3>
+                        <div class="info-item">
+                            <div class="info-label">Full Name</div>
+                            <input type="text" class="info-value form-control" value="Fatma Ezzahra Ghomrasni" disabled>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <input type="email" class="info-value form-control" value="ghomrasnifatma@gmail.com" disabled>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Major</div>
+                            <input type="text" class="info-value form-control" value="Computer Science" disabled>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Year</div>
+                            <input type="text" class="info-value form-control" value="2nd Year" disabled>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Student ID</div>
+                            <input type="text" class="info-value form-control" value="UTech-2021-CS-1034" disabled>
+                        </div>
+                        <button class="btn btn-primary mt-3" id="edit-info-btn">Edit</button>
+                    </div>
+
+                    <!-- Interests -->
+                    <div class="info-card">
+                        <h3 class="section-title">Interests</h3>
+                        <div>
+                            <span class="interest-badge">Technology</span>
+                            <span class="interest-badge">AI & Machine Learning</span>
+                            <span class="interest-badge">Web Development</span>
+                            <span class="interest-badge">Hackathons</span>
+                            <span class="interest-badge">Networking</span>
+                            <span class="interest-badge">Career Fairs</span>
+                            <span class="interest-badge">Workshops</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-lg-8">
+                    <!-- Profile Tabs - FIXED VERSION -->
+                    <div class="profile-tabs">
+                        <!-- FIX: Improved tab structure -->
+                        <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <!-- Make the entire button clickable -->
+                                <button class="nav-link active w-100" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="true">
+                                    Upcoming Events
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link w-100" id="past-tab" data-bs-toggle="tab" data-bs-target="#past" type="button" role="tab" aria-controls="past" aria-selected="false">
+                                    Past Events
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link w-100" id="recommendations-tab" data-bs-toggle="tab" data-bs-target="#recommendations" type="button" role="tab" aria-controls="recommendations" aria-selected="false">
+                                    Recommendations
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="profileTabsContent">
+                            <!-- Upcoming Events Tab -->
+                            <div class="tab-pane fade show active" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+                                <h3 class="section-title">Your Upcoming Events</h3>
+                                <div class="row row-cols-1 row-cols-md-2 g-4">
+                                    <div class="col">
+                                        <div class="card h-100 border-0 shadow-sm">
+                                            <img src="https://www.de-ctr.org/wp-content/uploads/2019/08/tech-talk-1024x512.jpg" class="card-img-top" alt="Tech Talk">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Tech Talk: Future of AI</h5>
+                                                <p class="card-text text-muted small mb-3">Guest lecture by leading AI researcher</p>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-calendar me-2"></i>
+                                                    <span>Tomorrow, 4:00 PM</span>
+                                                </div>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-geo-alt me-2"></i>
+                                                    <span>Lecture Hall B</span>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white border-0 pt-0">
+                                                <button class="btn btn-sm btn-outline-primary w-100">View Details</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card h-100 border-0 shadow-sm">
+                                            <img src="https://www.bostontechmom.com/wp-content/uploads/2022/11/hackathon-tech-banner.jpg" class="card-img-top" alt="Hackathon">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Campus Tech Hackathon</h5>
+                                                <p class="card-text text-muted small mb-3">48-hour coding competition with great prizes</p>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-calendar me-2"></i>
+                                                    <span>Oct 15-17, 2023</span>
+                                                </div>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-geo-alt me-2"></i>
+                                                    <span>Computer Science Building</span>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white border-0 pt-0">
+                                                <button class="btn btn-sm btn-outline-primary w-100">View Details</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Past Events Tab -->
+                            <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="past-tab">
+                                <h3 class="section-title">Your Past Events</h3>
+                                <div class="row row-cols-1 row-cols-md-2 g-4">
+                                    <!-- Past Event Cards -->
+                                    <div class="col">
+                                        <div class="card h-100 border-0 shadow-sm">
+                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOiDid5ou56oTfkIJ_vvvH-KXdkcXfpijymQ&s" class="card-img-top" alt="Workshop">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Python Programming Workshop</h5>
+                                                <p class="card-text text-muted small mb-3">Beginner to intermediate Python skills</p>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-calendar me-2"></i>
+                                                    <span>Sept 20, 2023</span>
+                                                </div>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                                    <i class="bi bi-star-fill text-warning me-1"></i>
+                                                    <i class="bi bi-star text-warning"></i>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white border-0 pt-0">
+                                                <button class="btn btn-sm btn-outline-secondary w-100">View Certificate</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- More past events... -->
+                                </div>
+                            </div>
+                            
+                            <!-- Recommendations Tab -->
+                            <div class="tab-pane fade" id="recommendations" role="tabpanel" aria-labelledby="recommendations-tab">
+                                <h3 class="section-title">Recommended For You</h3>
+                                <p class="text-muted mb-4">Based on your interests and preferences</p>
+                                
+                                <div class="row row-cols-1 row-cols-md-2 g-4">
+                                    <!-- Recommended Event Cards -->
+                                    <div class="col">
+                                        <div class="card h-100 border-0 shadow-sm">
+                                            <div class="position-relative">
+                                                <img src="https://thefusioneer.com/wp-content/uploads/2023/11/5-AI-Advancements-to-Expect-in-the-Next-10-Years-scaled.jpeg" class="card-img-top" alt="AI Workshop">
+                                                <span class="position-absolute top-0 end-0 bg-primary text-white m-2 px-2 py-1 rounded">95% Match</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <h5 class="card-title">AI & Machine Learning Workshop</h5>
+                                                <p class="card-text text-muted small mb-3">Hands-on workshop with industry experts</p>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-calendar me-2"></i>
+                                                    <span>Oct 22, 2023</span>
+                                                </div>
+                                                <div class="d-flex align-items-center text-muted small mb-2">
+                                                    <i class="bi bi-geo-alt me-2"></i>
+                                                    <span>Innovation Center</span>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white border-0 pt-0">
+                                                <button class="btn btn-sm btn-primary w-100">RSVP Now</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- More recommended events... -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer py-4 mt-5">
+        <div class="container text-center">
+            <img src="./assets/images/logo.png" alt="Logo" class="footer-logo mb-2">
+            <p>© 2025 Lama. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar menu item click functionality
+        const navItems = document.querySelectorAll('.nav-menu .nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Enable editing for personal information
+        const editButton = document.getElementById('edit-info-btn');
+        const inputs = document.querySelectorAll('.info-value');
+
+        editButton.addEventListener('click', () => {
+            const isEditing = editButton.textContent === 'Save';
+            inputs.forEach(input => input.disabled = isEditing);
+            editButton.textContent = isEditing ? 'Edit' : 'Save';
+        });
+        
+        // FIX: Improved tab initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make sure Bootstrap is fully loaded
+            if (typeof bootstrap !== 'undefined') {
+                // Initialize all tabs properly
+                const tabElements = document.querySelectorAll('#profileTabs button');
+                tabElements.forEach(function(tabEl) {
+                    // Create a new Tab instance for each tab
+                    const tab = new bootstrap.Tab(tabEl);
+                    
+                    // Add click event listener to each tab
+                    tabEl.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        tab.show();
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
