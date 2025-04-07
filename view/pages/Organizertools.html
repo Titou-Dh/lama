@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lama - Organizer Tools</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"view\assets\images\logo.png>
+    <link rel="stylesheet" href="view\styles\css\usersprofiles.css">
+    <link rel="icon" type="image/png" href="view\assets\images\logo.png">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="view\assets\images\logo.png" class="logo-img" alt="Logo">
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </li>
+            <li class="nav-item">
+                <i class="bi bi-calendar-event"></i>
+                <span>Events</span>
+            </li>
+            <li class="nav-item">
+                <i class="bi bi-chat-left-text"></i>
+                <span>Messages</span>
+            </li>
+            <li class="nav-item">
+                <i class="bi bi-person"></i>
+                <span><a href="OrganizerProfile.html" class="links">Profile</a></span>
+            </li>
+            <li class="nav-item active">
+                <i class="bi bi-tools"></i>
+                <span>Organizer Tools</span>
+            </li>
+            <li class="nav-item">
+                <i class="bi bi-gear"></i>
+                <span><a href="settings.html" class="links">Settings</a></span>
+            </li>
+        </ul>
+    </div>
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center text-md-start mb-4 mb-md-0">
+                        <img src="https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid" alt="Organizer avatar" class="profile-avatar">
+                    </div>
+                    <div class="col-md-8">
+                        <h2 class="mb-1">Sarah Johnson</h2>
+                        <p class="text-muted mb-2"><i class="bi bi-briefcase me-2"></i>Senior Event Coordinator</p>
+                        <p class="text-muted mb-3"><i class="bi bi-geo-alt me-2"></i>New York, NY</p>
+                        <div class="mb-3">
+                            <span class="expertise-badge">Tech Conferences</span>
+                            <span class="expertise-badge">Workshops</span>
+                            <span class="expertise-badge">Corporate Events</span>
+                            <span class="expertise-badge">Networking</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="star-rating me-2">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </div>
+                            <span class="text-muted">4.8 (126 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="profile-stats">
+                    <div class="profile-stat-item">
+                        <div class="number">87</div>
+                        <div class="label">Events Organized</div>
+                    </div>
+                    <div class="profile-stat-item">
+                        <div class="number">12,450</div>
+                        <div class="label">Total Attendees</div>
+                    </div>
+                    <div class="profile-stat-item">
+                        <div class="number">1</div>
+                        <div class="label">Upcoming Events</div>
+                    </div>
+                    <div class="profile-stat-item">
+                        <div class="number">98%</div>
+                        <div class="label">Satisfaction Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Organizer Tools Section -->
+            <div class="info-card">
+                <h3 class="section-title mb-4">Organizer Tools</h3>
+                
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <!-- Event Analytics Tool -->
+                    <div class="col">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="bi bi-bar-chart-fill"></i>
+                            </div>
+                            <h4 class="tool-title">Event Analytics</h4>
+                            <p class="tool-description">Gain valuable insights into your events with comprehensive analytics. Track attendance, engagement metrics, and audience demographics to optimize future events.</p>
+                            <div class="tool-features mb-3">
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Real-time attendance tracking</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Audience engagement metrics</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Custom dashboard with key performance indicators</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Exportable reports in multiple formats</span>
+                                </div>
+                            </div>
+                            <a href="#" class="tool-link">Access Analytics</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Attendee Management Tool -->
+                    <div class="col">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <h4 class="tool-title">Attendee Management</h4>
+                            <p class="tool-description">Streamline your attendee experience from registration to post-event follow-up. Manage guest lists, send personalized communications, and collect valuable feedback.</p>
+                            <div class="tool-features mb-3">
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Customizable registration forms</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Automated confirmation emails</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>QR code check-in system</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Post-event surveys and feedback collection</span>
+                                </div>
+                            </div>
+                            <a href="#" class="tool-link">Manage Attendees</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Promotion Tools -->
+                    <div class="col">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="bi bi-megaphone-fill"></i>
+                            </div>
+                            <h4 class="tool-title">Promotion Tools</h4>
+                            <p class="tool-description">Boost your event visibility with powerful promotion tools. Create eye-catching marketing materials, manage social media campaigns, and track promotional effectiveness.</p>
+                            <div class="tool-features mb-3">
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Email campaign builder with templates</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Social media integration and scheduling</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Custom landing page creator</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Promotional code and discount management</span>
+                                </div>
+                            </div>
+                            <a href="#" class="tool-link">Start Promoting</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Financial Reports -->
+                    <div class="col">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="bi bi-cash-stack"></i>
+                            </div>
+                            <h4 class="tool-title">Financial Reports</h4>
+                            <p class="tool-description">Take control of your event finances with comprehensive financial reporting. Track revenue, expenses, and profitability to make data-driven decisions for your events.</p>
+                            <div class="tool-features mb-3">
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Revenue tracking by ticket type</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Expense categorization and management</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Profit and loss statements</span>
+                                </div>
+                                <div class="tool-feature">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <span>Tax reporting and documentation</span>
+                                </div>
+                            </div>
+                            <a href="#" class="tool-link">View Financial Reports</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="info-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="section-title mb-0">Recent Activity</h3>
+                    <a href="#" class="text-muted small">View All</a>
+                </div>
+                
+                <div>
+                    <div class="activity-item" style="border-color: #4361ee;">
+                        <p class="activity-title">Analytics Report Generated</p>
+                        <p class="activity-description">Monthly analytics report for "Tech Talk: Future of AI" is now available</p>
+                        <p class="activity-time">10 minutes ago</p>
+                    </div>
+                    
+                    <div class="activity-item" style="border-color: #ff6ec7;">
+                        <p class="activity-title">New Attendee Registration</p>
+                        <p class="activity-description">15 new attendees registered for "Tech Talk: Future of AI"</p>
+                        <p class="activity-time">1 hour ago</p>
+                    </div>
+                    
+                    <div class="activity-item" style="border-color: #ffc107;">
+                        <p class="activity-title">Promotion Campaign Started</p>
+                        <p class="activity-description">Email campaign "Last Chance: Tech Talk Tickets" sent to 500 subscribers</p>
+                        <p class="activity-time">Yesterday</p>
+                    </div>
+                    
+                    <div class="activity-item" style="border-color: #20c997;">
+                        <p class="activity-title">Financial Report Updated</p>
+                        <p class="activity-description">Q2 Financial Report has been updated with latest revenue figures</p>
+                        <p class="activity-time">2 days ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer py-4 mt-5">
+        <div class="container text-center">
+            <img src="./assets/images/logo.png" alt="Logo" class="footer-logo mb-2">
+            <p>© 2025 Lama. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    });
+    </script>
+
+</body>
+</html>
