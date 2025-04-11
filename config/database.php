@@ -10,7 +10,6 @@ try {
         "mysql:host=$db_server;dbname=$db_name;charset=utf8",
         $db_user,
         $db_password,
-
     );
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();

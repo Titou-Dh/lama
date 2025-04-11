@@ -33,73 +33,10 @@
     />
     <link rel="stylesheet" href="../styles/css/landing2.css" />
 
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                blue: "#3b82f6",
-                purple: "#8b5cf6",
-                dark: "#1e40af",
-                light: "#93c5fd",
-                burgundy: "#9f1239",
-              },
-              secondary: {
-                purple: "#7c3aed",
-                light: "#c4b5fd",
-              },
-            },
-            fontFamily: {
-              poppins: ["Poppins", "sans-serif"],
-            },
-          },
-        },
-      };
-    </script>
+    <script src="../scripts/tailwind.js"></script>
   </head>
 
   <body>
-    <!-- Navbar -->
-    <!-- <nav class="navbar navbar-light" id="mainNav">
-
-    <div class="navbar-top container">
-
-      <a class="navbar-brand" href="#">
-        <img src="../assets/images/lg.png" alt="Lama" class="logo-img">
-      </a>
-
- 
-      <div class="nav-buttons">
-        <div class="nav-item">
-          <a class="nav-link btn btn-outline-gradient rounded-full px-3 py-1" href="create-event.html">Create Event</a>
-        </div>
-        <div class="nav-item">
-          <a class="nav-link mx-1" href="#">Help Center</a>
-        </div>
-        <div class="nav-item">
-          <a class="nav-link mx-1" href="sign-in.html">Log In</a>
-        </div>
-        <div class="nav-item">
-          <a class="nav-link btn btn-gradient rounded-full px-3 py-1" href="sign-up.html">Sign Up</a>
-        </div>
-        <div class="nav-item">
-          <div class="navbar-bottom container">
-            <div class="search-container">
-              <input class="form-control rounded-full w-100" type="search" placeholder="Search for events"
-                aria-label="Search">
-              <i class="fas fa-search search-icon"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-
-  </nav> -->
-
     <nav class="box-shadow-lg" id="mainNav">
       <div
         class="max-w-screen-xl flex flex-wrap py-2 items-center justify-between mx-auto"
@@ -113,7 +50,7 @@
           <div class="nav-item">
             <a
               class="nav-link btn btn-gradient rounded-full px-3 py-2 hover:text-white"
-              href="sign-up.php"
+              href="./auth/sign-up.php"
               >Sign Up</a
             >
           </div>

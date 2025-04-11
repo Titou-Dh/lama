@@ -1,6 +1,6 @@
 <?php
-include_once '../../config/database.php';
-include_once '../../controller/auth.php';
+include_once '../../../config/database.php';
+include_once '../../../controller/auth.php';
 
 session_start();
 
@@ -43,9 +43,9 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="../styles/css/auth.css" />
+  <link rel="stylesheet" href="../../styles/css/auth.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="../scripts/tailwind.js"></script>
+  <script src="../../scripts/tailwind.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
@@ -55,7 +55,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
     <!-- Left Section - Event Image and Text -->
     <div class="left-section hidden lg:block">
       <img
-        src="../assets/images/auth-img-v2.png"
+        src="../../assets/images/auth-img-v2.png"
         alt="Concert event with blue lighting and crowd"
         class="bg-image" />
       <div class="content">
@@ -64,7 +64,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
           Journey <br />with Us
         </h1>
         <div class="footer">
-          <img class="logo" src="../assets/images/logo.png" alt="Logo" />
+          <img class="logo" src="../../assets/images/logo.png" alt="Logo" />
           <p class="tagline">Lama – Uniting Events, Elevating Experiences!</p>
         </div>
       </div>
@@ -204,7 +204,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
         });
     });
   </script>
-  <script src="../scripts/auth.js"></script>
+  <script src="../../scripts/auth.js"></script>
 </body>
 
 </html>

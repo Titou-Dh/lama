@@ -33,9 +33,7 @@ main {
 }
 
 .bg-gradient-light {
-  background: linear-gradient(to right,
-      #e0e7ff,
-      #ede9fe);
+  background: linear-gradient(to right, #e0e7ff, #ede9fe);
   /* Light blue to light purple gradient */
 }
 
@@ -69,7 +67,6 @@ main {
   border-color: transparent;
 }
 
-
 .btn-burgundy {
   /* burgundy XD */
   background-color: #9f1239;
@@ -95,7 +92,6 @@ main {
   backdrop-filter: blur(23px) saturate(171%);
   -webkit-backdrop-filter: blur(23px) saturate(171%);
   background-color: rgba(110, 87, 145, 0.18);
-
 }
 
 .navbar-top {
@@ -185,9 +181,11 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom,
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0.7));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.7)
+  );
 }
 
 .hero-content {
