@@ -967,6 +967,51 @@ Senior Event Coordinator with over 10 years of experience organizing tech confer
     <script src="../../scripts/core/bootstrap.min.js"></script>
     <script src="../../scripts/soft-ui-dashboard.js"></script>
     <!-- <script src="../../scripts/soft-ui-dashboard.min.js"></script> -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const navItems = document.querySelectorAll(".nav-item");
+
+            navItems.forEach((item) => {
+                item.addEventListener("click", function() {
+                    navItems.forEach((el) => el.classList.remove("active"));
+                    this.classList.add("active");
+                });
+            });
+
+            // Add animation to settings tabs
+            const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
+            tabButtons.forEach((button) => {
+                button.addEventListener("click", function() {
+                    const targetId = this.getAttribute("data-bs-target");
+                    const targetPane = document.querySelector(targetId);
+
+                    if (targetPane) {
+                        targetPane.style.animation = "none";
+                        setTimeout(() => {
+                            targetPane.style.animation = "fadeIn 0.5s ease-in-out";
+                        }, 10);
+                    }
+                });
+            });
+
+            // Toggle switches functionality
+            const toggleSwitches = document.querySelectorAll(
+                ".toggle-switch input"
+            );
+            toggleSwitches.forEach((toggle) => {
+                toggle.addEventListener("change", function() {
+                    const parentCard = this.closest(".card");
+                    const checkboxes = parentCard.querySelectorAll(
+                        ".form-check-input:not(.toggle-switch input)"
+                    );
+
+                    checkboxes.forEach((checkbox) => {
+                        checkbox.disabled = !this.checked;
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
