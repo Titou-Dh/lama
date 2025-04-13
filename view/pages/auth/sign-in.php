@@ -176,14 +176,14 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
         .then((response) => response.json())
         .then((data) => {
           if (data.status === 'success') {
-            Swal.fire({
-              icon: "success",
-              title: "Login Successful",
-              text: data.message,
-              confirmButtonText: "OK",
-            }).then(() => {
-              window.location.href = "/lama/view/pages/landing-page.html";
-            });
+            // Swal.fire({
+            //   icon: "success",
+            //   title: "Login Successful",
+            //   text: data.message,
+            //   confirmButtonText: "OK",
+            // }).then(() => {
+            window.location.href = "/lama/view/pages/dashboard/index.php";
+            // });
           } else {
             Swal.fire({
               icon: "error",
