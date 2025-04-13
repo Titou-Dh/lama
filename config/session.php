@@ -17,6 +17,12 @@ function logout()
     exit();
 }
 
+
+function isSignedIn(): bool
+{
+    return isset($_SESSION);
+}
+
 // Handle logout action if requested via URL
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     logout();

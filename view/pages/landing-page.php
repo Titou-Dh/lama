@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,8 +39,21 @@
       </a>
       <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse mr-2">
         <div class="nav-item">
-          <a class="nav-link btn btn-gradient rounded-full px-3 py-2 hover:text-white" href="./auth/sign-up.php">Sign
-            Up</a>
+          <?php
+          if (isset($_SESSION['user_id'])) {
+            echo '
+            <div class="flex items-center gap-2"><a class="nav-link btn btn-gradient rounded-full px-3 py-2 flex items-center gap-2 hover:text-white" href="./dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>      
+                    Dashboard
+                  </a>
+                  <button onclick="window.location.href=\'../../config/session.php?action=logout\'" class="btn btn-outline-secondary  rounded-full">Logout</button></div>
+                  ';
+          } else {
+            echo '<a class="nav-link btn btn-gradient rounded-full px-3 py-2 hover:text-white" href="./auth/sign-in.php">
+                    Sign in
+                  </a>';
+          }
+          ?>
         </div>
         <button data-collapse-toggle="navbar-cta" type="button"
           class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 border-2 border-blue-500 rounded-lg md:hidden focus:outline-none hover:border-blue-600"
@@ -53,7 +71,7 @@
           class="flex flex-col font-medium px-2 py-3 md:p-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
           <li>
             <a href="#"
-              class="block py-2 px-3 md:p-0 btn-gradient md:bg-transparent text-white md:text-blue-700 rounded-xl"
+              class="block py-2 px-3 md:p-0 btn-gradient md:bg-transparent text-white md:text-blue-700 rounded-full"
               aria-current="page">Home</a>
           </li>
           <li>
@@ -745,7 +763,7 @@
     // Preference tags
     const preferenceTags = document.querySelectorAll(".preference-tag");
     preferenceTags.forEach((tag) => {
-      tag.addEventListener("click", function () {
+      tag.addEventListener("click", function() {
         this.classList.toggle("active");
       });
     });

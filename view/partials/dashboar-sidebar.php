@@ -58,7 +58,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <path d="M12 14v4" />
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1 <?php echo $current_page === 'create-event.php' ? 'text-white ' : ''; ?>">create-event</span>
+                        <span class="nav-link-text ms-1 <?php echo $current_page === 'create-event.php' ? 'text-white ' : ''; ?>">Create Event</span>
                     </a>
                 </li>
                 <!-- <li class="nav-item">

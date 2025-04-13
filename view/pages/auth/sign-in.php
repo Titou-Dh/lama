@@ -182,7 +182,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
             //   text: data.message,
             //   confirmButtonText: "OK",
             // }).then(() => {
-            window.location.href = "/lama/view/pages/dashboard/index.php";
+            window.location.href = "/lama/view/pages/landing-page.php";
             // });
           } else {
             Swal.fire({
