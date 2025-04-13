@@ -4,7 +4,7 @@ session_start();
 function checkSession()
 {
     if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-        header("Location: /view/pages/auth/sign-in.php");
+        header("Location: /lama/view/pages/auth/sign-in.php");
         exit();
     }
 }

@@ -1,152 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Event - EventLama</title>
-  
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
+
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles/css/createevent2.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              blue: '#3b82f6',
-              purple: '#8b5cf6',
-              dark: '#1e40af',
-              light: '#93c5fd',
-              burgundy: '#9f1239'
-            },
-            secondary: {
-              purple: '#7c3aed',
-              light: '#c4b5fd'
-            }
-          },
-          fontFamily: {
-            poppins: ['Poppins', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-  
+  <link rel="stylesheet" href="../../styles/css/createevent2.css">
+  <script src="../../scripts/tailwind.js"></script>
+
 </head>
+
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-light fixed-top" id="mainNav">
-    <!-- Top Row: Logo and Buttons -->
-    <div class="navbar-top container">
-      <!-- Logo -->
-      <a class="navbar-brand" href="#">
-        <img src="../assets/images/lg.png" alt="EventLama" class="logo-img">
-      </a>
-      
-       <!-- Nav Buttons -->
-      <div class="nav-buttons">
-          <!-- Bottom Row: Search Bar -->
-          <div class="navbar-bottom container">
-            <div class="search-container">
-              <input class="form-control rounded-full w-100" type="search" placeholder="Search for events" aria-label="Search">
-              <i class="fas fa-search search-icon"></i>
-            </div>
-          </div>
-      </div>
-     
-    
-    <div class="d-flex align-items-center">
-      <div class="dropdown">
-        <button
-          class="btn btn-link text-dark dropdown-toggle d-flex align-items-center"
-          type="button"
-          id="userDropdown"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <div class="me-2 d-none d-md-block">Sinda Sahmim</div>
-          <div
-            class="rounded-circle bg-gradient-primary d-flex align-items-center justify-content-center"
-            style="width: 40px; height: 40px"
-          >
-            <i class="fas fa-user text-white"></i>
-          </div>
-        </button>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="userDropdown"
-        >
-          <li>
-            <a class="dropdown-item" href="#"
-              ><i class="fas fa-user me-2"></i> Profile</a
-            >
-          </li>
-          <li>
-            <a class="dropdown-item" href="#"
-              ><i class="fas fa-cog me-2"></i> Settings</a
-            >
-          </li>
-          <li><hr class="dropdown-divider" /></li>
-          <li>
-            <a class="dropdown-item" href="#"
-              ><i class="fas fa-sign-out-alt me-2"></i> Logout</a
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
-        
-      </div>
-    </div>
-    
-    
-  </nav>
 
-  <main style="margin-top: 90px;">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <a href="#" class="sidebar-link active">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-      </a>
-      <a href="#" class="sidebar-link">
-        <i class="fas fa-cog"></i>
-        <span>Organizer Settings</span>
-      </a>
-      <a href="#" class="sidebar-link">
-        <i class="fas fa-ticket-alt"></i>
-        <span>My Events</span>
-      </a>
-      <a href="#" class="sidebar-link">
-        <i class="fas fa-chart-bar"></i>
-        <span>Analytics</span>
-      </a>
-      <a href="#" class="sidebar-link">
-        <i class="fas fa-users"></i>
-        <span>Attendees</span>
-      </a>
-      <a href="#" class="sidebar-link">
-        <i class="fas fa-money-bill-wave"></i>
-        <span>Finances</span>
-      </a>
-    </div>
 
+
+  <main>
     <!-- Content -->
     <div class="container py-4">
+      <a href="/lama/view/pages/dashboard" class="px-2 py-2 border border-primary w-fit d-flex align-items-center gap-2 rounded-md btn btn-outline-primary mb-5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left">
+          <path d="m12 19-7-7 7-7" />
+          <path d="M19 12H5" />
+        </svg>
+        Go back to Dashboard
+      </a>
       <div class="row">
         <div class="col-12">
           <h1 class="text-3xl font-bold mb-4 text-gradient">Create Your Event</h1>
-          
+
           <!-- Form Progress -->
           <div class="form-progress bg-gradient-light">
             <div class="progress-step active">
@@ -168,14 +61,14 @@
           </div>
         </div>
       </div>
-      
+
       <div class="row">
         <div class="col-lg-8">
           <!-- Event Images Section -->
           <div class="form-section">
             <h3 class="text-gradient">Event Images</h3>
             <p class="text-gray-500 mb-4">Upload eye-catching images to attract attendees. You can upload up to 10 images.</p>
-            
+
             <div class="image-slider mb-4">
               <div class="slider-images" id="sliderImages">
                 <div class="slider-image" style="background-image: url('https://via.placeholder.com/800x400/3b82f6/ffffff?text=Upload+Event+Image')"></div>
@@ -184,7 +77,7 @@
                 <div class="slider-dot active"></div>
               </div>
             </div>
-            
+
             <div class="image-upload-container" id="imageUpload">
               <i class="fas fa-cloud-upload-alt text-4xl text-primary-purple mb-2"></i>
               <p class="mb-1">Drag and drop your images here</p>
@@ -193,23 +86,23 @@
               <input type="file" id="imageInput" class="d-none" accept="image/*" multiple>
             </div>
           </div>
-          
+
           <!-- Basic Info Section -->
           <div class="form-section">
             <h3 class="text-gradient">Basic Information</h3>
-            
+
             <div class="mb-4">
               <label for="eventTitle" class="form-label font-medium">Event Title <span class="text-danger">*</span></label>
               <input type="text" class="form-control" id="eventTitle" placeholder="Keep it short and sweet">
               <div class="form-text">Attendees will see this as the event name. Example: "Summer Music Festival 2025"</div>
             </div>
-            
+
             <div class="mb-4">
               <label for="eventDescription" class="form-label font-medium">Event Description <span class="text-danger">*</span></label>
               <textarea class="form-control" id="eventDescription" rows="4" placeholder="Tell people what your event is about"></textarea>
               <div class="form-text">Provide a compelling description that will make people want to attend.</div>
             </div>
-            
+
             <div class="row mb-4">
               <div class="col-md-6">
                 <label class="form-label font-medium">Event Date <span class="text-danger">*</span></label>
@@ -226,7 +119,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="mb-4 p-3 rounded bg-gradient-light">
               <label class="form-label font-medium">Event Type <span class="text-danger">*</span></label>
               <div class="d-flex">
@@ -244,7 +137,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="mb-4" id="locationSection">
               <label for="eventLocation" class="form-label font-medium">Location <span class="text-danger">*</span></label>
               <div class="input-group">
@@ -252,7 +145,7 @@
                 <input type="text" class="form-control" id="eventLocation" placeholder="Enter venue name or address">
               </div>
             </div>
-            
+
             <div class="mb-4 d-none" id="onlineSection">
               <label for="eventLink" class="form-label font-medium">Online Event Link <span class="text-danger">*</span></label>
               <div class="input-group">
@@ -262,11 +155,11 @@
               <div class="form-text">You can add a Zoom, Google Meet, or any other video conferencing link.</div>
             </div>
           </div>
-          
+
           <!-- Event Details Section -->
           <div class="form-section">
             <h3 class="text-gradient">Event Details</h3>
-            
+
             <div class="mb-4">
               <label for="eventCategory" class="form-label font-medium">Category <span class="text-danger">*</span></label>
               <select class="form-select" id="eventCategory">
@@ -291,7 +184,7 @@
                 <option>Other</option>
               </select>
             </div>
-            
+
             <div class="mb-4 p-3 rounded bg-gradient-light">
               <label class="form-label font-medium">Age Restrictions</label>
               <select class="form-select" id="ageRestriction">
@@ -301,7 +194,7 @@
                 <option>Custom</option>
               </select>
             </div>
-            
+
             <div class="mb-4">
               <label for="doorTime" class="form-label font-medium">Door Time</label>
               <div class="input-group">
@@ -310,19 +203,19 @@
               </div>
               <div class="form-text">When should attendees arrive? (e.g., 30 minutes before start time)</div>
             </div>
-            
+
             <div class="mb-4">
               <label for="capacity" class="form-label font-medium">Capacity</label>
               <input type="number" class="form-control" id="capacity" placeholder="Maximum number of attendees">
               <div class="form-text">Leave blank for unlimited capacity.</div>
             </div>
           </div>
-          
+
           <!-- FAQ Section -->
           <div class="form-section">
             <h3 class="text-gradient">Frequently Asked Questions</h3>
             <p class="text-gray-500 mb-4">Add FAQs to provide additional information to attendees.</p>
-            
+
             <div id="faqContainer">
               <div class="faq-item mb-3 p-3 border rounded">
                 <div class="mb-3">
@@ -335,17 +228,17 @@
                 </div>
               </div>
             </div>
-            
+
             <button class="btn btn-outline-primary mt-2" id="addFaqBtn">
               <i class="fas fa-plus me-2"></i> Add Another FAQ
             </button>
           </div>
-          
+
           <!-- Tickets Section -->
           <div class="form-section">
             <h3 class="text-gradient">Tickets</h3>
             <p class="text-gray-500 mb-4">Set up tickets for your event. You can create multiple ticket types.</p>
-            
+
             <div id="ticketContainer">
               <div class="ticket-item mb-3 p-3 border rounded">
                 <div class="mb-3">
@@ -377,17 +270,17 @@
                 </div>
               </div>
             </div>
-            
+
             <button class="btn btn-outline-primary mt-2" id="addTicketBtn">
               <i class="fas fa-plus me-2"></i> Add Another Ticket
             </button>
           </div>
-          
+
           <!-- Promo Codes Section -->
           <div class="form-section">
             <h3 class="text-gradient">Promo Codes</h3>
             <p class="text-gray-500 mb-4">Create promotional codes to offer discounts on tickets.</p>
-            
+
             <div id="promoContainer">
               <div class="promo-item mb-3 p-3 border rounded">
                 <div class="mb-3">
@@ -422,19 +315,19 @@
                 </div>
               </div>
             </div>
-            
+
             <button class="btn btn-outline-primary mt-2" id="addPromoBtn">
               <i class="fas fa-plus me-2"></i> Add Another Promo Code
             </button>
           </div>
-          
+
           <!-- Publish Button -->
           <div class="d-flex justify-content-between mt-4 mb-5 p-4 rounded bg-gradient-light">
             <button class="btn btn-outline-secondary rounded-pill px-4">Save Draft</button>
             <button class="btn btn-burgundy rounded-pill px-5 py-2">Publish Event</button>
           </div>
         </div>
-        
+
         <!-- Preview Column -->
         <div class="col-lg-4">
           <div class="sticky-top" style="top: 100px;">
@@ -495,7 +388,7 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Event Details -->
             <div class="container py-4">
               <div class="row">
@@ -507,7 +400,7 @@
                       <p class="card-text" id="fullPreviewDescription">Event description will appear here...</p>
                     </div>
                   </div>
-                  
+
                   <!-- FAQ Section -->
                   <div class="card mb-4">
                     <div class="card-body">
@@ -518,7 +411,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="col-lg-4">
                   <!-- Location Section -->
                   <div class="card mb-4">
@@ -532,7 +425,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <!-- Tickets Section -->
                   <div class="card mb-4">
                     <div class="card-body">
@@ -542,7 +435,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <!-- Organizer Section -->
                   <div class="card">
                     <div class="card-body">
@@ -570,88 +463,11 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 mb-5 mb-lg-0">
-          <div class="d-flex align-items-center mb-4">
-            <img src="../assets/images/lg.png" alt="EventLama" style="height: 60px;"> 
-          </div>
-          <p class="text-gray-400 mb-4">Discover and create events that matter to you.</p>
-          <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
-        
-        <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
-          <h5 class="text-xl font-semibold mb-4">Company</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
-          </ul>
-        </div>
-        
-        <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
-          <h5 class="text-xl font-semibold mb-4">Support</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Help Center</a></li>
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Safety Center</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white">Community Guidelines</a></li>
-          </ul>
-        </div>
-        
-        <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
-          <h5 class="text-xl font-semibold mb-4">Legal</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white">Intellectual Property</a></li>
-          </ul>
-        </div>
-        
-        <div class="col-lg-2 col-md-4">
-          <h5 class="text-xl font-semibold mb-4">Download</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">iOS App</a></li>
-            <li class="mb-2"><a href="#" class="text-gray-400 hover:text-white">Android App</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <hr class="my-5 border-gray-700">
-      
-      <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-start">
-          <p class="text-gray-400 mb-0">&copy; 2025 EventLama. All rights reserved.</p>
-        </div>
-        <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
-          <div class="dropdown d-inline-block">
-            <button class="btn btn-sm btn-outline-light dropdown-toggle rounded-pill" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-globe me-1"></i> English
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-              <li><a class="dropdown-item" href="#">English</a></li>
-              <li><a class="dropdown-item" href="#">Español</a></li>
-              <li><a class="dropdown-item" href="#">Français</a></li>
-              <li><a class="dropdown-item" href="#">Arabic</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
+
   <!-- Custom JavaScript -->
   <script>
     // Navbar scroll effect
@@ -663,18 +479,18 @@
         navbar.classList.remove('navbar-scrolled');
       }
     });
-    
+
     // Toggle between in-person and online event
     document.getElementById('inPersonEvent').addEventListener('change', function() {
       document.getElementById('locationSection').classList.remove('d-none');
       document.getElementById('onlineSection').classList.add('d-none');
     });
-    
+
     document.getElementById('onlineEvent').addEventListener('change', function() {
       document.getElementById('locationSection').classList.add('d-none');
       document.getElementById('onlineSection').classList.remove('d-none');
     });
-    
+
     // Add FAQ button
     document.getElementById('addFaqBtn').addEventListener('click', function() {
       const faqContainer = document.getElementById('faqContainer');
@@ -695,13 +511,13 @@
         </div>
       `;
       faqContainer.appendChild(faqItem);
-      
+
       // Add remove functionality
       faqItem.querySelector('.remove-faq').addEventListener('click', function() {
         faqContainer.removeChild(faqItem);
       });
     });
-    
+
     // Add Ticket button
     document.getElementById('addTicketBtn').addEventListener('click', function() {
       const ticketContainer = document.getElementById('ticketContainer');
@@ -741,13 +557,13 @@
         </div>
       `;
       ticketContainer.appendChild(ticketItem);
-      
+
       // Add remove functionality
       ticketItem.querySelector('.remove-ticket').addEventListener('click', function() {
         ticketContainer.removeChild(ticketItem);
       });
     });
-    
+
     // Add Promo Code button
     document.getElementById('addPromoBtn').addEventListener('click', function() {
       const promoContainer = document.getElementById('promoContainer');
@@ -790,109 +606,114 @@
         </div>
       `;
       promoContainer.appendChild(promoItem);
-      
+
       // Add remove functionality
       promoItem.querySelector('.remove-promo').addEventListener('click', function() {
         promoContainer.removeChild(promoItem);
       });
     });
-    
+
     // Image upload functionality
     document.getElementById('imageUpload').addEventListener('click', function() {
       document.getElementById('imageInput').click();
     });
-    
+
     document.getElementById('imageInput').addEventListener('change', function(e) {
       const files = e.target.files;
       if (files.length > 0) {
         const sliderImages = document.getElementById('sliderImages');
         const sliderControls = document.getElementById('sliderControls');
-        
+
         // Clear existing images
         sliderImages.innerHTML = '';
         sliderControls.innerHTML = '';
-        
+
         // Add new images
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
           const reader = new FileReader();
-          
+
           reader.onload = function(e) {
             // Create slider image
             const sliderImage = document.createElement('div');
             sliderImage.className = 'slider-image';
             sliderImage.style.backgroundImage = `url('${e.target.result}')`;
             sliderImages.appendChild(sliderImage);
-            
+
             // Create slider dot
             const sliderDot = document.createElement('div');
             sliderDot.className = 'slider-dot';
             if (i === 0) sliderDot.classList.add('active');
             sliderControls.appendChild(sliderDot);
-            
+
             // Update preview
             if (i === 0) {
               document.getElementById('previewHeader').style.backgroundImage = `url('${e.target.result}')`;
               document.getElementById('fullPreviewHeader').style.backgroundImage = `url('${e.target.result}')`;
             }
           };
-          
+
           reader.readAsDataURL(file);
         }
       }
     });
-    
+
     // Real-time preview updates
     document.getElementById('eventTitle').addEventListener('input', function(e) {
       document.getElementById('previewTitle').textContent = e.target.value || 'Your Event Title';
       document.getElementById('fullPreviewTitle').textContent = e.target.value || 'Your Event Title';
     });
-    
+
     document.getElementById('eventDate').addEventListener('change', function(e) {
       updatePreviewDate();
     });
-    
+
     document.getElementById('eventTime').addEventListener('change', function(e) {
       updatePreviewDate();
     });
-    
+
     document.getElementById('eventLocation').addEventListener('input', function(e) {
       document.getElementById('previewLocation').textContent = e.target.value || 'Venue or Online';
       document.getElementById('fullPreviewLocation').textContent = e.target.value || 'Venue or Online';
     });
-    
+
     document.getElementById('eventLink').addEventListener('input', function(e) {
       if (document.getElementById('onlineEvent').checked) {
         document.getElementById('previewLocation').textContent = 'Online Event';
         document.getElementById('fullPreviewLocation').textContent = 'Online Event';
       }
     });
-    
+
     document.getElementById('eventDescription').addEventListener('input', function(e) {
       document.getElementById('previewDescription').textContent = e.target.value || 'Event description will appear here...';
       document.getElementById('fullPreviewDescription').textContent = e.target.value || 'Event description will appear here...';
     });
-    
+
     function updatePreviewDate() {
       const date = document.getElementById('eventDate').value;
       const time = document.getElementById('eventTime').value;
-      
+
       let previewDateText = 'Date and Time';
-      
+
       if (date) {
         const dateObj = new Date(date);
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const options = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        };
         previewDateText = dateObj.toLocaleDateString('en-US', options);
-        
+
         if (time) {
           previewDateText += ' at ' + formatTime(time);
         }
       }
-      
+
       document.getElementById('previewDate').textContent = previewDateText;
       document.getElementById('fullPreviewDate').textContent = previewDateText;
     }
-    
+
     function formatTime(timeString) {
       const [hours, minutes] = timeString.split(':');
       const hour = parseInt(hours);
@@ -904,7 +725,7 @@
     // Initialize the full preview modal
     document.addEventListener('DOMContentLoaded', function() {
       const fullPreviewModal = new bootstrap.Modal(document.getElementById('fullPreviewModal'));
-      
+
       // View Full Preview button click handler
       document.getElementById('viewFullPreviewBtn').addEventListener('click', function() {
         // Update the full preview with current form values
@@ -912,33 +733,33 @@
         // Show the modal
         fullPreviewModal.show();
       });
-      
+
       function updateFullPreview() {
         // Update FAQs
         updateFullPreviewFAQs();
-        
+
         // Update tickets
         updateFullPreviewTickets();
       }
-      
+
       function updateFullPreviewFAQs() {
         const faqContainer = document.getElementById('fullPreviewFAQs');
         faqContainer.innerHTML = '';
-        
+
         const faqItems = document.querySelectorAll('.faq-item');
         if (faqItems.length === 0) {
           faqContainer.innerHTML = '<p class="text-muted">No FAQs added yet</p>';
           return;
         }
-        
+
         const accordion = document.createElement('div');
         accordion.className = 'accordion';
         accordion.id = 'faqAccordion';
-        
+
         faqItems.forEach((item, index) => {
           const question = item.querySelector('input').value;
           const answer = item.querySelector('textarea').value;
-          
+
           if (question && answer) {
             const accordionItem = document.createElement('div');
             accordionItem.className = 'accordion-item';
@@ -957,32 +778,32 @@
             accordion.appendChild(accordionItem);
           }
         });
-        
+
         if (accordion.children.length > 0) {
           faqContainer.appendChild(accordion);
         } else {
           faqContainer.innerHTML = '<p class="text-muted">No FAQs added yet</p>';
         }
       }
-      
+
       function updateFullPreviewTickets() {
         const ticketsContainer = document.getElementById('fullPreviewTickets');
         ticketsContainer.innerHTML = '';
-        
+
         const ticketItems = document.querySelectorAll('.ticket-item');
         if (ticketItems.length === 0) {
           ticketsContainer.innerHTML = '<p class="text-muted">No tickets added yet</p>';
           return;
         }
-        
+
         const ticketsList = document.createElement('div');
         ticketsList.className = 'list-group';
-        
+
         ticketItems.forEach((item) => {
           const name = item.querySelector('input').value;
           const priceInput = item.querySelector('input[placeholder="0.00"]');
           const price = priceInput ? priceInput.value : '';
-          
+
           if (name) {
             const ticketItem = document.createElement('div');
             ticketItem.className = 'list-group-item d-flex justify-content-between align-items-center';
@@ -999,7 +820,7 @@
             ticketsList.appendChild(ticketItem);
           }
         });
-        
+
         if (ticketsList.children.length > 0) {
           ticketsContainer.appendChild(ticketsList);
         } else {
@@ -1009,5 +830,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>
