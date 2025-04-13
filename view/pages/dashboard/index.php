@@ -291,7 +291,7 @@ checkSession();
             right: 25,
             top: 25,
             bottom: 10
-          }
+          },
         },
         scales: {
           y: {
@@ -330,7 +330,8 @@ checkSession();
         labels: ['VIP', 'General', 'Early Bird'],
         datasets: [{
           data: [70, 200, 130],
-          backgroundColor: ['#4f46e5', '#10b981', '#f59e0b']
+          backgroundColor: ['#4f46e5', '#10b981', '#f59e0b'],
+          borderRadius: 8
         }]
       },
       options: {
@@ -352,7 +353,8 @@ checkSession();
         datasets: [{
           label: 'Uses',
           data: [45, 75, 60],
-          backgroundColor: '#f59e0b'
+          backgroundColor: '#f59e0b',
+          borderRadius: 10
         }]
       },
       options: {
@@ -387,7 +389,8 @@ checkSession();
         datasets: [{
           label: 'Attendees',
           data: [90, 60, 80, 50, 30],
-          backgroundColor: '#6366f1'
+          backgroundColor: '#6366f1',
+          borderRadius: 10
         }]
       },
       options: {
