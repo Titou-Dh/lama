@@ -1,8 +1,11 @@
 <?php
-include_once '../../../config/database.php';
-include_once '../../../controller/auth.php';
-
 session_start();
+
+require_once __DIR__ . '/../../../config/google.php';
+include_once __DIR__ . '/../../../config/database.php';
+include_once __DIR__ . '/../../../controller/auth.php';
+
+
 
 if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
   $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
@@ -128,7 +131,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
           </div>
 
           <!-- Google sign in -->
-          <button type="button" class="google-button">
+          <a href="<?php echo $client->createAuthUrl(); ?>" class="google-button">
             <span class="google-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +153,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
               </svg>
             </span>
             Sign in with Google
-          </button>
+          </a>
         </form>
 
         <p class="signup-text">
@@ -182,7 +185,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
             //   text: data.message,
             //   confirmButtonText: "OK",
             // }).then(() => {
-            window.location.href = "/lama/view/pages/dashboard/index.php";
+            window.location.href = "/lama/view/pages/landing-page.php";
             // });
           } else {
             Swal.fire({

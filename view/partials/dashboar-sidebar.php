@@ -28,7 +28,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <rect width="7" height="5" x="3" y="16" rx="1" />
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Dashboard</span>
+                        <span class="nav-link-text ms-1 <?php echo $current_page === 'index.php' ? 'text-white ' : ''; ?>">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -42,7 +42,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <path d="M3 10h18" />
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Events</span>
+                        <span class="nav-link-text ms-1 <?php echo $current_page === 'events.php' ? 'text-white ' : ''; ?>">Events</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -58,11 +58,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <path d="M12 14v4" />
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">create-event</span>
+                        <span class="nav-link-text ms-1 <?php echo $current_page === 'create-event.php' ? 'text-white ' : ''; ?>">Create Event</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php echo $current_page === 'messages.php' ? 'active' : ''; ?>" href="messages.php">
+                <!-- <li class="nav-item">
+                    <a class="nav-link 
+                    <?php echo $current_page === 'messages.php' ? 'active' : ''; ?>
+                    " href="messages.php">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-more-icon lucide-message-circle-more">
@@ -74,7 +76,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         </div>
                         <span class="nav-link-text ms-1">Messages</span>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link <?php echo $current_page === 'profile.php' ? 'active' : ''; ?>" href="profile.php">
                         <div
@@ -85,7 +87,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Profile</span>
+                        <span class="nav-link-text ms-1 <?php echo $current_page === 'profile.php' ? 'text-white ' : ''; ?>">Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?php echo $current_page === 'settings.php' ? 'active ' : ''; ?>" href="settings.php">
+                        <div
+                            class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings">
+                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </div>
+                        <span class="nav-link-text ms-1 <?php echo $current_page === 'settings.php' ? 'text-white ' : ''; ?>">settings</span>
                     </a>
                 </li>
             </ul>

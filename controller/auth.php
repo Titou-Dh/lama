@@ -77,9 +77,8 @@ function convertFullNameToUsername(string $fullName): string
  */
 function getUser(PDO $pdo, string $identifier, bool $isId = false): ?array
 {
-    $user = $pdo->query("SELECT * FROM users WHERE " . ($isId ? "id" : "email") . " = '$identifier'")->fetch(PDO::FETCH_ASSOC);
-    if (!$user) {
-        return null;
-    }
-    return $user->fetch(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE " . ($isId ? "id" : "email") . " = :identifier");
+    $stmt->bindParam(':identifier', $identifier);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 }

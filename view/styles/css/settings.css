@@ -70,7 +70,6 @@ body {
 /* Content Wrapper */
 .content-wrapper {
     min-height: calc(100vh - 80px); /* Subtract the footer height */
-    margin-left: var(--sidebar-width);
     padding: 20px;
     box-sizing: border-box;
   }
