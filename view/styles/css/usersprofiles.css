@@ -1,5 +1,10 @@
 :root {
-  --primary-color: linear-gradient(45deg, rgba(79, 70, 229, 0.9), rgba(139, 92, 246, 0.9)); /* Blue to Pink Gradient */
+  --primary-color: linear-gradient(
+    45deg,
+    rgba(79, 70, 229, 0.9),
+    rgba(139, 92, 246, 0.9)
+  );
+  /* Blue to Pink Gradient */
   --sidebar-width: 240px;
   --sidebar-bg: #ffffff;
   --body-bg: #f5f7fa;
@@ -7,7 +12,7 @@
 
 body {
   background-color: var(--body-bg);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Sidebar */
@@ -68,8 +73,8 @@ body {
 
 /* Content Wrapper */
 .content-wrapper {
-  min-height: calc(100vh - 80px); /* Subtract the footer height */
-  margin-left: var(--sidebar-width);
+  min-height: calc(100vh - 80px);
+  /* Subtract the footer height */
   padding: 20px;
   box-sizing: border-box;
 }
@@ -221,7 +226,12 @@ body {
 
 .btn-outline-primary:hover,
 .btn-primary:hover {
-  background: linear-gradient(45deg, rgba(79, 70, 229, 0.9), rgba(139, 92, 246, 0.9)); /* Darker Blue to Pink Gradient */
+  background: linear-gradient(
+    45deg,
+    rgba(79, 70, 229, 0.9),
+    rgba(139, 92, 246, 0.9)
+  );
+  /* Darker Blue to Pink Gradient */
   color: white;
 }
 
@@ -260,11 +270,11 @@ body {
 .info-value {
   color: #333;
 }
-.links{
+
+.links {
   color: #000;
   text-decoration: none;
 }
-
 
 /* Tool Cards */
 .tool-card {
@@ -373,7 +383,7 @@ body {
 }
 
 .section-title:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: -8px;
@@ -382,6 +392,7 @@ body {
   background: var(--primary-color);
   border-radius: 2px;
 }
+
 /* Footer */
 .footer {
   background-color: #516adc;
@@ -422,9 +433,5 @@ body {
 
   .nav-menu .nav-item i {
     margin-right: 0;
-  }
-
-  .content-wrapper {
-    margin-left: 70px;
   }
 }
