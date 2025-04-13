@@ -1,6 +1,48 @@
 <?php
 session_start();
 
+require_once __DIR__ . '/../../config/google.php';
+include_once __DIR__ . '/../../config/database.php';
+include_once __DIR__ . '/../../controller/auth.php';
+
+$error_signin = '';
+
+if (isset($_GET['code'])) {
+  try {
+    $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+
+    if (isset($token['access_token'])) {
+      $client->setAccessToken($token['access_token']);
+
+      // Get profile info
+      $google_oauth = new Google\Service\Oauth2($client);
+      $google_account_info = $google_oauth->userinfo->get();
+
+      $userinfo = [
+        'email' => $google_account_info['email'],
+        'full_name' => $google_account_info['name'],
+      ];
+
+      if ($userinfo) {
+        $res = getUser($cnx, $userinfo['email']);
+        if ($res) {
+          $_SESSION['user'] = $userinfo['email'];
+          $_SESSION['user_id'] = $res['id'];
+          $_SESSION['user_full_name'] = $userinfo['full_name'];
+        } else {
+          $error_signin = "You need to sign up with your email first!";
+        }
+      } else {
+        $error_signin = "Failed to authenticate with Google. Please try again.";
+      }
+    } else {
+      error_log("Google OAuth Error: No access token received");
+    }
+  } catch (Exception $e) {
+    error_log("Google OAuth Error: " . $e->getMessage());
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -27,8 +69,8 @@ session_start();
   <!-- Swiper CSS for carousels -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
   <link rel="stylesheet" href="../styles/css/landing2.css" />
-
   <script src="../scripts/tailwind.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -717,6 +759,19 @@ session_start();
       </div>
     </div>
   </footer>
+
+  <?php
+  $error_signin && '
+              <script>
+              Swal.fire({
+              icon: "error",
+              title: "Login Failed",
+              text: data.message,
+              confirmButtonText: "OK",
+            });
+              </script>
+    ';
+  ?>
 
   <!-- Script for navbar scroll effect -->
 
