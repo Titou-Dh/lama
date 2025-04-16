@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2025 at 03:35 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Apr 16, 2025 at 06:30 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,11 +46,43 @@ CREATE TABLE `events` (
   `description` text DEFAULT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
+  `door_time` time DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
+  `online_link` varchar(255) DEFAULT NULL,
+  `event_type` enum('in-person','online') NOT NULL DEFAULT 'in-person',
   `image` varchar(255) DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   `capacity` int(11) DEFAULT NULL,
+  `age_restriction` varchar(50) DEFAULT 'All Ages',
   `status` varchar(50) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `event_images`
+--
+
+CREATE TABLE `event_images` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `is_primary` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `faqs`
+--
+
+CREATE TABLE `faqs` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `question` text NOT NULL,
+  `answer` text NOT NULL,
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -83,6 +115,23 @@ CREATE TABLE `order_items` (
   `price` decimal(10,2) NOT NULL,
   `attendee_name` varchar(255) DEFAULT NULL,
   `attendee_email` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `promo_codes`
+--
+
+CREATE TABLE `promo_codes` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `discount_type` enum('percentage','fixed') NOT NULL,
+  `discount_value` decimal(10,2) NOT NULL,
+  `valid_from` date DEFAULT NULL,
+  `valid_until` date DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -135,6 +184,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `full_name`, `profile_image`, `created_at`, `is_organizer`) VALUES
+(1, 'sinda_1ed4', 'sindashm18@gmail.com', '$2y$10$VWGSQ4GukLeGdj/GRgx..e5vXW8O2quY4.XeDaUvNpZotlCllKlN.', 'sinda', NULL, '2025-04-15 23:26:04', 0);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -151,6 +207,21 @@ ALTER TABLE `events`
   ADD PRIMARY KEY (`id`),
   ADD KEY `organizer_id` (`organizer_id`),
   ADD KEY `category_id` (`category_id`);
+ALTER TABLE `events` ADD FULLTEXT KEY `event_search` (`title`,`description`,`location`);
+
+--
+-- Indexes for table `event_images`
+--
+ALTER TABLE `event_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`);
+
+--
+-- Indexes for table `faqs`
+--
+ALTER TABLE `faqs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`);
 
 --
 -- Indexes for table `orders`
@@ -166,6 +237,13 @@ ALTER TABLE `order_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `order_id` (`order_id`),
   ADD KEY `ticket_id` (`ticket_id`);
+
+--
+-- Indexes for table `promo_codes`
+--
+ALTER TABLE `promo_codes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`event_id`);
 
 --
 -- Indexes for table `reviews`
@@ -207,6 +285,18 @@ ALTER TABLE `events`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `event_images`
+--
+ALTER TABLE `event_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `faqs`
+--
+ALTER TABLE `faqs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
@@ -216,6 +306,12 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `promo_codes`
+--
+ALTER TABLE `promo_codes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -234,7 +330,7 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -248,6 +344,18 @@ ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `event_images`
+--
+ALTER TABLE `event_images`
+  ADD CONSTRAINT `event_images_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `faqs`
+--
+ALTER TABLE `faqs`
+  ADD CONSTRAINT `faqs_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
@@ -259,6 +367,12 @@ ALTER TABLE `orders`
 ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `promo_codes`
+--
+ALTER TABLE `promo_codes`
+  ADD CONSTRAINT `promo_codes_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `reviews`
