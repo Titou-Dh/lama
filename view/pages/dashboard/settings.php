@@ -56,9 +56,6 @@ checkSession();
                         </div>
                     </div>
                 </div>
-                <!-- Settings Content -->
-                <div class="settings-content">
-                    < class="tab-content" id="v-pills-tabContent">
                         <!-- Account Settings -->
                         <div
                             class="tab-pane fade show active"
@@ -136,12 +133,12 @@ Senior Event Coordinator with over 10 years of experience organizing tech confer
                                         alt="Profile Picture"
                                         class="rounded-circle me-4"
                                         style="
-                    width: 100px;
-                    height: 100px;
-                    object-fit: cover;
-                    border: 3px solid #4361ee;
-                    " />
-                                    <div>
+                                        width: 100px;
+                                        height: 100px;
+                                        object-fit: cover;
+                                        border: 3px solid #4361ee;
+                                        " />
+                                <div>
                                         <div class="mb-3">
                                             <input
                                                 class="form-control"
@@ -235,6 +232,7 @@ Senior Event Coordinator with over 10 years of experience organizing tech confer
                                                 id="confirmPassword" />
                                         </div>
                                     </div>
+
                                 </form>
                             </div>
 
@@ -245,7 +243,6 @@ Senior Event Coordinator with over 10 years of experience organizing tech confer
                                 <button class="save-btn">Save Changes</button>
                             </div>
                         </div>
-                    </div>                 
             </div>
         </div>
     </main>

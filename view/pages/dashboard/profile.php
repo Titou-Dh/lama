@@ -94,24 +94,7 @@ checkSession();
                             <h3 class="section-title">Professional Information</h3>
                             <div class="info-item">
                                 <div class="info-label">Full Name</div>
-                                <p>Sarah Johnson</p>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Email</div>
-                                <p>sarah.johnson@eventpro.com</p>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Phone</div>
-                                <p>(123) 456-7890</p>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Company</div>
-                                <p>EventPro Inc.</p>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Position</div>
-                                <p>Senior Event Coordinator</p>
-                            </div>
+
                         </div>
 
                         <!-- Expertise -->
@@ -257,7 +240,6 @@ checkSession();
                                                         <span>Lecture Hall B</span>
                                                     </div>
                                                 </div>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -292,7 +274,6 @@ checkSession();
                                                         <span>Innovation Center</span>
                                                     </div>
                                                 </div>
-                                            
                                             </div>
                                         </div>
                                     </div>
