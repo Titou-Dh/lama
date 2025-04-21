@@ -59,6 +59,12 @@ function loginUser(PDO $pdo, string $email, string $password): AuthResult
     }
 }
 
+
+/**
+ * Convert full name to username
+ * @param string $fullName Full name of the user
+ * @return string Generated username
+ */
 function convertFullNameToUsername(string $fullName): string
 {
     $username = strtolower(str_replace(' ', '_', $fullName));

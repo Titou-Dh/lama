@@ -17,26 +17,53 @@
 function createEvent($pdo, $eventData, $fileData = null)
 {
     try {
-        // Handle image upload if present
         $imagePath = null;
         if ($fileData && !empty($fileData['name'])) {
             $imageUploadResult = uploadEventImage($fileData);
             if ($imageUploadResult['success']) {
                 $imagePath = $imageUploadResult['filepath'];
+                event_log("Event image uploaded successfully: {$imagePath}");
+            } else {
+                event_log("Event image upload failed: {$imageUploadResult['error']}");
             }
         }
-
-        // Prepare SQL query
-        $sql = "INSERT INTO events (organizer_id, title, description, start_date, end_date, 
-                door_time, location, online_link, event_type, image, category_id, capacity, 
-                age_restriction, status) 
-                VALUES (:organizer_id, :title, :description, :start_date, :end_date, 
-                :door_time, :location, :online_link, :event_type, :image, :category_id, :capacity, 
-                :age_restriction, :status)";
+        $sql = "INSERT INTO events (
+                                organizer_id,
+                                title,
+                                description,
+                                start_date,
+                                end_date, 
+                                location,
+                                image,
+                                category_id,
+                                capacity, 
+                                age_restriction,
+                                event_type, 
+                                online_link,
+                                door_time,
+                                status
+                            ) 
+                            VALUES (
+                                :organizer_id, 
+                                :title, 
+                                :description, 
+                                :start_date, 
+                                :end_date, 
+                                :location,  
+                                :image, 
+                                :category_id, 
+                                :capacity, 
+                                :age_restriction, 
+                                :event_type, 
+                                :online_link, 
+                                :door_time, 
+                                :status
+                            )";
 
         $stmt = $pdo->prepare($sql);
+        event_log("Preparing to create event with data: " . json_encode($eventData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
-        // Bind parameters
+
         $stmt->bindParam(':organizer_id', $eventData['organizer_id']);
         $stmt->bindParam(':title', $eventData['title']);
         $stmt->bindParam(':description', $eventData['description']);
@@ -52,13 +79,13 @@ function createEvent($pdo, $eventData, $fileData = null)
         $stmt->bindParam(':age_restriction', $eventData['age_restriction']);
         $stmt->bindParam(':status', $eventData['status']);
 
-        // Execute query
         $stmt->execute();
+        event_log("Event created successfully with ID: " . $pdo->lastInsertId());
 
-        // Return ID of the created event
         return $pdo->lastInsertId();
     } catch (PDOException $e) {
         error_log("Event Creation Error: " . $e->getMessage());
+        event_log("Event creation failed: " . $e->getMessage(), 'ERROR', ['eventData' => $eventData]);
         return false;
     }
 }
@@ -82,7 +109,7 @@ function getEventById($pdo, $id)
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-
+        event_log("Fetched event with ID: {$id}");
         return $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log("Get Event Error: " . $e->getMessage());
@@ -110,7 +137,6 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
 
         $params = [];
 
-        // Apply filters
         if (!empty($filters['category_id'])) {
             $sql .= " AND e.category_id = :category_id";
             $params[':category_id'] = $filters['category_id'];
@@ -141,10 +167,8 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
             $params[':date_to'] = $filters['date_to'];
         }
 
-        // Add order by
         $sql .= " ORDER BY e.start_date ASC";
 
-        // Add pagination
         $offset = ($page - 1) * $limit;
         $sql .= " LIMIT :limit OFFSET :offset";
         $params[':limit'] = $limit;
@@ -152,7 +176,6 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
 
         $stmt = $pdo->prepare($sql);
 
-        // Bind parameters
         foreach ($params as $key => $value) {
             if ($key == ':limit' || $key == ':offset') {
                 $stmt->bindValue($key, $value, PDO::PARAM_INT);
@@ -182,23 +205,30 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
 function updateEvent($pdo, $id, $eventData, $fileData = null)
 {
     try {
-        // First get current event data
         $currentEvent = getEventById($pdo, $id);
         if (!$currentEvent) {
             return false;
         }
 
-        // Handle image upload if present
-        $imagePath = $currentEvent['image']; // Default to current image
+        $imagePath = $currentEvent['image'];
         if ($fileData && !empty($fileData['name'])) {
             $imageUploadResult = uploadEventImage($fileData);
             if ($imageUploadResult['success']) {
                 $imagePath = $imageUploadResult['filepath'];
 
-                // Delete old image if it exists
-                if (!empty($currentEvent['image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image'])) {
-                    unlink($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image']);
+                $oldImagePath = $currentEvent['image'];
+                if (!empty($oldImagePath)) {
+                    if (isset($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['DOCUMENT_ROOT'])) {
+                        $absoluteOldImagePath = $_SERVER['DOCUMENT_ROOT'] . $oldImagePath;
+                    } else {
+                        $absoluteOldImagePath = dirname(dirname(__FILE__)) . '/public' . $oldImagePath;
+                    }
+                    if (file_exists($absoluteOldImagePath)) {
+                        @unlink($absoluteOldImagePath);
+                    }
                 }
+            } else {
+                event_log("Event image upload failed during update: " . $imageUploadResult['error'], 'ERROR');
             }
         }
 
@@ -220,7 +250,6 @@ function updateEvent($pdo, $id, $eventData, $fileData = null)
 
         $stmt = $pdo->prepare($sql);
 
-        // Bind parameters
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':title', $eventData['title']);
         $stmt->bindParam(':description', $eventData['description']);
@@ -236,7 +265,6 @@ function updateEvent($pdo, $id, $eventData, $fileData = null)
         $stmt->bindParam(':age_restriction', $eventData['age_restriction']);
         $stmt->bindParam(':status', $eventData['status']);
 
-        // Execute query
         return $stmt->execute();
     } catch (PDOException $e) {
         error_log("Update Event Error: " . $e->getMessage());
@@ -256,13 +284,11 @@ function updateEvent($pdo, $id, $eventData, $fileData = null)
 function deleteEvent($pdo, $id, $userId, $isAdmin = false)
 {
     try {
-        // Verify event exists and user has permission
         $currentEvent = getEventById($pdo, $id);
         if (!$currentEvent || ($currentEvent['organizer_id'] != $userId && !$isAdmin)) {
-            return false; // Event not found or user doesn't have permission
+            return false;
         }
 
-        // Remove event image if exists
         if (!empty($currentEvent['image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image'])) {
             unlink($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image']);
         }
@@ -290,21 +316,23 @@ function deleteEvent($pdo, $id, $userId, $isAdmin = false)
 function searchEvents($pdo, $query, $page = 1, $limit = 10)
 {
     try {
-        // Using FULLTEXT search for better performance and relevancy
-        $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name,
-               MATCH(e.title, e.description, e.location) AGAINST(:query) as relevance
+        // Using LIKE search for compatibility with MySQL/phpMyAdmin without FULLTEXT index
+        $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name
                FROM events e
                LEFT JOIN categories c ON e.category_id = c.id
                LEFT JOIN users u ON e.organizer_id = u.id
-               WHERE MATCH(e.title, e.description, e.location) AGAINST(:query)
-               ORDER BY relevance DESC";
+               WHERE e.title LIKE :query
+                  OR e.description LIKE :query
+                  OR e.location LIKE :query
+               ORDER BY e.start_date DESC";
 
         // Add pagination
         $offset = ($page - 1) * $limit;
         $sql .= " LIMIT :limit OFFSET :offset";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':query', $query);
+        $likeQuery = '%' . $query . '%';
+        $stmt->bindValue(':query', $likeQuery, PDO::PARAM_STR);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
@@ -396,36 +424,55 @@ function uploadEventImage($fileData)
         'error' => ''
     ];
 
-    $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/events/';
 
-    // Create directory if it doesn't exist
-    if (!is_dir($upload_dir)) {
-        mkdir($upload_dir, 0755, true);
+
+    $relative_path = '/lama/uploads/events/';
+    $absolute_path = $_SERVER['DOCUMENT_ROOT'] . $relative_path;
+
+    if (!isset($_SERVER['DOCUMENT_ROOT']) || empty($_SERVER['DOCUMENT_ROOT'])) {
+        $absolute_path = dirname(dirname(__FILE__)) . '/public' . $relative_path;
+    }
+
+    if (!is_dir($absolute_path)) {
+        if (!@mkdir($absolute_path, 0755, true)) {
+            $absolute_path = sys_get_temp_dir() . '/lama_events/';
+            $relative_path = '/tmp/lama_events/';
+
+            if (!is_dir($absolute_path)) {
+                @mkdir($absolute_path, 0755, true);
+            }
+
+            if (!is_dir($absolute_path)) {
+                error_log("Event Image Upload Error: Cannot create upload directory: $absolute_path");
+                $result['error'] = "Server configuration error: Can't create upload directory.";
+                return $result;
+            }
+        }
     }
 
     $filename = uniqid() . '_' . basename($fileData['name']);
-    $target_file = $upload_dir . $filename;
+    $target_file = "$absolute_path$filename";
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Check if image file is actual image
-    $check = getimagesize($fileData['tmp_name']);
-    if ($check === false) {
-        $result['error'] = "File is not an image.";
-        return $result;
+    if (filesize($fileData['tmp_name']) > 0) {
+        $check = @getimagesize($fileData['tmp_name']);
+        if ($check === false) {
+            $result['error'] = "File is not an image.";
+            return $result;
+        }
     }
 
-    // Allow certain file formats
     if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
         $result['error'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
         return $result;
     }
 
-    // Try to upload file
-    if (move_uploaded_file($fileData['tmp_name'], $target_file)) {
+    if (@move_uploaded_file($fileData['tmp_name'], $target_file) || @copy($fileData['tmp_name'], $target_file)) {
         $result['success'] = true;
-        $result['filepath'] = '/uploads/events/' . $filename; // Store relative path
+        $result['filepath'] = "$relative_path$filename"; // Store relative path
         return $result;
     } else {
+        error_log("Event Image Upload Error: Failed to move uploaded file from {$fileData['tmp_name']} to {$target_file}");
         $result['error'] = "Sorry, there was an error uploading your file.";
         return $result;
     }
@@ -489,5 +536,38 @@ function countEvents($pdo, $filters = [])
     } catch (PDOException $e) {
         error_log("Count Events Error: " . $e->getMessage());
         return 0;
+    }
+}
+
+
+
+/**
+ * Log event information to a file
+ *
+ * @param string $message The message to log
+ * @param string $level The log level (INFO, WARNING, ERROR)
+ * @param array $data Additional data to include in the log entry
+ * @return void
+ */
+function event_log($message, $level = 'INFO', $data = [])
+{
+    // Define absolute path to log file
+    $log_file = dirname(dirname(__FILE__)) . '/event_log.txt';
+    $timestamp = date('Y-m-d H:i:s');
+    $user_id = $_SESSION['user_id'] ?? 'not-logged-in';
+
+    // Format the log message
+    $log_entry = "[{$timestamp}] [{$level}] [UserID: {$user_id}] {$message}";
+
+    // Add any additional data as JSON
+    if (!empty($data)) {
+        $log_entry .= " - Data: " . json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    $log_entry .= PHP_EOL;
+
+    // Append to log file with error handling
+    if (!@file_put_contents($log_file, $log_entry, FILE_APPEND)) {
+        error_log("Failed to write to event log file: {$log_file}");
     }
 }

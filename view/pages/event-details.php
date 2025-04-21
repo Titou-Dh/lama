@@ -10,6 +10,9 @@ if (isset($_GET["id"])) {
     header("Location: error.html");
     exit();
   }
+} else {
+  header("Location: error.html");
+  exit();
 }
 
 ?>
@@ -222,7 +225,7 @@ if (isset($_GET["id"])) {
           <div
             class="relative w-full h-64 md:h-96 rounded-lg overflow-hidden">
             <img
-              src="../assets/images/tech.jpg"
+              src="../../..<?php echo $res["image"] ?>"
               alt="Tech Conference"
               class="w-full h-full object-cover" />
             <div

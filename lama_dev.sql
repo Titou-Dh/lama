@@ -388,6 +388,52 @@ ALTER TABLE `tickets`
   ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE;
 COMMIT;
 
+
+INSERT INTO `categories` (`id`, `name`, `description`) VALUES
+(1, '', 'Music - Concerts, festivals, and performances'),
+(2, '', 'Business - Networking events, conferences, and seminars'),
+(3, '', 'Food & Drink - Tastings, cooking classes, and food festivals'),
+(4, '', 'Community - Local gatherings and community events'),
+(5, '', 'Arts - Exhibitions, galleries, and artistic performances'),
+(6, '', 'Sports & Fitness - Games, tournaments, and fitness classes'),
+(7, '', 'Health - Wellness workshops and health seminars'),
+(8, '', 'Science & Technology - Tech conferences and scientific exhibitions'),
+(9, '', 'Travel & Outdoor - Adventure events and outdoor activities'),
+(10, '', 'Charity & Causes - Fundraisers and awareness events'),
+(11, '', 'Spirituality - Spiritual gatherings and religious events'),
+(12, '', 'Family & Education - Educational workshops and family activities'),
+(13, '', 'Holiday - Celebrations and seasonal events'),
+(14, '', 'Fashion - Fashion shows and industry events'),
+(15, '', 'Home & Lifestyle - Home improvement and lifestyle events'),
+(16, '', 'Auto, Boat & Air - Motor shows and aviation events'),
+(17, '', 'Hobbies - Hobby gatherings and interest-based events'),
+(18, '', 'Other - Events that don\'t fit in other categories');
+
+
+-- Insert admin user with hashed password 1234
+INSERT INTO `users` (`username`, `email`, `password_hash`, `full_name`, `profile_image`, `created_at`, `is_organizer`) VALUES
+('admin', 'admin@lama.com', '$2y$10$gQYRwwIPc/2PVpbSL0iK4.3IYu.UlcLVztOf9IiYxV7bCkIJ7rH2S', 'Admin', NULL, current_timestamp(), 1);
+
+-- Fix categories names (seems like category names are empty)
+UPDATE `categories` SET `name` = 'Music' WHERE `id` = 1;
+UPDATE `categories` SET `name` = 'Business' WHERE `id` = 2;
+UPDATE `categories` SET `name` = 'Food & Drink' WHERE `id` = 3;
+UPDATE `categories` SET `name` = 'Community' WHERE `id` = 4;
+UPDATE `categories` SET `name` = 'Arts' WHERE `id` = 5;
+UPDATE `categories` SET `name` = 'Sports & Fitness' WHERE `id` = 6;
+UPDATE `categories` SET `name` = 'Health' WHERE `id` = 7;
+UPDATE `categories` SET `name` = 'Science & Technology' WHERE `id` = 8;
+UPDATE `categories` SET `name` = 'Travel & Outdoor' WHERE `id` = 9;
+UPDATE `categories` SET `name` = 'Charity & Causes' WHERE `id` = 10;
+UPDATE `categories` SET `name` = 'Spirituality' WHERE `id` = 11;
+UPDATE `categories` SET `name` = 'Family & Education' WHERE `id` = 12;
+UPDATE `categories` SET `name` = 'Holiday' WHERE `id` = 13;
+UPDATE `categories` SET `name` = 'Fashion' WHERE `id` = 14;
+UPDATE `categories` SET `name` = 'Home & Lifestyle' WHERE `id` = 15;
+UPDATE `categories` SET `name` = 'Auto, Boat & Air' WHERE `id` = 16;
+UPDATE `categories` SET `name` = 'Hobbies' WHERE `id` = 17;
+UPDATE `categories` SET `name` = 'Other' WHERE `id` = 18;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
