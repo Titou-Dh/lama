@@ -17,10 +17,20 @@ enum AuthResult: int
  */
 function registerUser(PDO $pdo, string $name, string $email, string $password): AuthResult
 {
+    if (empty($name) || empty($email) || empty($password)) {
+        return AuthResult::FAILURE;
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return AuthResult::FAILURE;
+    }
+
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-    $res = $pdo->query("SELECT * FROM users WHERE email = '$email'");
-    if ($res->rowCount() > 0) {
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    if ($stmt->rowCount() > 0) {
         return AuthResult::USER_EXISTS;
     }
 
@@ -43,6 +53,14 @@ function registerUser(PDO $pdo, string $name, string $email, string $password): 
  */
 function loginUser(PDO $pdo, string $email, string $password): AuthResult
 {
+    if (empty($email) || empty($password)) {
+        return AuthResult::INVALID_CREDENTIALS;
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return AuthResult::INVALID_CREDENTIALS;
+    }
+
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
     $stmt->bindParam(':email', $email);
     $stmt->execute();
@@ -83,7 +101,9 @@ function convertFullNameToUsername(string $fullName): string
  */
 function getUser(PDO $pdo, string $identifier, bool $isId = false): ?array
 {
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE " . ($isId ? "id" : "email") . " = :identifier");
+    $column = $isId ? "id" : "email";
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE {$column} = :identifier");
     $stmt->bindParam(':identifier', $identifier);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
