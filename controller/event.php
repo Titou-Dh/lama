@@ -81,7 +81,23 @@ function createEvent($pdo, $eventData, $fileData = null)
 
         $stmt->execute();
         event_log("Event created successfully with ID: " . $pdo->lastInsertId());
+        if ($eventData['organizer_id']) {
+            $checkUserSql = "SELECT is_organizer FROM users WHERE id = :user_id";
+            $checkUserStmt = $pdo->prepare($checkUserSql);
+            $checkUserStmt->bindParam(':user_id', $eventData['organizer_id']);
+            $checkUserStmt->execute();
 
+            $userData = $checkUserStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($userData && $userData['is_organizer'] == 0) {
+                $updateUserSql = "UPDATE users SET is_organizer = 1 WHERE id = :user_id";
+                $updateUserStmt = $pdo->prepare($updateUserSql);
+                $updateUserStmt->bindParam(':user_id', $eventData['organizer_id']);
+                $updateUserStmt->execute();
+
+                event_log("User ID: {$eventData['organizer_id']} promoted from attendee to organizer");
+            }
+        }
         return $pdo->lastInsertId();
     } catch (PDOException $e) {
         error_log("Event Creation Error: " . $e->getMessage());
