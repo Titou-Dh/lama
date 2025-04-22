@@ -3,6 +3,34 @@
 include "../../../config/session.php";
 checkSession();
 
+// Include database connection and user/event controllers
+include_once "../../../config/database.php"; // This will give us $cnx
+include_once "../../../controller/user.php";
+include_once "../../../controller/event.php";
+
+// Get user ID from session
+$userId = $_SESSION['user_id'];
+
+// Get user data
+$userData = getUserById($cnx, $userId);
+
+// Get user events
+$upcomingEvents = getEvents($cnx, [
+    'organizer_id' => $userId,
+    'date_from' => date('Y-m-d'),
+    'status' => 'published'
+]);
+
+$pastEvents = getEvents($cnx, [
+    'organizer_id' => $userId,
+    'date_to' => date('Y-m-d', strtotime('-1 day')),
+    'status' => 'published'
+]);
+
+$draftEvents = getEvents($cnx, [
+    'organizer_id' => $userId,
+    'status' => 'draft'
+]);
 ?>
 <html lang="en">
 
@@ -38,17 +66,17 @@ checkSession();
                     <div class="row align-items-center">
                         <div class="col-md-2 text-center text-md-start mb-4 mb-md-0">
                             <img
-                                src="https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid"
-                                alt="Organizer avatar"
+                                src="<?php echo !empty($userData['profile_image']) ? $userData['profile_image'] : 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid'; ?>"
+                                alt="User avatar"
                                 class="profile-avatar" />
                         </div>
                         <div class="col-md-8">
-                            <h2 class="mb-1">Sarah Johnson</h2>
+                            <h2 class="mb-1"><?php echo htmlspecialchars($userData['full_name']); ?></h2>
                             <p class="text-muted mb-2">
-                                <i class="bi bi-briefcase me-2"></i>Senior Event Coordinator
+                                <i class="bi bi-briefcase me-2"></i><?php echo $userData['is_organizer'] ? 'Event Organizer' : 'Attendee'; ?>
                             </p>
                             <p class="text-muted mb-3">
-                                <i class="bi bi-geo-alt me-2"></i>New York, NY
+                                <i class="bi bi-geo-alt me-2"></i>Location
                             </p>
                             <div class="mb-3">
                                 <span class="expertise-badge">Tech Conferences</span>
@@ -71,7 +99,7 @@ checkSession();
 
                     <div class="profile-stats">
                         <div class="profile-stat-item">
-                            <div class="number">87</div>
+                            <div class="number"><?php echo count($pastEvents) + count($upcomingEvents); ?></div>
                             <div class="label">Events Organized</div>
                         </div>
                         <div class="profile-stat-item">
@@ -79,7 +107,7 @@ checkSession();
                             <div class="label">Total Attendees</div>
                         </div>
                         <div class="profile-stat-item">
-                            <div class="number">1</div>
+                            <div class="number"><?php echo count($upcomingEvents); ?></div>
                             <div class="label">Upcoming Events</div>
                         </div>
                     </div>
@@ -92,9 +120,28 @@ checkSession();
                         <!-- Professional Information -->
                         <div class="info-card">
                             <h3 class="section-title">Professional Information</h3>
-                            <div class="info-item">
-                                <div class="info-label">Full Name</div>
-
+                            <form id="profile-form" method="post" action="../../../controllers/update-profile.php">
+                                <div class="info-item">
+                                    <div class="info-label">Full Name</div>
+                                    <p><?php echo htmlspecialchars($userData['full_name']); ?></p>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Email</div>
+                                    <p><?php echo htmlspecialchars($userData['email']); ?></p>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Username</div>
+                                    <p><?php echo htmlspecialchars($userData['username']); ?></p>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Member Since</div>
+                                    <p><?php echo date('F j, Y', strtotime($userData['created_at'])); ?></p>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Account Type</div>
+                                    <p><?php echo $userData['is_organizer'] ? 'Organizer' : 'Attendee'; ?></p>
+                                </div>
+                            </form>
                         </div>
 
                         <!-- Expertise -->
@@ -218,30 +265,43 @@ checkSession();
                                     aria-labelledby="upcoming-tab">
                                     <h3 class="section-title">Your Upcoming Events</h3>
                                     <div class="row row-cols-1 row-cols-md-2 g-4">
-                                        <div class="col">
-                                            <div class="card h-100 border-0 shadow-sm">
-                                                <img
-                                                    src="https://www.de-ctr.org/wp-content/uploads/2019/08/tech-talk-1024x512.jpg"
-                                                    class="card-img-top"
-                                                    alt="Upcoming Event" />
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Tech Talk: Future of AI</h5>
-                                                    <p class="card-text text-muted small mb-3">
-                                                        Guest lecture by leading AI researcher
-                                                    </p>
-                                                    <div
-                                                        class="d-flex align-items-center text-muted small mb-2">
-                                                        <i class="bi bi-calendar me-2"></i>
-                                                        <span>Tomorrow, 4:00 PM</span>
-                                                    </div>
-                                                    <div
-                                                        class="d-flex align-items-center text-muted small mb-2">
-                                                        <i class="bi bi-geo-alt me-2"></i>
-                                                        <span>Lecture Hall B</span>
+                                        <?php if (count($upcomingEvents) > 0): ?>
+                                            <?php foreach ($upcomingEvents as $event): ?>
+                                                <div class="col">
+                                                    <div class="card h-100 border-0 shadow-sm">
+                                                        <img
+                                                            src="<?php echo !empty($event['image']) ? $event['image'] : 'https://www.de-ctr.org/wp-content/uploads/2019/08/tech-talk-1024x512.jpg'; ?>"
+                                                            class="card-img-top"
+                                                            alt="<?php echo htmlspecialchars($event['title']); ?>" />
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><?php echo htmlspecialchars($event['title']); ?></h5>
+                                                            <p class="card-text text-muted small mb-3">
+                                                                <?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?>
+                                                            </p>
+                                                            <div
+                                                                class="d-flex align-items-center text-muted small mb-2">
+                                                                <i class="bi bi-calendar me-2"></i>
+                                                                <span><?php echo date('F j, Y, g:i A', strtotime($event['start_date'])); ?></span>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center text-muted small mb-2">
+                                                                <i class="bi bi-geo-alt me-2"></i>
+                                                                <span><?php echo htmlspecialchars($event['location']); ?></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer bg-white border-0 pt-0">
+                                                            <a href="../events/edit.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                                Edit
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <div class="col-12">
+                                                <p class="text-center">You don't have any upcoming events.</p>
                                             </div>
-                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <!-- Past Events Tab -->
@@ -252,30 +312,43 @@ checkSession();
                                     aria-labelledby="past-tab">
                                     <h3 class="section-title">Your Past Events</h3>
                                     <div class="row row-cols-1 row-cols-md-2 g-4">
-                                        <div class="col">
-                                            <div class="card h-100 border-0 shadow-sm">
-                                                <img
-                                                    src="https://www.bostontechmom.com/wp-content/uploads/2022/11/hackathon-tech-banner.jpg"
-                                                    class="card-img-top"
-                                                    alt="Past Event" />
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Hackathon 2024</h5>
-                                                    <p class="card-text text-muted small mb-3">
-                                                        A 48-hour coding challenge.
-                                                    </p>
-                                                    <div
-                                                        class="d-flex align-items-center text-muted small mb-2">
-                                                        <i class="bi bi-calendar me-2"></i>
-                                                        <span>March 15, 2024</span>
-                                                    </div>
-                                                    <div
-                                                        class="d-flex align-items-center text-muted small mb-2">
-                                                        <i class="bi bi-geo-alt me-2"></i>
-                                                        <span>Innovation Center</span>
+                                        <?php if (count($pastEvents) > 0): ?>
+                                            <?php foreach ($pastEvents as $event): ?>
+                                                <div class="col">
+                                                    <div class="card h-100 border-0 shadow-sm">
+                                                        <img
+                                                            src="<?php echo !empty($event['image']) ? $event['image'] : 'https://www.bostontechmom.com/wp-content/uploads/2022/11/hackathon-tech-banner.jpg'; ?>"
+                                                            class="card-img-top"
+                                                            alt="<?php echo htmlspecialchars($event['title']); ?>" />
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><?php echo htmlspecialchars($event['title']); ?></h5>
+                                                            <p class="card-text text-muted small mb-3">
+                                                                <?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?>
+                                                            </p>
+                                                            <div
+                                                                class="d-flex align-items-center text-muted small mb-2">
+                                                                <i class="bi bi-calendar me-2"></i>
+                                                                <span><?php echo date('F j, Y', strtotime($event['start_date'])); ?></span>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center text-muted small mb-2">
+                                                                <i class="bi bi-geo-alt me-2"></i>
+                                                                <span><?php echo htmlspecialchars($event['location']); ?></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer bg-white border-0 pt-0">
+                                                            <a href="../events/view.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                                View
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <div class="col-12">
+                                                <p class="text-center">You don't have any past events.</p>
                                             </div>
-                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <!-- Drafts Tab -->
@@ -286,35 +359,43 @@ checkSession();
                                     aria-labelledby="drafts-tab">
                                     <h3 class="section-title">Your Drafts</h3>
                                     <div class="row row-cols-1 row-cols-md-2 g-4">
-                                        <div class="col">
-                                            <div class="card h-100 border-0 shadow-sm">
-                                                <img
-                                                    src="https://thefusioneer.com/wp-content/uploads/2023/11/5-AI-Advancements-to-Expect-in-the-Next-10-Years-scaled.jpeg"
-                                                    class="card-img-top"
-                                                    alt="Draft Event" />
-                                                <div class="card-body">
-                                                    <h5 class="card-title">AI Workshop</h5>
-                                                    <p class="card-text text-muted small mb-3">
-                                                        Hands-on session on AI tools.
-                                                    </p>
-                                                    <div
-                                                        class="d-flex align-items-center text-muted small mb-2">
-                                                        <i class="bi bi-calendar me-2"></i>
-                                                        <span>April 5, 2025</span>
-                                                    </div>
-                                                    <div
-                                                        class="d-flex align-items-center text-muted small mb-2">
-                                                        <i class="bi bi-geo-alt me-2"></i>
-                                                        <span>Lab 3</span>
+                                        <?php if (count($draftEvents) > 0): ?>
+                                            <?php foreach ($draftEvents as $event): ?>
+                                                <div class="col">
+                                                    <div class="card h-100 border-0 shadow-sm">
+                                                        <img
+                                                            src="<?php echo !empty($event['image']) ? $event['image'] : 'https://thefusioneer.com/wp-content/uploads/2023/11/5-AI-Advancements-to-Expect-in-the-Next-10-Years-scaled.jpeg'; ?>"
+                                                            class="card-img-top"
+                                                            alt="<?php echo htmlspecialchars($event['title']); ?>" />
+                                                        <div class="card-body">
+                                                            <h5 class="card-title"><?php echo htmlspecialchars($event['title']); ?></h5>
+                                                            <p class="card-text text-muted small mb-3">
+                                                                <?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?>
+                                                            </p>
+                                                            <div
+                                                                class="d-flex align-items-center text-muted small mb-2">
+                                                                <i class="bi bi-calendar me-2"></i>
+                                                                <span><?php echo date('F j, Y', strtotime($event['start_date'])); ?></span>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex align-items-center text-muted small mb-2">
+                                                                <i class="bi bi-geo-alt me-2"></i>
+                                                                <span><?php echo htmlspecialchars($event['location']); ?></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer bg-white border-0 pt-0">
+                                                            <a href="../events/edit.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                                Edit
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="card-footer bg-white border-0 pt-0">
-                                                    <button class="btn btn-sm btn-outline-primary w-100">
-                                                        Delete
-                                                    </button>
-                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <div class="col-12">
+                                                <p class="text-center">You don't have any draft events.</p>
                                             </div>
-                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -346,12 +427,45 @@ checkSession();
             });
 
             const editButton = document.getElementById("edit-info-btn");
+            const saveButton = document.getElementById("save-info-btn");
+            const cancelButton = document.getElementById("cancel-info-btn");
             const inputs = document.querySelectorAll(".info-value");
+            
+            // Store original values
+            const originalValues = {};
+            inputs.forEach(input => {
+                if (input.name) {
+                    originalValues[input.name] = input.value;
+                }
+            });
 
             editButton.addEventListener("click", () => {
-                const isEditing = editButton.textContent === "Save";
-                inputs.forEach((input) => (input.disabled = isEditing));
-                editButton.textContent = isEditing ? "Edit" : "Save";
+                // Enable editing
+                inputs.forEach(input => {
+                    if (input.name && input.name !== 'username' && input.name !== 'created_at') {
+                        input.disabled = false;
+                    }
+                });
+                
+                // Show save and cancel buttons, hide edit button
+                editButton.classList.add('d-none');
+                saveButton.classList.remove('d-none');
+                cancelButton.classList.remove('d-none');
+            });
+            
+            cancelButton.addEventListener("click", () => {
+                // Reset to original values
+                inputs.forEach(input => {
+                    if (input.name && originalValues[input.name]) {
+                        input.value = originalValues[input.name];
+                    }
+                    input.disabled = true;
+                });
+                
+                // Show edit button, hide save and cancel buttons
+                editButton.classList.remove('d-none');
+                saveButton.classList.add('d-none');
+                cancelButton.classList.add('d-none');
             });
         });
     </script>
