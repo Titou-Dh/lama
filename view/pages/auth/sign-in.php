@@ -14,7 +14,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
   $authResult = loginUser($cnx, $email, $password);
 
   if ($authResult === AuthResult::SUCCESS) {
-    $stmt = $cnx->prepare("SELECT id, full_name FROM users WHERE email = ?");
+    $stmt = $cnx->prepare("SELECT id, full_name, is_organizer FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -22,6 +22,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
       $_SESSION['user'] = $email;
       $_SESSION['user_id'] = $user['id'];
       $_SESSION['user_full_name'] = $user['full_name'];
+      $_SESSION['user_role'] = $user['is_organizer'] === 1 ? true : false;
       echo json_encode(['status' => 'success', 'message' => 'Login successful!', 'ok' => true]);
     } else {
       echo json_encode(['status' => 'error', 'message' => 'User data retrieval failed', 'ok' => false]);

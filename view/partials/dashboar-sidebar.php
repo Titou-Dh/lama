@@ -78,7 +78,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </a>
                 </li> -->
                 <li class="nav-item">
-                    <a class="nav-link <?php echo $current_page === 'profile.php' ? 'active' : ''; ?>" href="profile.php">
+                    <a class="nav-link <?php echo ($current_page === 'profile.php' || $current_page === "organizer-profile.php" || $current_page = "attende-profile.php") ? 'active' : ''; ?>" href="profile.php">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-icon lucide-circle-user">
@@ -87,7 +87,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1 <?php echo $current_page === 'profile.php' ? 'text-white ' : ''; ?>">Profile</span>
+                        <span class="nav-link-text ms-1 <?php echo ($current_page === 'profile.php' || $current_page === "organizer-profile.php" || $current_page = "attende-profile.php") ? 'text-white ' : ''; ?>">Profile</span>
                     </a>
                 </li>
                 <li class="nav-item">

@@ -26,7 +26,11 @@ if (isset($_GET['code'])) {
       if ($userinfo) {
         $res = getUser($cnx, $userinfo['email']);
         if ($res) {
-          $_SESSION['user'] = $userinfo['email'];
+          $_SESSION['user'] = [
+            'email' => $userinfo['email'],
+            'full_name' => $userinfo['full_name'],
+            'role' => $res['is_organizer'] === 1 ? true : false
+          ];
           $_SESSION['user_id'] = $res['id'];
           $_SESSION['user_full_name'] = $userinfo['full_name'];
         } else {
