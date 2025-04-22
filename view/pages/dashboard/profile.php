@@ -31,6 +31,10 @@ $draftEvents = getEvents($cnx, [
     'organizer_id' => $userId,
     'status' => 'draft'
 ]);
+
+// Default avatar URL
+$defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+$profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] : $defaultAvatar;
 ?>
 <html lang="en">
 
@@ -66,33 +70,18 @@ $draftEvents = getEvents($cnx, [
                     <div class="row align-items-center">
                         <div class="col-md-2 text-center text-md-start mb-4 mb-md-0">
                             <img
-                                src="<?php echo !empty($userData['profile_image']) ? $userData['profile_image'] : 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid'; ?>"
+                                src="<?php echo $profileImage; ?>"
                                 alt="User avatar"
                                 class="profile-avatar" />
                         </div>
                         <div class="col-md-8">
                             <h2 class="mb-1"><?php echo htmlspecialchars($userData['full_name']); ?></h2>
                             <p class="text-muted mb-2">
-                                <i class="bi bi-briefcase me-2"></i><?php echo $userData['is_organizer'] ? 'Event Organizer' : 'Attendee'; ?>
+                                <i class="fas fa-user me-2"></i>@<?php echo htmlspecialchars($userData['username']); ?>
                             </p>
-                            <p class="text-muted mb-3">
-                                <i class="bi bi-geo-alt me-2"></i>Location
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-briefcase me-2"></i><?php echo $userData['is_organizer'] ? 'Event Organizer' : 'Attendee'; ?>
                             </p>
-                            <div class="mb-3">
-                                <span class="expertise-badge">Tech Conferences</span>
-                                <span class="expertise-badge">Workshops</span>
-                                <span class="expertise-badge">Corporate Events</span>
-                                <span class="expertise-badge">Networking</span>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="star-rating me-2">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-half"></i>
-                                </div>
-                                <span class="text-muted">4.8 (126 reviews)</span>
                             </div>
                         </div>
                     </div>
@@ -103,7 +92,7 @@ $draftEvents = getEvents($cnx, [
                             <div class="label">Events Organized</div>
                         </div>
                         <div class="profile-stat-item">
-                            <div class="number">12,450</div>
+                            <div class="number">0</div>
                             <div class="label">Total Attendees</div>
                         </div>
                         <div class="profile-stat-item">
@@ -126,12 +115,12 @@ $draftEvents = getEvents($cnx, [
                                     <p><?php echo htmlspecialchars($userData['full_name']); ?></p>
                                 </div>
                                 <div class="info-item">
-                                    <div class="info-label">Email</div>
-                                    <p><?php echo htmlspecialchars($userData['email']); ?></p>
-                                </div>
-                                <div class="info-item">
                                     <div class="info-label">Username</div>
                                     <p><?php echo htmlspecialchars($userData['username']); ?></p>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Email</div>
+                                    <p><?php echo htmlspecialchars($userData['email']); ?></p>
                                 </div>
                                 <div class="info-item">
                                     <div class="info-label">Member Since</div>
@@ -179,11 +168,11 @@ $draftEvents = getEvents($cnx, [
                                     </div>
                                 </div>
                                 <div class="star-rating mb-2">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
                                 </div>
                                 <p class="review-text">
                                     Sarah organized our tech conference flawlessly. Her attention
@@ -203,11 +192,11 @@ $draftEvents = getEvents($cnx, [
                                     </div>
                                 </div>
                                 <div class="star-rating mb-2">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
                                 </div>
                                 <p class="review-text">
                                     Great experience working with Sarah on our company's annual
@@ -280,12 +269,12 @@ $draftEvents = getEvents($cnx, [
                                                             </p>
                                                             <div
                                                                 class="d-flex align-items-center text-muted small mb-2">
-                                                                <i class="bi bi-calendar me-2"></i>
+                                                                <i class="fas fa-calendar me-2"></i>
                                                                 <span><?php echo date('F j, Y, g:i A', strtotime($event['start_date'])); ?></span>
                                                             </div>
                                                             <div
                                                                 class="d-flex align-items-center text-muted small mb-2">
-                                                                <i class="bi bi-geo-alt me-2"></i>
+                                                                <i class="fas fa-map-marker-alt me-2"></i>
                                                                 <span><?php echo htmlspecialchars($event['location']); ?></span>
                                                             </div>
                                                         </div>
@@ -327,12 +316,12 @@ $draftEvents = getEvents($cnx, [
                                                             </p>
                                                             <div
                                                                 class="d-flex align-items-center text-muted small mb-2">
-                                                                <i class="bi bi-calendar me-2"></i>
+                                                                <i class="fas fa-calendar me-2"></i>
                                                                 <span><?php echo date('F j, Y', strtotime($event['start_date'])); ?></span>
                                                             </div>
                                                             <div
                                                                 class="d-flex align-items-center text-muted small mb-2">
-                                                                <i class="bi bi-geo-alt me-2"></i>
+                                                                <i class="fas fa-map-marker-alt me-2"></i>
                                                                 <span><?php echo htmlspecialchars($event['location']); ?></span>
                                                             </div>
                                                         </div>
@@ -374,12 +363,12 @@ $draftEvents = getEvents($cnx, [
                                                             </p>
                                                             <div
                                                                 class="d-flex align-items-center text-muted small mb-2">
-                                                                <i class="bi bi-calendar me-2"></i>
+                                                                <i class="fas fa-calendar me-2"></i>
                                                                 <span><?php echo date('F j, Y', strtotime($event['start_date'])); ?></span>
                                                             </div>
                                                             <div
                                                                 class="d-flex align-items-center text-muted small mb-2">
-                                                                <i class="bi bi-geo-alt me-2"></i>
+                                                                <i class="fas fa-map-marker-alt me-2"></i>
                                                                 <span><?php echo htmlspecialchars($event['location']); ?></span>
                                                             </div>
                                                         </div>
@@ -442,7 +431,7 @@ $draftEvents = getEvents($cnx, [
             editButton.addEventListener("click", () => {
                 // Enable editing
                 inputs.forEach(input => {
-                    if (input.name && input.name !== 'username' && input.name !== 'created_at') {
+                    if (input.name && input.name !== 'created_at') {
                         input.disabled = false;
                     }
                 });
@@ -470,5 +459,4 @@ $draftEvents = getEvents($cnx, [
         });
     </script>
 </body>
-
 </html>
