@@ -9,8 +9,13 @@ include_once __DIR__ . '/../../controller/preferences.php';
 
 $error_signin = '';
 $categories = getCategories($cnx);
-$user_preferences = getUserPreferences($cnx, $_SESSION['user_id'] ?? null);
-$recommended_events = getRecommendedEvents($cnx, $_SESSION['user_id'] ?? null, 3);
+if (isset($_SESSION["user_id"])) {
+  $user_preferences = getUserPreferences($cnx, $_SESSION['user_id'] ?? null);
+  $recommended_events = getRecommendedEvents($cnx, $_SESSION['user_id'] ?? null, 3);
+} else {
+  $user_preferences = [];
+  $recommended_events = [];
+}
 if (isset($_GET['code'])) {
   try {
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);

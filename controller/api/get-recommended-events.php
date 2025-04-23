@@ -7,8 +7,8 @@ header('Content-Type: application/json');
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode([
-        'status' => 'error',
-        'message' => 'Please log in to see recommendations'
+        'status' => 'success',
+        'events' => []
     ]);
     exit;
 }

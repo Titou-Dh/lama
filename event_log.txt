@@ -425,3 +425,33 @@
 [2025-04-23 02:38:03] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"testt","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"testt\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi9A65.tmp\" 2>&1","return_code":1}
 [2025-04-23 02:38:03] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"testt","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
 [2025-04-23 02:38:03] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"testt"}
+[2025-04-23 11:37:46] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"messi","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"messi\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiBAEC.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:37:46] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"messi","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:37:46] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"messi"}
+[2025-04-23 11:37:51] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"onlilne","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"onlilne\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiCF8E.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:37:51] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"onlilne","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:37:51] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"onlilne"}
+[2025-04-23 11:37:55] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"online","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"online\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiDCDD.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:37:55] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"online","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:37:55] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"online"}
+[2025-04-23 11:40:13] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"pu","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"pu\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiF9E2.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:40:13] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"pu","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:40:13] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"pu"}
+[2025-04-23 11:40:14] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"ipu","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"ipu\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiFC93.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:40:14] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"ipu","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:40:14] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"ipu"}
+[2025-04-23 11:40:16] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"pu","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"pu\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi32B.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:40:16] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"pu","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:40:16] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"pu"}
+[2025-04-23 11:40:17] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"publi","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"publi\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi937.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:40:17] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"publi","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:40:17] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"publi"}
+[2025-04-23 11:43:25] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"pu","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"pu\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiE7F6.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:43:25] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"pu","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:43:25] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"pu"}
+[2025-04-23 11:43:27] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"ipu","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"ipu\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiEC1D.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:43:27] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"ipu","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:43:27] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"ipu"}
+[2025-04-23 11:43:27] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"pu","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"pu\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiEDB5.tmp\" 2>&1","return_code":1}
+[2025-04-23 11:43:27] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"pu","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-23 11:43:27] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"pu"}
