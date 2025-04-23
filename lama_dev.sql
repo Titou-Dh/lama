@@ -183,6 +183,27 @@ CREATE TABLE `users` (
   `is_organizer` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `user_preferences`
+--
+--
+-- Table structure for user preferences
+-- 
+
+CREATE TABLE IF NOT EXISTS user_preferences (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    category_id INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_category (user_id, category_id)
+);
+
+
 --
 -- Dumping data for table `users`
 --

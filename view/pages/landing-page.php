@@ -4,9 +4,13 @@ session_start();
 require_once __DIR__ . '/../../config/google.php';
 include_once __DIR__ . '/../../config/database.php';
 include_once __DIR__ . '/../../controller/auth.php';
+include_once __DIR__ . '/../../controller/categories.php';
+include_once __DIR__ . '/../../controller/preferences.php';
 
 $error_signin = '';
-
+$categories = getCategories($cnx);
+$user_preferences = getUserPreferences($cnx, $_SESSION['user_id'] ?? null);
+$recommended_events = getRecommendedEvents($cnx, $_SESSION['user_id'] ?? null, 3);
 if (isset($_GET['code'])) {
   try {
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
@@ -476,17 +480,17 @@ if (isset($_GET['code'])) {
       </div>
 
       <div class="text-center mt-5">
-        <a href="#" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
+        <a href="searchpage.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
       </div>
     </div>
   </section>
 
   <!-- Personalization Section -->
   <section class="personalization-section">
-    <div class="personalization-bg"></div>
+
     <div class="container">
       <div class="row align-items-center">
-        <div class="col-lg-6 mb-5 mb-lg-0">
+        <form class="col-lg-6 mb-5 mb-lg-0" method="POST" id="preferencesForm" action="landing-page.php">
           <h2 class="text-3xl font-bold mb-4 text-gradient">
             let's make it personal!
           </h2>
@@ -494,106 +498,32 @@ if (isset($_GET['code'])) {
             Tell us what you're interested in, and we'll recommend events
             tailored just for you. Select your preferences below:
           </p>
-
           <div class="preference-tags mb-4">
-            <span class="preference-tag">Music</span>
-            <span class="preference-tag active">Art</span>
-            <span class="preference-tag">Sports</span>
-            <span class="preference-tag active">Technology</span>
-            <span class="preference-tag">Food & Drink</span>
-            <span class="preference-tag">Business</span>
-            <span class="preference-tag">Health</span>
-            <span class="preference-tag">Education</span>
-            <span class="preference-tag">Community</span>
-            <span class="preference-tag">Charity</span>
-            <span class="preference-tag">Family</span>
-            <span class="preference-tag">Fashion</span>
+            <?php foreach ($categories as $category): ?>
+              <div
+                class="preference-tag <?php echo in_array($category['id'], $user_preferences) ? 'active' : ''; ?>"
+                data-id="<?php echo htmlspecialchars($category['id']); ?>">
+                <?php echo htmlspecialchars($category['name']); ?>
+              </div>
+            <?php endforeach; ?>
           </div>
-
-          <button class="btn btn-gradient rounded-pill px-5 py-2">
-            save Preferences
+          <input type="hidden" id="selectedCategories" name="selectedCategories" value="">
+          <button class="btn btn-gradient rounded-pill px-5 py-2" id="savePreferences" type="submit">
+            Save Preferences
           </button>
-        </div>
+        </form>
+
         <div class="col-lg-6">
           <div class="card border-0 shadow-lg">
             <div class="card-body p-4">
               <h3 class="card-title text-xl font-bold mb-4">
                 Your Recommended Events
               </h3>
-
-              <div class="recommended-event d-flex mb-4">
-                <div class="flex-shrink-0 me-3" style="
-                      width: 80px;
-                      height: 80px;
-                      background-image: url('../assets/images/art.jpg');
-                      background-size: cover;
-                      border-radius: 0.5rem;
-                    "></div>
-                <div>
-                  <h4 class="text-lg font-semibold">
-                    Contemporary Art Exhibition
-                  </h4>
-                  <p class="text-sm text-gray-500 mb-1">
-                    <i class="far fa-calendar-alt me-1"></i> Jun 12, 2025
-                  </p>
-                  <p class="text-sm text-gray-500">
-                    <i class="fas fa-map-marker-alt me-1"></i> Modern Gallery,
-                    New York
-                  </p>
-                </div>
-              </div>
-
-              <div class="recommended-event d-flex mb-4">
-                <div class="flex-shrink-0 me-3" style="
-                      width: 80px;
-                      height: 80px;
-                      background-image: url('../assets/images/tech.jpg');
-                      background-size: cover;
-                      border-radius: 0.5rem;
-                    "></div>
-                <div>
-                  <h4 class="text-lg font-semibold">
-                    AI & Machine Learning Workshop
-                  </h4>
-                  <p class="text-sm text-gray-500 mb-1">
-                    <i class="far fa-calendar-alt me-1"></i> Jun 18, 2025
-                  </p>
-                  <p class="text-sm text-gray-500">
-                    <i class="fas fa-map-marker-alt me-1"></i> Tech Hub, San
-                    Francisco
-                  </p>
-                </div>
-              </div>
-
-              <div class="recommended-event d-flex">
-                <div class="flex-shrink-0 me-3" style="
-                      width: 80px;
-                      height: 80px;
-                      background-image: url('../assets/images/photography.jpg');
-                      background-size: cover;
-                      border-radius: 0.5rem;
-                    "></div>
-                <div>
-                  <h4 class="text-lg font-semibold">
-                    Photography Masterclass
-                  </h4>
-                  <p class="text-sm text-gray-500 mb-1">
-                    <i class="far fa-calendar-alt me-1"></i> Jun 25, 2025
-                  </p>
-                  <p class="text-sm text-gray-500">
-                    <i class="fas fa-map-marker-alt me-1"></i> Creative
-                    Studio, Chicago
-                  </p>
-                </div>
-              </div>
-
-              <div class="text-center mt-4">
-                <a href="#" class="btn btn-outline-primary rounded-pill px-4">View All Recommendations</a>
-              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -608,8 +538,8 @@ if (isset($_GET['code'])) {
               text: data.message,
               confirmButtonText: "OK",
             });
-              </script>
-    ';
+            </script>
+            ';
   ?>
 
   <!-- Script for navbar scroll effect -->
@@ -653,16 +583,9 @@ if (isset($_GET['code'])) {
         },
       },
     });
-
-    // Preference tags
-    const preferenceTags = document.querySelectorAll(".preference-tag");
-    preferenceTags.forEach((tag) => {
-      tag.addEventListener("click", function() {
-        this.classList.toggle("active");
-      });
-    });
   </script>
   <script src="../scripts/landing.js"></script>
+  <script src="../scripts/preferences.js"></script>
 </body>
 
 </html>
