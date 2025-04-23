@@ -25,9 +25,6 @@ function getUserById($pdo, $id)
     }
 }
 
-
-
-
 /**
  * Change user password
  * 
@@ -453,48 +450,25 @@ function updateUserProfile($pdo, $id, $userData, $fileData = null)
  * @param string $password Password confirmation
  * @return boolean Success or failure
  */
-function deleteUserAccount($pdo, $id, $password)
-{
+function deleteUserAccount($pdo, $userId, $password) {
     try {
-        // Get user with password hash for verification
-        $sql = "SELECT password_hash, profile_image FROM users WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':id', $id);
+        // Fetch user data for password verification
+        $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
         $stmt->execute();
-
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // Verify password
         if (!$user || !password_verify($password, $user['password_hash'])) {
-            return false;
-        }
-        if (!$user || !password_verify($password, $user['password_hash'])) {
-            error_log("Delete User Error: Password verification failed for user ID $id");
-            return false;
+            return false; // Incorrect password
         }
 
-        // Delete user's profile image if exists
-        if (!empty($user['profile_image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $user['profile_image'])) {
-            unlink($_SERVER['DOCUMENT_ROOT'] . $user['profile_image']);
-        }
-        if (!empty($user['profile_image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $user['profile_image'])) {
-            if (!unlink($_SERVER['DOCUMENT_ROOT'] . $user['profile_image'])) {
-                error_log("Delete User Error: Failed to delete profile image for user ID $id");
-            }
-        }
-
-        // Delete user
-        $sql = "DELETE FROM users WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':id', $id);  // Removed the stray hyphen here
-        if (!$stmt->execute()) {
-            error_log("Delete User Error: Failed to execute DELETE query for user ID $id");
-            return false;
-        }
-        $result = $stmt->execute();
-
-        return $result;
+        // Delete user from the database
+        $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        return $stmt->execute();
     } catch (PDOException $e) {
-        error_log("Delete User Error: " . $e->getMessage());
+        error_log("Error deleting user: " . $e->getMessage());
         return false;
     }
 }

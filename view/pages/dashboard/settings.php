@@ -91,7 +91,7 @@ if (isset($_POST['update_profile'])) {
 // Handle account deletion
 if (isset($_POST['delete_account'])) {
     $password = $_POST['delete_password'] ?? '';
-    
+
     if (empty($password)) {
         $deleteMessage = '<div class="alert alert-danger">Password is required to delete your account</div>';
     } else {
@@ -99,7 +99,7 @@ if (isset($_POST['delete_account'])) {
         if ($result) {
             // Destroy session and redirect to login
             session_destroy();
-            header('Location: ../../../login.php?message=account_deleted');
+            header('Location: ../auth/sign-in.php?message=account_deleted');
             exit;
         } else {
             $deleteMessage = '<div class="alert alert-danger">Incorrect password or unable to delete account</div>';
@@ -264,13 +264,13 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                         <h3 class="settings-title text-danger">Delete Account</h3>
                                         <p class="text-muted">Once you delete your account, there is no going back. Please be certain.</p>
                                         <?php echo $deleteMessage; ?>
-                                        <form method="post" id="deleteAccountForm">
+                                        <form method="post">
                                             <div class="form-group">
                                                 <label for="delete_password" class="form-control-label">Enter your password to confirm</label>
                                                 <input type="password" class="form-control" id="delete_password" name="delete_password" required>
                                             </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">Delete Account</button>
+                                            <div class="d-flex justify-content-end mt-3">
+                                                <button type="submit" name="delete_account" class="btn btn-danger">Delete Account</button>
                                             </div>
                                         </form>
                                     </div>
@@ -292,12 +292,11 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you absolutely sure you want to delete your account? This action cannot be undone.</p>
-                    <p>All your data, including events, orders, and personal information will be permanently removed.</p>
+                    <p>Are you sure you want to delete your account? This action cannot be undone.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete My Account</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Account</button>
                 </div>
             </div>
         </div>
@@ -308,13 +307,12 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
     <script src="../../scripts/core/bootstrap.min.js"></script>
     <script src="../../scripts/soft-ui-dashboard.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             // Handle delete confirmation
-            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-                document.getElementById('deleteAccountForm').innerHTML += '<input type="hidden" name="delete_account" value="1">';
-                document.getElementById('deleteAccountForm').submit();
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+                document.querySelector('form[method="post"]').submit();
             });
-            
+
             // Show active tab based on URL hash
             const hash = window.location.hash;
             if (hash) {
@@ -324,21 +322,20 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                     tabInstance.show();
                 }
             }
-            
+
             // Update URL hash when tab changes
             const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
             tabs.forEach(tab => {
-                tab.addEventListener('shown.bs.tab', function(e) {
+                tab.addEventListener('shown.bs.tab', function (e) {
                     const target = e.target.getAttribute('data-bs-target');
                     window.location.hash = target;
                 });
             });
-            
+
             // Username validation
             const usernameInput = document.getElementById('username');
             if (usernameInput) {
-                usernameInput.addEventListener('input', function() {
-                    // Remove spaces and special characters
+                usernameInput.addEventListener('input', function () {
                     this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
                 });
             }
