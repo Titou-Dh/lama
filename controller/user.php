@@ -26,144 +26,6 @@ function getUserById($pdo, $id)
 }
 
 /**
- * Update user profile
- * 
- * @param PDO $pdo Database connection
- * @param int $id User ID
- * @param array $userData Updated user data
- * @param array $fileData Optional profile image
- * @return boolean Success or failure
- */
-function updateUserProfile($pdo, $id, $userData, $fileData = null)
-{
-    try {
-        // First get current user data
-        $currentUser = getUserById($pdo, $id);
-        if (!$currentUser) {
-            return false;
-        }
-
-        // Check if email is being changed and already exists
-        if (isset($userData['email']) && $userData['email'] !== $currentUser['email']) {
-            $sql = "SELECT id FROM users WHERE email = :email AND id != :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':email', $userData['email']);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                return false;
-            }
-        }
-
-        // Handle image upload if present
-        $imagePath = $currentUser['profile_image']; // Default to current image
-        if ($fileData && !empty($fileData['name'])) {
-            $imageUploadResult = uploadProfileImage($fileData);
-            if ($imageUploadResult['success']) {
-                $imagePath = $imageUploadResult['filepath'];
-
-                // Delete old image if it exists
-                if (!empty($currentUser['profile_image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $currentUser['profile_image'])) {
-                    unlink($_SERVER['DOCUMENT_ROOT'] . $currentUser['profile_image']);
-                }
-            }
-        }
-
-        // Build SQL query based on provided fields
-        $sql = "UPDATE users SET ";
-        $params = [];
-
-        if (isset($userData['email'])) {
-            $sql .= "email = :email, ";
-            $params[':email'] = $userData['email'];
-        }
-
-        if (isset($userData['full_name'])) {
-            $sql .= "full_name = :full_name, ";
-            $params[':full_name'] = $userData['full_name'];
-        }
-
-        if (isset($userData['is_organizer'])) {
-            $sql .= "is_organizer = :is_organizer, ";
-            $isOrganizer = $userData['is_organizer'] ? 1 : 0;
-            $params[':is_organizer'] = $isOrganizer;
-        }
-
-        // Set profile image
-        $sql .= "profile_image = :profile_image ";
-        $params[':profile_image'] = $imagePath;
-
-        // If password change requested, update it
-        if (isset($userData['new_password']) && !empty($userData['new_password'])) {
-            $sql .= ", password_hash = :password_hash ";
-            $passwordHash = password_hash($userData['new_password'], PASSWORD_DEFAULT);
-            $params[':password_hash'] = $passwordHash;
-        }
-
-        $sql .= "WHERE id = :id";
-        $params[':id'] = $id;
-
-        $stmt = $pdo->prepare($sql);
-
-        // Bind parameters
-        foreach ($params as $key => $value) {
-            $stmt->bindValue($key, $value);
-        }
-
-        // Execute query
-        $result = $stmt->execute();
-
-        return $result;
-    } catch (PDOException $e) {
-        error_log("Update User Error: " . $e->getMessage());
-        return false;
-    }
-}
-
-/**
- * Delete a user account
- * 
- * @param PDO $pdo Database connection
- * @param int $id User ID
- * @param string $password Password confirmation
- * @return boolean Success or failure
- */
-function deleteUserAccount($pdo, $id, $password)
-{
-    try {
-        // Get user with password hash for verification
-        $sql = "SELECT password_hash, profile_image FROM users WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$user || !password_verify($password, $user['password_hash'])) {
-            return false;
-        }
-
-        // Delete user's profile image if exists
-        if (!empty($user['profile_image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $user['profile_image'])) {
-            unlink($_SERVER['DOCUMENT_ROOT'] . $user['profile_image']);
-        }
-
-        // Delete user
-        $sql = "DELETE FROM users WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':id', $id);
-
-        $result = $stmt->execute();
-
-        return $result;
-    } catch (PDOException $e) {
-        error_log("Delete User Error: " . $e->getMessage());
-        return false;
-    }
-}
-
-/**
  * Change user password
  * 
  * @param PDO $pdo Database connection
@@ -464,5 +326,149 @@ function countUsers($pdo, $filters = [])
     } catch (PDOException $e) {
         error_log("Count Users Error: " . $e->getMessage());
         return 0;
+    }
+}
+/**
+ * Update user profile
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $id User ID
+ * @param array $userData Updated user data
+ * @param array $fileData Optional profile image
+ * @return boolean Success or failure
+ */
+function updateUserProfile($pdo, $id, $userData, $fileData = null)
+{
+    try {
+        // First get current user data
+        $currentUser = getUserById($pdo, $id);
+        if (!$currentUser) {
+            return false;
+        }
+
+        // Check if email is being changed and already exists
+        if (isset($userData['email']) && $userData['email'] !== $currentUser['email']) {
+            $sql = "SELECT id FROM users WHERE email = :email AND id != :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':email', $userData['email']);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return false;
+            }
+        }
+
+        // Check if username is being changed and already exists
+        if (isset($userData['username']) && $userData['username'] !== $currentUser['username']) {
+            $sql = "SELECT id FROM users WHERE username = :username AND id != :id";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':username', $userData['username']);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return false;
+            }
+        }
+
+        // Handle image upload if present
+        $imagePath = $currentUser['profile_image']; // Default to current image
+        if ($fileData && !empty($fileData['name'])) {
+            $imageUploadResult = uploadProfileImage($fileData);
+            if ($imageUploadResult['success']) {
+                $imagePath = $imageUploadResult['filepath'];
+
+                // Delete old image if it exists
+                if (!empty($currentUser['profile_image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $currentUser['profile_image'])) {
+                    unlink($_SERVER['DOCUMENT_ROOT'] . $currentUser['profile_image']);
+                }
+            }
+        }
+
+        // Build SQL query based on provided fields
+        $sql = "UPDATE users SET ";
+        $params = [];
+
+        if (isset($userData['email'])) {
+            $sql .= "email = :email, ";
+            $params[':email'] = $userData['email'];
+        }
+
+        if (isset($userData['full_name'])) {
+            $sql .= "full_name = :full_name, ";
+            $params[':full_name'] = $userData['full_name'];
+        }
+
+        if (isset($userData['username'])) {
+            $sql .= "username = :username, ";
+            $params[':username'] = $userData['username'];
+        }
+
+        if (isset($userData['is_organizer'])) {
+            $sql .= "is_organizer = :is_organizer, ";
+            $isOrganizer = $userData['is_organizer'] ? 1 : 0;
+            $params[':is_organizer'] = $isOrganizer;
+        }
+
+        // Set profile image
+        $sql .= "profile_image = :profile_image ";
+        $params[':profile_image'] = $imagePath;
+
+        // If password change requested, update it
+        if (isset($userData['new_password']) && !empty($userData['new_password'])) {
+            $sql .= ", password_hash = :password_hash ";
+            $passwordHash = password_hash($userData['new_password'], PASSWORD_DEFAULT);
+            $params[':password_hash'] = $passwordHash;
+        }
+
+        $sql .= "WHERE id = :id";
+        $params[':id'] = $id;
+
+        $stmt = $pdo->prepare($sql);
+
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        // Execute query
+        $result = $stmt->execute();
+
+        return $result;
+    } catch (PDOException $e) {
+        error_log("Update User Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Delete a user account
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $id User ID
+ * @param string $password Password confirmation
+ * @return boolean Success or failure
+ */
+function deleteUserAccount($pdo, $userId, $password) {
+    try {
+        // Fetch user data for password verification
+        $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verify password
+        if (!$user || !password_verify($password, $user['password_hash'])) {
+            return false; // Incorrect password
+        }
+
+        // Delete user from the database
+        $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        error_log("Error deleting user: " . $e->getMessage());
+        return false;
     }
 }

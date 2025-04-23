@@ -3,13 +3,120 @@
 include "../../../config/session.php";
 checkSession();
 
+// Include database connection and user controller
+include_once "../../../config/database.php"; // This will give us $cnx
+include_once "../../../controller/user.php";
+
+// Get user ID from session
+$userId = $_SESSION['user_id'];
+
+// Get user data
+$userData = getUserById($cnx, $userId);
+
+// Process form submissions
+$passwordMessage = '';
+$profileMessage = '';
+$deleteMessage = '';
+
+// Handle password change
+if (isset($_POST['change_password'])) {
+    $currentPassword = $_POST['current_password'] ?? '';
+    $newPassword = $_POST['new_password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+    
+    if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+        $passwordMessage = '<div class="alert alert-danger">All password fields are required</div>';
+    } elseif ($newPassword !== $confirmPassword) {
+        $passwordMessage = '<div class="alert alert-danger">New passwords do not match</div>';
+    } else {
+        $result = changeUserPassword($cnx, $userId, $currentPassword, $newPassword);
+        if ($result['success']) {
+            $passwordMessage = '<div class="alert alert-success">' . $result['message'] . '</div>';
+        } else {
+            $passwordMessage = '<div class="alert alert-danger">' . $result['message'] . '</div>';
+        }
+    }
+}
+
+// Handle profile update
+if (isset($_POST['update_profile'])) {
+    // Check if username is already taken
+    $newUsername = $_POST['username'] ?? '';
+    $usernameAvailable = true;
+    
+    if ($newUsername !== $userData['username']) {
+        // Check if username exists in database
+        try {
+            $stmt = $cnx->prepare("SELECT id FROM users WHERE username = :username AND id != :user_id");
+            $stmt->bindParam(':username', $newUsername);
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->execute();
+            
+            if ($stmt->rowCount() > 0) {
+                $usernameAvailable = false;
+                $profileMessage = '<div class="alert alert-danger">Username is already taken. Please choose another one.</div>';
+            }
+        } catch (PDOException $e) {
+            error_log("Username check error: " . $e->getMessage());
+            $profileMessage = '<div class="alert alert-danger">An error occurred. Please try again.</div>';
+            $usernameAvailable = false;
+        }
+    }
+    
+    if ($usernameAvailable) {
+        $userData = [
+            'username' => $newUsername,
+            'full_name' => $_POST['full_name'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            // Removed is_organizer toggle
+        ];
+        
+        // Handle profile image upload
+        $fileData = null;
+        if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+            $fileData = $_FILES['profile_image'];
+        }
+        
+        $result = updateUserProfile($cnx, $userId, $userData, $fileData);
+        if ($result) {
+            $profileMessage = '<div class="alert alert-success">Profile updated successfully</div>';
+            // Refresh user data
+            $userData = getUserById($cnx, $userId);
+        } else {
+            $profileMessage = '<div class="alert alert-danger">Failed to update profile</div>';
+        }
+    }
+}
+
+// Handle account deletion
+if (isset($_POST['delete_account'])) {
+    $password = $_POST['delete_password'] ?? '';
+
+    if (empty($password)) {
+        $deleteMessage = '<div class="alert alert-danger">Password is required to delete your account</div>';
+    } else {
+        $result = deleteUserAccount($cnx, $userId, $password);
+        if ($result) {
+            // Destroy session and redirect to login
+            session_destroy();
+            header('Location: ../auth/sign-in.php?message=account_deleted');
+            exit;
+        } else {
+            $deleteMessage = '<div class="alert alert-danger">Incorrect password or unable to delete account</div>';
+        }
+    }
+}
+
+// Default avatar URL
+$defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+$profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] : $defaultAvatar;
 ?>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
+    <title>Account Settings</title>
     <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,800" rel="stylesheet" />
     <!-- Nucleo Icons -->
     <link href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css" rel="stylesheet" />
@@ -22,935 +129,152 @@ checkSession();
         id="pagestyle"
         href="../../styles/css/soft-ui-dashboard.css"
         rel="stylesheet" />
-    <link rel="stylesheet" href="../../styles/css/settings.css" />
+    <link rel="stylesheet" href="../../styles/css/usersprofiles.css" />
     <link rel="icon" type="image/png" href="../../assets/images/logo.png" />
-
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
     <?php include '../../partials/dashboar-sidebar.php' ?>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <?php include '../../partials/dashboard-navbar.php' ?>
-        <div class="content-wrapper">
-            <div class="container-fluid">
-                <!-- Header with user info -->
-                <div class="profile-header mb-4">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h2 class="section-title mb-4">Account Settings</h2>
-                            <p class="text-muted">
-                                Manage your account settings and preferences
-                            </p>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <div class="d-flex align-items-center justify-content-end">
-                                <div class="me-3 text-end">
-                                    <h6 class="mb-0">Sarah Johnson</h6>
-                                </div>
-                                <img
-                                    src="https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid"
-                                    alt="Profile"
-                                    class="rounded-circle"
-                                    style="width: 50px; height: 50px; object-fit: cover" />
-                            </div>
-                        </div>
-                    </div>
+        <div class="container-fluid py-4">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <img src="<?php echo $profileImage; ?>" alt="Profile Avatar" class="profile-avatar">
+                <div class="profile-info">
+                    <h2><?php echo htmlspecialchars($userData['full_name']); ?></h2>
+                    <p>@<?php echo htmlspecialchars($userData['username']); ?></p>
+                    <p><?php echo htmlspecialchars($userData['email']); ?></p>
                 </div>
-
-                <!-- Settings Navigation (Horizontal) -->
-                <div class="settings-nav">
-                    <div class="nav nav-pills" id="v-pills-tab" role="tablist">
-                        <button
-                            class="nav-link active"
-                            id="v-pills-account-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-account"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-account"
-                            aria-selected="true">
-                            <i class="bi bi-person-circle"></i> Account
-                        </button>
-                        <button
-                            class="nav-link"
-                            id="v-pills-notifications-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-notifications"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-notifications"
-                            aria-selected="false">
-                            <i class="bi bi-bell"></i> Notifications
-                        </button>
-                        <button
-                            class="nav-link"
-                            id="v-pills-privacy-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-privacy"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-privacy"
-                            aria-selected="false">
-                            <i class="bi bi-shield-lock"></i> Privacy & Security
-                        </button>
-                        <button
-                            class="nav-link"
-                            id="v-pills-integrations-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#v-pills-integrations"
-                            type="button"
-                            role="tab"
-                            aria-controls="v-pills-integrations"
-                            aria-selected="false">
-                            <i class="bi bi-puzzle"></i> Integrations
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Settings Content -->
-                <div class="settings-content">
-                    <div class="tab-content" id="v-pills-tabContent">
-                        <!-- Account Settings -->
-                        <div
-                            class="tab-pane fade show active"
-                            id="v-pills-account"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-account-tab">
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Personal Information</h3>
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-6 form-group">
-                                            <label for="firstName" class="form-label">First Name</label>
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                id="firstName"
-                                                value="Sarah" />
-                                        </div>
-                                        <div class="col-md-6 form-group">
-                                            <label for="lastName" class="form-label">Last Name</label>
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                id="lastName"
-                                                value="Johnson" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 form-group">
-                                            <label for="email" class="form-label">Email Address</label>
-                                            <input
-                                                type="email"
-                                                class="form-control"
-                                                id="email"
-                                                value="sarah.johnson@eventpro.com" />
-                                        </div>
-                                        <div class="col-md-6 form-group">
-                                            <label for="phone" class="form-label">Phone Number</label>
-                                            <input
-                                                type="tel"
-                                                class="form-control"
-                                                id="phone"
-                                                value="+1 (555) 123-4567" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="jobTitle" class="form-label">Job Title</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="jobTitle"
-                                            value="Senior Event Coordinator" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="location" class="form-label">Location</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="location"
-                                            value="New York, NY" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="bio" class="form-label">Bio</label>
-                                        <textarea class="form-control" id="bio" rows="4">
-Senior Event Coordinator with over 10 years of experience organizing tech conferences, workshops, and corporate events. Passionate about creating memorable experiences and fostering meaningful connections.</textarea>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Profile Picture</h3>
-                                <div class="d-flex align-items-center mb-3">
-                                    <img
-                                        src="https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid"
-                                        alt="Profile Picture"
-                                        class="rounded-circle me-4"
-                                        style="
-                      width: 100px;
-                      height: 100px;
-                      object-fit: cover;
-                      border: 3px solid #4361ee;
-                    " />
-                                    <div>
-                                        <div class="mb-3">
-                                            <input
-                                                class="form-control"
-                                                type="file"
-                                                id="profilePicture" />
-                                        </div>
-                                        <div>
-                                            <button class="btn btn-custom btn-custom-primary me-2">
-                                                Upload New Picture
-                                            </button>
-                                            <button class="btn btn-custom btn-custom-danger">
-                                                Remove
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-muted small">
-                                    Recommended size: 400x400 pixels (max 2MB). JPG, GIF, or PNG.
-                                </p>
-                            </div>
-
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Expertise & Skills</h3>
-                                <div class="form-group">
-                                    <label class="form-label">Areas of Expertise</label>
-                                    <div class="mb-3">
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <span class="expertise-badge d-flex align-items-center">
-                                                Tech Conferences
-                                                <i
-                                                    class="bi bi-x-circle ms-2"
-                                                    style="cursor: pointer"></i>
-                                            </span>
-                                            <span class="expertise-badge d-flex align-items-center">
-                                                Workshops
-                                                <i
-                                                    class="bi bi-x-circle ms-2"
-                                                    style="cursor: pointer"></i>
-                                            </span>
-                                            <span class="expertise-badge d-flex align-items-center">
-                                                Corporate Events
-                                                <i
-                                                    class="bi bi-x-circle ms-2"
-                                                    style="cursor: pointer"></i>
-                                            </span>
-                                            <span class="expertise-badge d-flex align-items-center">
-                                                Networking
-                                                <i
-                                                    class="bi bi-x-circle ms-2"
-                                                    style="cursor: pointer"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            placeholder="Add a new expertise" />
-                                        <button
-                                            class="btn btn-custom btn-custom-primary"
-                                            type="button">
-                                            Add
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Change Password</h3>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="currentPassword" class="form-label">Current Password</label>
-                                        <input
-                                            type="password"
-                                            class="form-control"
-                                            id="currentPassword" />
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 form-group">
-                                            <label for="newPassword" class="form-label">New Password</label>
-                                            <input
-                                                type="password"
-                                                class="form-control"
-                                                id="newPassword" />
-                                        </div>
-                                        <div class="col-md-6 form-group">
-                                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                                            <input
-                                                type="password"
-                                                class="form-control"
-                                                id="confirmPassword" />
-                                        </div>
-                                    </div>
-                                    <div class="password-strength mt-2 mb-3">
-                                        <div class="progress" style="height: 6px">
-                                            <div
-                                                class="progress-bar bg-success"
-                                                role="progressbar"
-                                                style="width: 75%"
-                                                aria-valuenow="75"
-                                                aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                        <small class="text-success mt-1 d-block">Strong password</small>
-                                    </div>
-                                    <p class="text-muted small">
-                                        Password must be at least 8 characters long and include
-                                        uppercase, lowercase, numbers, and special characters.
-                                    </p>
-                                </form>
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-4">
-                                <button class="btn btn-custom btn-custom-outline">
-                                    Cancel
-                                </button>
-                                <button class="save-btn">Save Changes</button>
-                            </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h6>Account Settings</h6>
                         </div>
-
-                        <!-- Notification Settings -->
-                        <div
-                            class="tab-pane fade"
-                            id="v-pills-notifications"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-notifications-tab">
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Email Notifications</h3>
-                                <div class="card settings-card mb-4">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="mb-1">Event Updates</h5>
-                                                <p class="text-muted mb-0">
-                                                    Receive notifications about changes to your events
-                                                </p>
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">
+                                        Profile Information
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">
+                                        Password
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="danger-tab" data-bs-toggle="tab" data-bs-target="#danger" type="button" role="tab">
+                                        Delete Account
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content mt-4" id="settingsTabsContent">
+                                <!-- Profile Information Tab -->
+                                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="settings-card">
+                                        <h3 class="settings-title">Profile Information</h3>
+                                        <?php echo $profileMessage; ?>
+                                        <form method="post" enctype="multipart/form-data">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="username" class="form-control-label">Username</label>
+                                                        <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($userData['username']); ?>">
+                                                        <small class="text-muted">Choose a unique username</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="email" class="form-control-label">Email address</label>
+                                                        <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($userData['email']); ?>">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" checked />
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                        <div class="ms-4 mt-3">
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="eventChanges"
-                                                    checked />
-                                                <label class="form-check-label" for="eventChanges">
-                                                    Event changes and updates
-                                                </label>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="full_name" class="form-control-label">Full Name</label>
+                                                        <input type="text" class="form-control" id="full_name" name="full_name" value="<?php echo htmlspecialchars($userData['full_name']); ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="created_at" class="form-control-label">Member Since</label>
+                                                        <input type="text" class="form-control" id="created_at" value="<?php echo date('F j, Y', strtotime($userData['created_at'])); ?>" disabled>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="eventReminders"
-                                                    checked />
-                                                <label class="form-check-label" for="eventReminders">
-                                                    Event reminders and notifications
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="eventCancellations"
-                                                    checked />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="eventCancellations">
-                                                    Event cancellations
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card settings-card mb-4">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="mb-1">Attendee Activity</h5>
-                                                <p class="text-muted mb-0">
-                                                    Notifications about attendee registrations and
-                                                    interactions
-                                                </p>
-                                            </div>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" checked />
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                        <div class="ms-4 mt-3">
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="newRegistrations"
-                                                    checked />
-                                                <label class="form-check-label" for="newRegistrations">
-                                                    New attendee registrations
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="attendeeCancellations"
-                                                    checked />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="attendeeCancellations">
-                                                    Attendee cancellations
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="attendeeFeedback" />
-                                                <label class="form-check-label" for="attendeeFeedback">
-                                                    Attendee feedback and reviews
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card settings-card mb-4">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="mb-1">Financial Updates</h5>
-                                                <p class="text-muted mb-0">
-                                                    Notifications about payments and financial activity
-                                                </p>
-                                            </div>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" checked />
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                        <div class="ms-4 mt-3">
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="paymentNotifications"
-                                                    checked />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="paymentNotifications">
-                                                    Payment notifications
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="refundRequests"
-                                                    checked />
-                                                <label class="form-check-label" for="refundRequests">
-                                                    Refund requests
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="financialReports"
-                                                    checked />
-                                                <label class="form-check-label" for="financialReports">
-                                                    Financial reports
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Push Notifications</h3>
-                                <div class="card settings-card mb-4">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="mb-1">Mobile Notifications</h5>
-                                                <p class="text-muted mb-0">
-                                                    Receive push notifications on your mobile device
-                                                </p>
-                                            </div>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" checked />
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-                                        <div class="ms-4 mt-3">
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="pushEventUpdates"
-                                                    checked />
-                                                <label class="form-check-label" for="pushEventUpdates">
-                                                    Event updates and changes
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="pushNewRegistrations"
-                                                    checked />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="pushNewRegistrations">
-                                                    New attendee registrations
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="pushPaymentNotifications"
-                                                    checked />
-                                                <label
-                                                    class="form-check-label"
-                                                    for="pushPaymentNotifications">
-                                                    Payment notifications
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="pushMessages" />
-                                                <label class="form-check-label" for="pushMessages">
-                                                    New messages
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-4">
-                                <button class="btn btn-custom btn-custom-outline">
-                                    Reset to Default
-                                </button>
-                                <button class="save-btn">Save Changes</button>
-                            </div>
-                        </div>
-
-                        <!-- Privacy & Security Settings -->
-                        <div
-                            class="tab-pane fade"
-                            id="v-pills-privacy"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-privacy-tab">
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Privacy Settings</h3>
-                                <div class="card settings-card mb-4">
-                                    <div class="card-body">
-                                        <div class="form-group mb-4">
-                                            <label class="form-label">Profile Visibility</label>
-                                            <select class="form-select">
-                                                <option value="public" selected>
-                                                    Public - Anyone can view your profile
-                                                </option>
-                                                <option value="private">
-                                                    Private - Only registered users can view your profile
-                                                </option>
-                                                <option value="hidden">
-                                                    Hidden - Only you can view your profile
-                                                </option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group mb-4">
-                                            <label class="form-label">Contact Information Visibility</label>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="showEmail"
-                                                    checked />
-                                                <label class="form-check-label" for="showEmail">
-                                                    Show email address on profile
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="showPhone" />
-                                                <label class="form-check-label" for="showPhone">
-                                                    Show phone number on profile
-                                                </label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="showLocation"
-                                                    checked />
-                                                <label class="form-check-label" for="showLocation">
-                                                    Show location on profile
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Security Settings</h3>
-                                <div class="card settings-card mb-4">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center mb-4">
-                                            <div>
-                                                <h5 class="mb-1">Two-Factor Authentication</h5>
-                                                <p class="text-muted mb-0">
-                                                    Add an extra layer of security to your account
-                                                </p>
-                                            </div>
-                                            <label class="toggle-switch">
-                                                <input type="checkbox" />
-                                                <span class="toggle-slider"></span>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group mb-4">
-                                            <label class="form-label">Session Timeout</label>
-                                            <select class="form-select">
-                                                <option value="30">30 minutes</option>
-                                                <option value="60" selected>1 hour</option>
-                                                <option value="120">2 hours</option>
-                                                <option value="240">4 hours</option>
-                                                <option value="480">8 hours</option>
-                                            </select>
-                                            <small class="text-muted">You'll be automatically logged out after this period of
-                                                inactivity</small>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <h6 class="mb-2">Active Sessions</h6>
-                                            <div
-                                                class="card mb-2"
-                                                style="border-radius: 8px; border: 1px solid #e0e0e0">
-                                                <div class="card-body py-2 px-3">
-                                                    <div
-                                                        class="d-flex justify-content-between align-items-center">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="profile_image" class="form-control-label">Profile Image</label>
+                                                        <input type="file" class="form-control" id="profile_image" name="profile_image">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-control-label">Current Profile Image</label>
                                                         <div>
-                                                            <p class="mb-0">
-                                                                <i class="bi bi-laptop me-2"></i> MacBook Pro -
-                                                                New York
-                                                            </p>
-                                                            <small class="text-muted">Current session</small>
+                                                            <img src="<?php echo $profileImage; ?>" alt="Profile Image" class="img-fluid rounded" style="max-height: 100px;">
                                                         </div>
-                                                        <span class="badge-success">Active Now</span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div
-                                                class="card mb-2"
-                                                style="border-radius: 8px; border: 1px solid #e0e0e0">
-                                                <div class="card-body py-2 px-3">
-                                                    <div
-                                                        class="d-flex justify-content-between align-items-center">
-                                                        <div>
-                                                            <p class="mb-0">
-                                                                <i class="bi bi-phone me-2"></i> iPhone 13 - New
-                                                                York
-                                                            </p>
-                                                            <small class="text-muted">Last active: 2 hours ago</small>
-                                                        </div>
-                                                        <button class="btn btn-sm btn-custom-danger">
-                                                            Revoke
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                            <!-- Removed organizer toggle -->
+                                            <div class="d-flex justify-content-end mt-4">
+                                                <button type="submit" name="update_profile" class="btn btn-primary">Save Changes</button>
                                             </div>
-                                            <button
-                                                type="button"
-                                                class="btn btn-custom btn-custom-danger mt-2">
-                                                Revoke All Other Sessions
-                                            </button>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Data Management</h3>
-                                <div class="card settings-card">
-                                    <div class="card-body">
-                                        <div class="mb-4">
-                                            <h5 class="mb-2">Download Your Data</h5>
-                                            <p class="text-muted mb-3">
-                                                Download a copy of your personal data including profile
-                                                information, events, and activity history.
-                                            </p>
-                                            <button
-                                                type="button"
-                                                class="btn btn-custom btn-custom-primary">
-                                                Download My Data
-                                            </button>
-                                        </div>
-
-                                        <div>
-                                            <h5 class="mb-2">Delete Account</h5>
-                                            <p class="text-muted mb-3">
-                                                Permanently delete your account and all associated data.
-                                                This action cannot be undone.
-                                            </p>
-                                            <button
-                                                type="button"
-                                                class="btn btn-custom btn-custom-danger">
-                                                Delete Account
-                                            </button>
-                                        </div>
+                                
+                                <!-- Password Tab -->
+                                <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
+                                    <div class="settings-card">
+                                        <h3 class="settings-title">Change Password</h3>
+                                        <?php echo $passwordMessage; ?>
+                                        <form method="post">
+                                            <div class="form-group">
+                                                <label for="current_password" class="form-control-label">Current Password</label>
+                                                <input type="password" class="form-control" id="current_password" name="current_password" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="new_password" class="form-control-label">New Password</label>
+                                                <input type="password" class="form-control" id="new_password" name="new_password" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="confirm_password" class="form-control-label">Confirm New Password</label>
+                                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" name="change_password" class="btn btn-primary">Change Password</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-4">
-                                <button class="btn btn-custom btn-custom-outline">
-                                    Cancel
-                                </button>
-                                <button class="save-btn">Save Changes</button>
-                            </div>
-                        </div>
-
-                        <!-- Integrations Settings -->
-                        <div
-                            class="tab-pane fade"
-                            id="v-pills-integrations"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-integrations-tab">
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Connected Services</h3>
-
-                                <div class="card settings-card mb-3">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <div
-                                                    class="me-3 d-flex align-items-center justify-content-center"
-                                                    style="
-                            width: 50px;
-                            height: 50px;
-                            background-color: #f1f5f9;
-                            border-radius: 10px;
-                          ">
-                                                    <i class="bi bi-google fs-4 text-primary"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="mb-1">Google Calendar</h6>
-                                                    <small class="text-muted">Connected on May 10, 2025</small>
-                                                </div>
+                                
+                                <!-- Danger Zone Tab -->
+                                <div class="tab-pane fade" id="danger" role="tabpanel" aria-labelledby="danger-tab">
+                                    <div class="settings-card danger-zone">
+                                        <h3 class="settings-title text-danger">Delete Account</h3>
+                                        <p class="text-muted">Once you delete your account, there is no going back. Please be certain.</p>
+                                        <?php echo $deleteMessage; ?>
+                                        <form method="post">
+                                            <div class="form-group">
+                                                <label for="delete_password" class="form-control-label">Enter your password to confirm</label>
+                                                <input type="password" class="form-control" id="delete_password" name="delete_password" required>
                                             </div>
-                                            <div>
-                                                <span class="badge-success me-2">Connected</span>
-                                                <button class="btn btn-sm btn-custom-danger">
-                                                    Disconnect
-                                                </button>
+                                            <div class="d-flex justify-content-end mt-3">
+                                                <button type="submit" name="delete_account" class="btn btn-danger">Delete Account</button>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
-
-                                <div class="card settings-card mb-3">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <div
-                                                    class="me-3 d-flex align-items-center justify-content-center"
-                                                    style="
-                            width: 50px;
-                            height: 50px;
-                            background-color: #f1f5f9;
-                            border-radius: 10px;
-                          ">
-                                                    <i class="bi bi-stripe fs-4 text-primary"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="mb-1">Stripe</h6>
-                                                    <small class="text-muted">Connected on April 22, 2025</small>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <span class="badge-success me-2">Connected</span>
-                                                <button class="btn btn-sm btn-custom-danger">
-                                                    Disconnect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card settings-card mb-3">
-                                    <div class="card-body">
-                                        <div
-                                            class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <div
-                                                    class="me-3 d-flex align-items-center justify-content-center"
-                                                    style="
-                            width: 50px;
-                            height: 50px;
-                            background-color: #f1f5f9;
-                            border-radius: 10px;
-                          ">
-                                                    <i class="bi bi-mailchimp fs-4 text-primary"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="mb-1">Mailchimp</h6>
-                                                    <small class="text-muted">Connected on March 15, 2025</small>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <span class="badge-success me-2">Connected</span>
-                                                <button class="btn btn-sm btn-custom-danger">
-                                                    Disconnect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="settings-section">
-                                <h3 class="settings-section-title">Available Integrations</h3>
-
-                                <div class="row row-cols-1 row-cols-md-2 g-4">
-                                    <div class="col">
-                                        <div class="card settings-card h-100">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    <div
-                                                        class="me-3 d-flex align-items-center justify-content-center"
-                                                        style="
-                              width: 50px;
-                              height: 50px;
-                              background-color: #f1f5f9;
-                              border-radius: 10px;
-                            ">
-                                                        <i class="bi bi-zoom-in fs-4 text-primary"></i>
-                                                    </div>
-                                                    <h5 class="card-title mb-0">Zoom</h5>
-                                                </div>
-                                                <p class="card-text text-muted">
-                                                    Connect your Zoom account to easily create and manage
-                                                    virtual events.
-                                                </p>
-                                                <button class="btn btn-custom btn-custom-primary">
-                                                    Connect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <div class="card settings-card h-100">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    <div
-                                                        class="me-3 d-flex align-items-center justify-content-center"
-                                                        style="
-                              width: 50px;
-                              height: 50px;
-                              background-color: #f1f5f9;
-                              border-radius: 10px;
-                            ">
-                                                        <i class="bi bi-slack fs-4 text-primary"></i>
-                                                    </div>
-                                                    <h5 class="card-title mb-0">Slack</h5>
-                                                </div>
-                                                <p class="card-text text-muted">
-                                                    Get notifications and updates directly in your Slack
-                                                    workspace.
-                                                </p>
-                                                <button class="btn btn-custom btn-custom-primary">
-                                                    Connect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <div class="card settings-card h-100">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    <div
-                                                        class="me-3 d-flex align-items-center justify-content-center"
-                                                        style="
-                              width: 50px;
-                              height: 50px;
-                              background-color: #f1f5f9;
-                              border-radius: 10px;
-                            ">
-                                                        <i class="bi bi-paypal fs-4 text-primary"></i>
-                                                    </div>
-                                                    <h5 class="card-title mb-0">PayPal</h5>
-                                                </div>
-                                                <p class="card-text text-muted">
-                                                    Accept payments through PayPal for your events.
-                                                </p>
-                                                <button class="btn btn-custom btn-custom-primary">
-                                                    Connect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <div class="card settings-card h-100">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    <div
-                                                        class="me-3 d-flex align-items-center justify-content-center"
-                                                        style="
-                              width: 50px;
-                              height: 50px;
-                              background-color: #f1f5f9;
-                              border-radius: 10px;
-                            ">
-                                                        <i class="bi bi-linkedin fs-4 text-primary"></i>
-                                                    </div>
-                                                    <h5 class="card-title mb-0">LinkedIn</h5>
-                                                </div>
-                                                <p class="card-text text-muted">
-                                                    Share your events on LinkedIn and connect with
-                                                    professional networks.
-                                                </p>
-                                                <button class="btn btn-custom btn-custom-primary">
-                                                    Connect
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-4">
-                                <button class="btn btn-custom btn-custom-outline">
-                                    Cancel
-                                </button>
-                                <button class="save-btn">Save Changes</button>
                             </div>
                         </div>
                     </div>
@@ -958,60 +282,64 @@ Senior Event Coordinator with over 10 years of experience organizing tech confer
             </div>
         </div>
     </main>
+    
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Account Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
-    <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+    <!-- Scripts -->
     <script src="../../scripts/core/popper.min.js"></script>
     <script src="../../scripts/core/bootstrap.min.js"></script>
     <script src="../../scripts/soft-ui-dashboard.js"></script>
-    <!-- <script src="../../scripts/soft-ui-dashboard.min.js"></script> -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const navItems = document.querySelectorAll(".nav-item");
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle delete confirmation
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+                document.querySelector('form[method="post"]').submit();
+            });
 
-            navItems.forEach((item) => {
-                item.addEventListener("click", function() {
-                    navItems.forEach((el) => el.classList.remove("active"));
-                    this.classList.add("active");
+            // Show active tab based on URL hash
+            const hash = window.location.hash;
+            if (hash) {
+                const tab = document.querySelector(`[data-bs-target="${hash}"]`);
+                if (tab) {
+                    const tabInstance = new bootstrap.Tab(tab);
+                    tabInstance.show();
+                }
+            }
+
+            // Update URL hash when tab changes
+            const tabs = document.querySelectorAll('[data-bs-toggle="tab"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (e) {
+                    const target = e.target.getAttribute('data-bs-target');
+                    window.location.hash = target;
                 });
             });
 
-            // Add animation to settings tabs
-            const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
-            tabButtons.forEach((button) => {
-                button.addEventListener("click", function() {
-                    const targetId = this.getAttribute("data-bs-target");
-                    const targetPane = document.querySelector(targetId);
-
-                    if (targetPane) {
-                        targetPane.style.animation = "none";
-                        setTimeout(() => {
-                            targetPane.style.animation = "fadeIn 0.5s ease-in-out";
-                        }, 10);
-                    }
+            // Username validation
+            const usernameInput = document.getElementById('username');
+            if (usernameInput) {
+                usernameInput.addEventListener('input', function () {
+                    this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
                 });
-            });
-
-            // Toggle switches functionality
-            const toggleSwitches = document.querySelectorAll(
-                ".toggle-switch input"
-            );
-            toggleSwitches.forEach((toggle) => {
-                toggle.addEventListener("change", function() {
-                    const parentCard = this.closest(".card");
-                    const checkboxes = parentCard.querySelectorAll(
-                        ".form-check-input:not(.toggle-switch input)"
-                    );
-
-                    checkboxes.forEach((checkbox) => {
-                        checkbox.disabled = !this.checked;
-                    });
-                });
-            });
+            }
         });
     </script>
 </body>
-
 </html>

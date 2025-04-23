@@ -81,7 +81,23 @@ function createEvent($pdo, $eventData, $fileData = null)
 
         $stmt->execute();
         event_log("Event created successfully with ID: " . $pdo->lastInsertId());
+        if ($eventData['organizer_id']) {
+            $checkUserSql = "SELECT is_organizer FROM users WHERE id = :user_id";
+            $checkUserStmt = $pdo->prepare($checkUserSql);
+            $checkUserStmt->bindParam(':user_id', $eventData['organizer_id']);
+            $checkUserStmt->execute();
 
+            $userData = $checkUserStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($userData && $userData['is_organizer'] == 0) {
+                $updateUserSql = "UPDATE users SET is_organizer = 1 WHERE id = :user_id";
+                $updateUserStmt = $pdo->prepare($updateUserSql);
+                $updateUserStmt->bindParam(':user_id', $eventData['organizer_id']);
+                $updateUserStmt->execute();
+
+                event_log("User ID: {$eventData['organizer_id']} promoted from attendee to organizer");
+            }
+        }
         return $pdo->lastInsertId();
     } catch (PDOException $e) {
         error_log("Event Creation Error: " . $e->getMessage());
@@ -316,29 +332,65 @@ function deleteEvent($pdo, $id, $userId, $isAdmin = false)
 function searchEvents($pdo, $query, $page = 1, $limit = 10)
 {
     try {
-        // Using LIKE search for compatibility with MySQL/phpMyAdmin without FULLTEXT index
         $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name
                FROM events e
                LEFT JOIN categories c ON e.category_id = c.id
                LEFT JOIN users u ON e.organizer_id = u.id
-               WHERE e.title LIKE :query
-                  OR e.description LIKE :query
-                  OR e.location LIKE :query
-               ORDER BY e.start_date DESC";
-
-        // Add pagination
-        $offset = ($page - 1) * $limit;
-        $sql .= " LIMIT :limit OFFSET :offset";
+               WHERE e.start_date >= CURRENT_DATE
+               ORDER BY e.start_date ASC";
 
         $stmt = $pdo->prepare($sql);
-        $likeQuery = '%' . $query . '%';
-        $stmt->bindValue(':query', $likeQuery, PDO::PARAM_STR);
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-
         $stmt->execute();
+        $allEvents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($query) || empty($allEvents)) {
+            return [];
+        }
+
+        $results = runTfIdfSearch($query, $allEvents);
+
+        if ($results === false) {
+            event_log("TF-IDF search failed, falling back to basic search", "WARNING", ['query' => $query]);
+
+            $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name
+                   FROM events e
+                   LEFT JOIN categories c ON e.category_id = c.id
+                   LEFT JOIN users u ON e.organizer_id = u.id
+                   WHERE e.title LIKE :query
+                      OR e.description LIKE :query
+                      OR e.location LIKE :query
+                   ORDER BY e.start_date DESC";
+
+            $offset = ($page - 1) * $limit;
+            $sql .= " LIMIT :limit OFFSET :offset";
+
+            $stmt = $pdo->prepare($sql);
+            $likeQuery = '%' . $query . '%';
+            $stmt->bindValue(':query', $likeQuery, PDO::PARAM_STR);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        $eventIds = $results['results'];
+
+        if (empty($eventIds)) {
+            return [];
+        }
+
+        $matchedEvents = [];
+        foreach ($allEvents as $event) {
+            if (in_array($event['id'], $eventIds)) {
+                $matchedEvents[] = $event;
+                if (count($matchedEvents) >= $limit) {
+                    break;
+                }
+            }
+        }
+
+        return $matchedEvents;
     } catch (PDOException $e) {
         error_log("Search Events Error: " . $e->getMessage());
         return [];
@@ -578,6 +630,77 @@ function getEventAttendees($pdo, $eventId) {
 }
 
 /**
+ * Run TF-IDF search using Python script
+ * 
+ * @param string $query Search query
+ * @param array $events Array of events to search through
+ * @return array|false Results with event IDs sorted by relevance or false on error
+ */
+function runTfIdfSearch($query, $events)
+{
+    try {
+        $pythonScript = dirname(dirname(__FILE__)) . '/indexation/main.py';
+
+        $eventsJson = json_encode($events);
+        // Use a temporary file for large JSON payloads to avoid escapeshellarg length limit
+        $tmpJsonFile = tempnam(sys_get_temp_dir(), 'tfidf_');
+        file_put_contents($tmpJsonFile, $eventsJson);
+
+        $escapedQuery = escapeshellarg($query);
+        $escapedJsonFile = escapeshellarg($tmpJsonFile);
+
+        $pythonCmd = 'python';
+        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+            exec('which python3', $output, $returnVar);
+            if ($returnVar === 0) {
+                $pythonCmd = 'python3';
+            }
+        }
+
+        $command = "$pythonCmd \"$pythonScript\" $escapedQuery $escapedJsonFile 2>&1";
+        $output = [];
+        $returnVar = 0;
+
+        exec($command, $output, $returnVar);
+
+        event_log("TF-IDF search executed", "INFO", [
+            'query' => $query,
+            'command' => $command,
+            'return_code' => $returnVar
+        ]);
+
+        if ($returnVar !== 0) {
+            event_log("TF-IDF search error: Python execution failed", "ERROR", [
+                'query' => $query,
+                'return_code' => $returnVar,
+                'output' => implode("\n", $output)
+            ]);
+            return false;
+        }
+
+        $jsonResult = implode("\n", $output);
+        $result = json_decode($jsonResult, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            event_log("TF-IDF search error: JSON parsing failed", "ERROR", [
+                'query' => $query,
+                'json_error' => json_last_error_msg(),
+                'output' => $jsonResult
+            ]);
+            return false;
+        }
+
+        // Clean up temporary file
+        @unlink($tmpJsonFile);
+
+        return $result;
+    } catch (Exception $e) {
+        event_log("TF-IDF search exception: " . $e->getMessage(), "ERROR", ['query' => $query]);
+        return false;
+    }
+}
+
+/**
  * Log event information to a file
  *
  * @param string $message The message to log
@@ -587,22 +710,18 @@ function getEventAttendees($pdo, $eventId) {
  */
 function event_log($message, $level = 'INFO', $data = [])
 {
-    // Define absolute path to log file
     $log_file = dirname(dirname(__FILE__)) . '/event_log.txt';
     $timestamp = date('Y-m-d H:i:s');
     $user_id = $_SESSION['user_id'] ?? 'not-logged-in';
 
-    // Format the log message
     $log_entry = "[{$timestamp}] [{$level}] [UserID: {$user_id}] {$message}";
 
-    // Add any additional data as JSON
     if (!empty($data)) {
         $log_entry .= " - Data: " . json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     $log_entry .= PHP_EOL;
 
-    // Append to log file with error handling
     if (!@file_put_contents($log_file, $log_entry, FILE_APPEND)) {
         error_log("Failed to write to event log file: {$log_file}");
     }
