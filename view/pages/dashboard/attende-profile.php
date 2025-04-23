@@ -11,21 +11,17 @@ $userId = $_SESSION['user_id'];
 
 $userData = getUserById($cnx, $userId);
 
+// Get events attended by the user
 $upcomingEvents = getEvents($cnx, [
-    'organizer_id' => $userId,
+    'attendee_id' => $userId,
     'date_from' => date('Y-m-d'),
     'status' => 'published'
 ]);
 
 $pastEvents = getEvents($cnx, [
-    'organizer_id' => $userId,
+    'attendee_id' => $userId,
     'date_to' => date('Y-m-d', strtotime('-1 day')),
     'status' => 'published'
-]);
-
-$draftEvents = getEvents($cnx, [
-    'organizer_id' => $userId,
-    'status' => 'draft'
 ]);
 
 $defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
@@ -51,7 +47,6 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
         rel="stylesheet" />
     <link rel="stylesheet" href="../../styles/css/usersprofiles.css" />
     <link rel="icon" type="image/png" href="../../assets/images/logo.png" />
-
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -79,22 +74,19 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                             </p>
                         </div>
                     </div>
-                </div>
-
-                <div class="profile-stats">
+                    <div class="profile-stats">
                     <div class="profile-stat-item">
                         <div class="number"><?php echo count($pastEvents) + count($upcomingEvents); ?></div>
-                        <div class="label">Events Organized</div>
-                    </div>
-                    <div class="profile-stat-item">
-                        <div class="number">0</div>
-                        <div class="label">Total Attendees</div>
+                        <div class="label">Events Attended</div>
                     </div>
                     <div class="profile-stat-item">
                         <div class="number"><?php echo count($upcomingEvents); ?></div>
                         <div class="label">Upcoming Events</div>
                     </div>
                 </div>
+                </div>
+
+                
             </div>
 
             <!-- Profile Content -->
@@ -127,79 +119,6 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                             </div>
                         </form>
                     </div>
-
-                    <!-- Expertise -->
-                    <div class="info-card">
-                        <h3 class="section-title">Areas of Expertise</h3>
-                        <div>
-                            <span class="expertise-badge">Tech Conferences</span>
-                            <span class="expertise-badge">Workshops</span>
-                            <span class="expertise-badge">Corporate Events</span>
-                            <span class="expertise-badge">Networking</span>
-                            <span class="expertise-badge">Product Launches</span>
-                            <span class="expertise-badge">Team Building</span>
-                            <span class="expertise-badge">Virtual Events</span>
-                            <span class="expertise-badge">Hybrid Events</span>
-                        </div>
-                    </div>
-
-                    <!-- Reviews -->
-                    <div class="info-card">
-                        <div
-                            class="d-flex justify-content-between align-items-center mb-4">
-                            <h3 class="section-title mb-0">Recent Reviews</h3>
-                            <a href="#" class="text-muted small">View All</a>
-                        </div>
-
-                        <div class="review-card">
-                            <div class="reviewer-info">
-                                <img
-                                    src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    alt="Reviewer"
-                                    class="reviewer-avatar" />
-                                <div>
-                                    <div class="reviewer-name">Michael Chen</div>
-                                    <div class="review-date">2 days ago</div>
-                                </div>
-                            </div>
-                            <div class="star-rating mb-2">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="review-text">
-                                Sarah organized our tech conference flawlessly. Her attention
-                                to detail and ability to handle last-minute changes was
-                                impressive. Would definitely work with her again!
-                            </p>
-                        </div>
-                        <div class="review-card">
-                            <div class="reviewer-info">
-                                <img
-                                    src="https://plus.unsplash.com/premium_photo-1670884441012-c5cf195c062a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    alt="Reviewer"
-                                    class="reviewer-avatar" />
-                                <div>
-                                    <div class="reviewer-name">Jessica Williams</div>
-                                    <div class="review-date">1 week ago</div>
-                                </div>
-                            </div>
-                            <div class="star-rating mb-2">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <p class="review-text">
-                                Great experience working with Sarah on our company's annual
-                                retreat. She managed to keep everything within budget while
-                                still delivering a memorable experience.
-                            </p>
-                        </div>
-                    </div>
                 </div>
                 <!-- Right Column -->
                 <div class="col-lg-8">
@@ -226,17 +145,6 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                     type="button"
                                     role="tab">
                                     Past Events
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button
-                                    class="nav-link"
-                                    id="drafts-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#drafts"
-                                    type="button"
-                                    role="tab">
-                                    Drafts
                                 </button>
                             </li>
                         </ul>
@@ -274,8 +182,8 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer bg-white border-0 pt-0">
-                                                        <a href="../events/edit.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
-                                                            Edit
+                                                        <a href="../events/view.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                            View
                                                         </a>
                                                     </div>
                                                 </div>
@@ -335,62 +243,12 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <!-- Drafts Tab -->
-                            <div
-                                class="tab-pane fade"
-                                id="drafts"
-                                role="tabpanel"
-                                aria-labelledby="drafts-tab">
-                                <h3 class="section-title">Your Drafts</h3>
-                                <div class="row row-cols-1 row-cols-md-2 g-4">
-                                    <?php if (count($draftEvents) > 0): ?>
-                                        <?php foreach ($draftEvents as $event): ?>
-                                            <div class="col">
-                                                <div class="card h-100 border-0 shadow-sm">
-                                                    <img
-                                                        src="<?php echo !empty($event['image']) ? $event['image'] : 'https://thefusioneer.com/wp-content/uploads/2023/11/5-AI-Advancements-to-Expect-in-the-Next-10-Years-scaled.jpeg'; ?>"
-                                                        class="card-img-top"
-                                                        alt="<?php echo htmlspecialchars($event['title']); ?>" />
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><?php echo htmlspecialchars($event['title']); ?></h5>
-                                                        <p class="card-text text-muted small mb-3">
-                                                            <?php echo htmlspecialchars(substr($event['description'], 0, 100)) . '...'; ?>
-                                                        </p>
-                                                        <div
-                                                            class="d-flex align-items-center text-muted small mb-2">
-                                                            <i class="fas fa-calendar me-2"></i>
-                                                            <span><?php echo date('F j, Y', strtotime($event['start_date'])); ?></span>
-                                                        </div>
-                                                        <div
-                                                            class="d-flex align-items-center text-muted small mb-2">
-                                                            <i class="fas fa-map-marker-alt me-2"></i>
-                                                            <span><?php echo htmlspecialchars($event['location']); ?></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer bg-white border-0 pt-0">
-                                                        <a href="../events/edit.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
-                                                            Edit
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <div class="col-12">
-                                            <p class="text-center">You don't have any draft events.</p>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-
     </main>
-
 
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -398,61 +256,7 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
     <script src="../../scripts/core/popper.min.js"></script>
     <script src="../../scripts/core/bootstrap.min.js"></script>
     <script src="../../scripts/soft-ui-dashboard.js"></script>
-    <!-- <script src="../../scripts/soft-ui-dashboard.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const tabButtons = document.querySelectorAll("#profileTabs .nav-link");
-            tabButtons.forEach((button) => {
-                button.addEventListener("click", function() {
-                    sidebarNavItems.forEach((el) => el.classList.remove("active"));
-                    activeSidebarItem.classList.add("active");
-                });
-            });
-
-            const editButton = document.getElementById("edit-info-btn");
-            const saveButton = document.getElementById("save-info-btn");
-            const cancelButton = document.getElementById("cancel-info-btn");
-            const inputs = document.querySelectorAll(".info-value");
-
-            // Store original values
-            const originalValues = {};
-            inputs.forEach(input => {
-                if (input.name) {
-                    originalValues[input.name] = input.value;
-                }
-            });
-
-            editButton.addEventListener("click", () => {
-                // Enable editing
-                inputs.forEach(input => {
-                    if (input.name && input.name !== 'created_at') {
-                        input.disabled = false;
-                    }
-                });
-
-                // Show save and cancel buttons, hide edit button
-                editButton.classList.add('d-none');
-                saveButton.classList.remove('d-none');
-                cancelButton.classList.remove('d-none');
-            });
-
-            cancelButton.addEventListener("click", () => {
-                // Reset to original values
-                inputs.forEach(input => {
-                    if (input.name && originalValues[input.name]) {
-                        input.value = originalValues[input.name];
-                    }
-                    input.disabled = true;
-                });
-
-                // Show edit button, hide save and cancel buttons
-                editButton.classList.remove('d-none');
-                saveButton.classList.add('d-none');
-                cancelButton.classList.add('d-none');
-            });
-        });
-    </script>
 </body>
 
 </html>
