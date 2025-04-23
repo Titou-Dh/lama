@@ -40,31 +40,33 @@ if (isset($_GET['code'])) {
     }
   } catch (Exception $e) {
     error_log("Google OAuth Error: " . $e->getMessage());
-
   }
-  $events = [];
-try {
-    $stmt = $cnx->query("
-        SELECT e.*, c.name AS category_name 
-        FROM events e
-        LEFT JOIN categories c ON e.category_id = c.id
-        WHERE e.start_date >= NOW()
-        ORDER BY e.start_date ASC
-        LIMIT 6
-    ");
-    $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    error_log("Database error: " . $e->getMessage());
-    $events = []; // Fallback to empty array
-}
 }
 
-// Ensure $events is defined
-$events = $events ?? []; // Initialize as an empty array if not already set
+// Ensure $events is defined and populated
+try {
+    $stmt = $cnx->query("SELECT e.*, c.name AS category_name 
+                          FROM events e
+                          LEFT JOIN categories c ON e.category_id = c.id
+                          WHERE e.start_date >= NOW()
+                          ORDER BY e.start_date ASC
+                          LIMIT 6");
+    $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$events) {
+        error_log("No events found in the database.");
+    }
+} catch (PDOException $e) {
+    error_log("Database error while fetching events: " . $e->getMessage());
+    $events = []; // Fallback to an empty array
+}
+
+// Debugging: Log the $events variable to check if data is being fetched
+error_log(print_r($events, true));
 
 ?>
 
-<!DOCTYPE html>ri
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -112,7 +114,7 @@ $events = $events ?? []; // Initialize as an empty array if not already set
           <div class="carousel-caption d-none d-md-block">
             <h2 class="text-3xl font-bold mb-2">Discover Amazing Events</h2>
             <p class="mb-4">Find the perfect events happening around you</p>
-            <button class="btn btn-gradient rounded-full px-5 py-2">
+            <button class="btn btn-gradient rounded-full px-5 py-2" onclick="location.href='searchpage.php'">
               Explore Events
             </button>
           </div>
@@ -138,9 +140,13 @@ $events = $events ?? []; // Initialize as an empty array if not already set
             <p class="mb-4">
               Host and manage events with our powerful platform
             </p>
-            <button class="btn btn-gradient rounded-full px-5 py-2">
-              Start Creating
-            </button>
+            <?php
+            if (isset($_SESSION['user_id'])) {
+                echo '<button class="btn btn-gradient rounded-full px-5 py-2" onclick="location.href=\'dashboard/create-event.php\'">Start Creating</button>';
+            } else {
+                echo '<button class="btn btn-gradient rounded-full px-5 py-2" onclick="location.href=\'auth/sign-in.php\'">Start Creating</button>';
+            }
+            ?>
           </div>
         </div>
       </div>
@@ -336,7 +342,7 @@ $events = $events ?? []; // Initialize as an empty array if not already set
         </div>
 
         <div class="text-center mt-5">
-            <a href="events.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
+            <a href="searchpage.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
         </div>
     </div>
 </section>
