@@ -64,13 +64,6 @@ CREATE TABLE `events` (
 -- Table structure for table `event_images`
 --
 
-CREATE TABLE `event_images` (
-  `id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `image_path` varchar(255) NOT NULL,
-  `is_primary` tinyint(1) DEFAULT 0,
-  `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
