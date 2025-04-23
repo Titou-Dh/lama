@@ -269,3 +269,7 @@
 [2025-04-21 03:55:42] [INFO] [UserID: not-logged-in] Event image upload failed: Sorry, only JPG, JPEG, PNG & GIF files are allowed.
 [2025-04-21 03:55:42] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":"2","title":"Event With Invalid Image Format","description":"This event tests uploading an image with invalid format.","start_date":"2025-05-21 03:55:30","end_date":null,"door_time":null,"location":"Image Test Venue","online_link":null,"event_type":"in-person","category_id":"4","capacity":null,"age_restriction":null,"status":"draft"}
 [2025-04-21 03:55:42] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'end_date' cannot be null - Data: {"eventData":{"organizer_id":"2","title":"Event With Invalid Image Format","description":"This event tests uploading an image with invalid format.","start_date":"2025-05-21 03:55:30","end_date":null,"door_time":null,"location":"Image Test Venue","online_link":null,"event_type":"in-person","category_id":"4","capacity":null,"age_restriction":null,"status":"draft"}}
+[2025-04-23 19:33:40] [INFO] [UserID: not-logged-in] Fetched event with ID: 10
+[2025-04-23 20:04:45] [INFO] [UserID: not-logged-in] Fetched event with ID: 5
+[2025-04-23 20:05:47] [INFO] [UserID: not-logged-in] Fetched event with ID: 5
+[2025-04-23 20:06:30] [INFO] [UserID: not-logged-in] Fetched event with ID: 5

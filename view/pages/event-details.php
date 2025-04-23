@@ -1,6 +1,7 @@
 <?php
 include "../../config/database.php";
 include "../../controller/event.php";
+include '../partials/navbar.php';
 
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
   $eventId = (int) $_GET["id"];
@@ -143,86 +144,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
 </head>
 
 <body class="bg-gray-50">
-  <!-- Header/Navigation -->
-  <header class="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-    <div class="container mx-auto px-4">
-      <nav class="flex items-center justify-between py-4">
-        <a href="index.html" class="flex items-center space-x-2">
-          <img src="../assets/images/logo.png" alt="Lamma Logo" class="h-8 w-8" />
-        </a>
-        <div class="hidden md:flex items-center space-x-6">
-          <a href="dashboard.html" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
-            <i class="fas fa-home mr-2"></i>
-            <span>Dashboard</span>
-          </a>
-          <a href="events.html" class="flex items-center text-sm font-medium text-blue-500">
-            <i class="fas fa-calendar mr-2"></i>
-            <span>Events</span>
-          </a>
-          <a href="messages.html" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
-            <i class="fas fa-comment mr-2"></i>
-            <span>Messages</span>
-          </a>
-          <a href="profile.html" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
-            <i class="fas fa-user mr-2"></i>
-            <span>Profile</span>
-          </a>
-          <a href="create-event.html" class="flex items-center text-sm font-medium text-gray-500 hover:text-blue-500">
-            <i class="fas fa-plus-circle mr-2"></i>
-            <span>Create Event</span>
-          </a>
-        </div>
-        <div class="flex items-center space-x-4">
-          <div class="relative">
-            <button class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center" id="userMenuButton">
-              <img src="../assets/images/aziz.jpg" alt="User" class="h-8 w-8 rounded-full" />
-            </button>
-            <div class="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" id="userMenu">
-              <div class="py-1">
-                <div class="px-4 py-2 text-sm text-gray-700">
-                  <p class="font-medium">Username</p>
-                  <p class="text-xs text-gray-500">user@example.com</p>
-                </div>
-                <hr />
-                <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                <hr />
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log out</a>
-              </div>
-            </div>
-          </div>
-          <button class="md:hidden" id="mobileMenuButton">
-            <i class="fas fa-bars text-gray-500"></i>
-          </button>
-        </div>
-      </nav>
-      <!-- Mobile menu -->
-      <div class="md:hidden hidden" id="mobileMenu">
-        <div class="px-2 pt-2 pb-3 space-y-1">
-          <a href="dashboard.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
-            <i class="fas fa-home mr-2"></i>
-            Dashboard
-          </a>
-          <a href="events.html" class="block px-3 py-2 rounded-md text-base font-medium text-blue-500 hover:bg-gray-100">
-            <i class="fas fa-calendar mr-2"></i>
-            Events
-          </a>
-          <a href="messages.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
-            <i class="fas fa-comment mr-2"></i>
-            Messages
-          </a>
-          <a href="profile.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
-            <i class="fas fa-user mr-2"></i>
-            Profile
-          </a>
-          <a href="create-event.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100">
-            <i class="fas fa-plus-circle mr-2"></i>
-            Create Event
-          </a>
-        </div>
-      </div>
-    </div>
-  </header>
+  
 
   <!-- Breadcrumb -->
   <div class="bg-gray-50 py-3">
