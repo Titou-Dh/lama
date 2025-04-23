@@ -4,8 +4,6 @@ session_start();
 require_once __DIR__ . '/../../config/google.php';
 include_once __DIR__ . '/../../config/database.php';
 include_once __DIR__ . '/../../controller/auth.php';
-include_once __DIR__ . '/../../controller/categories.php';
-include_once __DIR__ . '/../../controller/preferences.php';
 
 $error_signin = '';
 $categories = getCategories($cnx);
@@ -16,6 +14,8 @@ if (isset($_SESSION["user_id"])) {
   $user_preferences = [];
   $recommended_events = [];
 }
+
+
 if (isset($_GET['code'])) {
   try {
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
@@ -35,11 +35,7 @@ if (isset($_GET['code'])) {
       if ($userinfo) {
         $res = getUser($cnx, $userinfo['email']);
         if ($res) {
-          $_SESSION['user'] = [
-            'email' => $userinfo['email'],
-            'full_name' => $userinfo['full_name'],
-            'role' => $res['is_organizer'] === 1 ? true : false
-          ];
+          $_SESSION['user'] = $userinfo['email'];
           $_SESSION['user_id'] = $res['id'];
           $_SESSION['user_full_name'] = $userinfo['full_name'];
         } else {
@@ -53,28 +49,29 @@ if (isset($_GET['code'])) {
     }
   } catch (Exception $e) {
     error_log("Google OAuth Error: " . $e->getMessage());
-
   }
-  $events = [];
+}
+
+// Ensure $events is defined and populated
 try {
-    $stmt = $cnx->query("
-        SELECT e.*, c.name AS category_name 
-        FROM events e
-        LEFT JOIN categories c ON e.category_id = c.id
-        WHERE e.start_date >= NOW()
-        ORDER BY e.start_date ASC
-        LIMIT 6
-    ");
-    $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $stmt = $cnx->query("SELECT e.*, c.name AS category_name 
+                          FROM events e
+                          LEFT JOIN categories c ON e.category_id = c.id
+                          WHERE e.start_date >= NOW()
+                          ORDER BY e.start_date ASC
+                          LIMIT 6");
+  $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  if (!$events) {
+    error_log("No events found in the database.");
+  }
 } catch (PDOException $e) {
-    error_log("Database error: " . $e->getMessage());
-    $events = []; // Fallback to empty array
+  error_log("Database error while fetching events: " . $e->getMessage());
+  $events = []; // Fallback to an empty array
 }
-}
 
-
-
-
+// Debugging: Log the $events variable to check if data is being fetched
+error_log(print_r($events, true));
 
 ?>
 
@@ -126,7 +123,7 @@ try {
           <div class="carousel-caption d-none d-md-block">
             <h2 class="text-3xl font-bold mb-2">Discover Amazing Events</h2>
             <p class="mb-4">Find the perfect events happening around you</p>
-            <button class="btn btn-gradient rounded-full px-5 py-2">
+            <button class="btn btn-gradient rounded-full px-5 py-2" onclick="location.href='searchpage.php'">
               Explore Events
             </button>
           </div>
@@ -152,9 +149,13 @@ try {
             <p class="mb-4">
               Host and manage events with our powerful platform
             </p>
-            <button class="btn btn-gradient rounded-full px-5 py-2">
-              Start Creating
-            </button>
+            <?php
+            if (isset($_SESSION['user_id'])) {
+              echo '<button class="btn btn-gradient rounded-full px-5 py-2" onclick="location.href=\'dashboard/create-event.php\'">Start Creating</button>';
+            } else {
+              echo '<button class="btn btn-gradient rounded-full px-5 py-2" onclick="location.href=\'auth/sign-in.php\'">Start Creating</button>';
+            }
+            ?>
           </div>
         </div>
       </div>
@@ -243,234 +244,238 @@ try {
     </section>
   </main>
 
-<!-- Featured Events Section -->
-<section class="py-5 bg-gradient-light">
+  <!-- Featured Events Section -->
+  <section class="py-5 bg-gradient-light">
     <div class="container">
-        <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
-            Featured Events
-        </h2>
-        <p class="text-gray-500 text-center mb-5">
-            Discover the most popular events happening around you
-        </p>
+      <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
+        Featured Events
+      </h2>
+      <p class="text-gray-500 text-center mb-5">
+        Discover the most popular events happening around you
+      </p>
 
-        <!-- Swiper Carousel -->
-        <div class="swiper featured-events-swiper">
-            <div class="swiper-wrapper">
-                <?php foreach ($events as $event): ?>
-                <div class="swiper-slide">
-                    <a href="event-details.php?id=<?php echo $event['id']; ?>">
-                        <div class="event-card">
-                            <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
-                                <div class="event-date">
-                                    <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
-                                </div>
-                                <div class="event-category">
-                                    <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
-                                </div>
-                            </div>
-                            <div class="event-content">
-                                <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
-                                <div class="event-location">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>
-                                        <?php echo $event['event_type'] === 'online' 
-                                            ? 'Online Event' 
-                                            : htmlspecialchars($event['location']); 
-                                        ?>
-                                    </span>
-                                </div>
-                                <p class="event-description">
-                                    <?php echo htmlspecialchars(
-                                        strlen($event['description']) > 100 
-                                            ? substr($event['description'], 0, 100) . '...' 
-                                            : $event['description']
-                                    ); ?>
-                                </p>
-                                <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <?php endforeach; ?>
-            </div>
-
-            <!-- Swiper Navigation and Pagination -->
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-        </div>
-    </div>
-
-<
-  <!-- Upcoming Events Section -->
-<section class="py-5">
-    <div class="container">
-        <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
-            Upcoming Events
-        </h2>
-        <p class="text-gray-500 text-center mb-5">
-            Don't miss out on these exciting events happening soon
-        </p>
-
-        <div class="row g-4">
-            <?php foreach ($events as $event): ?>
-            <div class="col-lg-4 col-md-6">
+      <!-- Swiper Carousel -->
+      <div class="swiper featured-events-swiper">
+        <div class="swiper-wrapper">
+          <?php foreach ($events as $event): ?>
+            <div class="swiper-slide">
+              <a href="event-details.php?id=<?php echo $event['id']; ?>">
                 <div class="event-card">
-                    <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
-                        <div class="event-date">
-                            <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
-                        </div>
-                        <div class="event-category">
-                            <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
-                        </div>
+                  <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
+                    <div class="event-date">
+                      <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
                     </div>
-                    <div class="event-content">
-                        <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
-                        <div class="event-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>
-                                <?php echo $event['event_type'] === 'online' 
-                                    ? 'Online Event' 
-                                    : htmlspecialchars($event['location']); 
-                                ?>
-                            </span>
-                        </div>
-                        <p class="event-description">
-                            <?php echo htmlspecialchars(
-                                strlen($event['description']) > 100 
-                                    ? substr($event['description'], 0, 100) . '...' 
-                                    : $event['description']
-                            ); ?>
-                        </p>
-                        <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
+                    <div class="event-category">
+                      <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
                     </div>
+                  </div>
+                  <div class="event-content">
+                    <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
+                    <div class="event-location">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>
+                        <?php echo $event['event_type'] === 'online'
+                          ? 'Online Event'
+                          : htmlspecialchars($event['location']);
+                        ?>
+                      </span>
+                    </div>
+                    <p class="event-description">
+                      <?php echo htmlspecialchars(
+                        strlen($event['description']) > 100
+                          ? substr($event['description'], 0, 100) . '...'
+                          : $event['description']
+                      ); ?>
+                    </p>
+                    <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
+                  </div>
                 </div>
+              </a>
             </div>
-            <?php endforeach; ?>
+          <?php endforeach; ?>
         </div>
 
-        <!-- Event Card 4 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="event-card">
-            <div class="event-image" style="background-image: url('../assets/images/clean.jpg')">
-              <div class="event-date">Jul 2, 2025</div>
-              <div class="event-category">Community</div>
-            </div>
-            <div class="event-content">
-              <h3 class="event-title">Community Cleanup Day</h3>
-              <div class="event-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Riverside Park, Portland</span>
-              </div>
-              <p class="event-description">
-                Join your community in making a difference. Help clean up
-                local parks and waterways while connecting with like-minded
-                individuals.
-              </p>
-              <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Event Card 5 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="event-card">
-            <div class="event-image" style="background-image: url('../assets/images/card6.jpg')">
-              <div class="event-date">Jul 10, 2025</div>
-              <div class="event-category">Music</div>
-            </div>
-            <div class="event-content">
-              <h3 class="event-title">Classical Music Night</h3>
-              <div class="event-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>tunis,lac</span>
-              </div>
-              <p class="event-description">
-                Experience the magic of classical music performed by a
-                world-renowned orchestra. An unforgettable evening of timeless
-                masterpieces.
-              </p>
-              <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Event Card 6 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="event-card">
-            <div class="event-image" style="background-image: url('../assets/images/writing.jpg')">
-              <div class="event-date">Jul 15, 2025</div>
-              <div class="event-category">Education</div>
-            </div>
-            <div class="event-content">
-              <h3 class="event-title">Creative Writing Workshop</h3>
-              <div class="event-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Public Library, Seattle</span>
-              </div>
-              <p class="event-description">
-                Develop your writing skills with guidance from published
-                authors. Perfect for beginners and experienced writers looking
-                to refine their craft.
-              </p>
-              <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="text-center mt-5">
-        <a href="searchpage.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
+        <!-- Swiper Navigation and Pagination -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
       </div>
     </div>
-</section>
 
-  <!-- Personalization Section -->
-  <section class="personalization-section">
-
-    <div class="container">
-      <div class="row align-items-center">
-        <form class="col-lg-6 mb-5 mb-lg-0" method="POST" id="preferencesForm" action="landing-page.php">
-          <h2 class="text-3xl font-bold mb-4 text-gradient">
-            let's make it personal!
+    <
+      <!-- Upcoming Events Section -->
+      <section class="py-5">
+        <div class="container">
+          <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
+            Upcoming Events
           </h2>
-          <p class="text-gray-700 mb-4">
-            Tell us what you're interested in, and we'll recommend events
-            tailored just for you. Select your preferences below:
+          <p class="text-gray-500 text-center mb-5">
+            Don't miss out on these exciting events happening soon
           </p>
-          <div class="preference-tags mb-4">
-            <?php foreach ($categories as $category): ?>
-              <div
-                class="preference-tag <?php echo in_array($category['id'], $user_preferences) ? 'active' : ''; ?>"
-                data-id="<?php echo htmlspecialchars($category['id']); ?>">
-                <?php echo htmlspecialchars($category['name']); ?>
+
+          <div class="row g-4">
+            <?php foreach ($events as $event): ?>
+              <div class="col-lg-4 col-md-6">
+                <div class="event-card">
+                  <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
+                    <div class="event-date">
+                      <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
+                    </div>
+                    <div class="event-category">
+                      <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
+                    </div>
+                  </div>
+                  <div class="event-content">
+                    <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
+                    <div class="event-location">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>
+                        <?php echo $event['event_type'] === 'online'
+                          ? 'Online Event'
+                          : htmlspecialchars($event['location']);
+                        ?>
+                      </span>
+                    </div>
+                    <p class="event-description">
+                      <?php echo htmlspecialchars(
+                        strlen($event['description']) > 100
+                          ? substr($event['description'], 0, 100) . '...'
+                          : $event['description']
+                      ); ?>
+                    </p>
+                    <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
+                  </div>
+                </div>
               </div>
             <?php endforeach; ?>
           </div>
-          <input type="hidden" id="selectedCategories" name="selectedCategories" value="">
-          <button class="btn btn-gradient rounded-pill px-5 py-2" id="savePreferences" type="submit">
-            Save Preferences
-          </button>
-        </form>
 
-        <div class="col-lg-6">
-          <div class="card border-0 shadow-lg">
-            <div class="card-body p-4">
-              <h3 class="card-title text-xl font-bold mb-4">
-                Your Recommended Events
-              </h3>
+          <div class="text-center mt-5">
+            <a href="searchpage.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Personalization Section -->
+      <section class="personalization-section">
+        <div class="personalization-bg"></div>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+              <h2 class="text-3xl font-bold mb-4 text-gradient">
+                let's make it personal!
+              </h2>
+              <p class="text-gray-700 mb-4">
+                Tell us what you're interested in, and we'll recommend events
+                tailored just for you. Select your preferences below:
+              </p>
+
+              <div class="preference-tags mb-4">
+                <span class="preference-tag">Music</span>
+                <span class="preference-tag active">Art</span>
+                <span class="preference-tag">Sports</span>
+                <span class="preference-tag active">Technology</span>
+                <span class="preference-tag">Food & Drink</span>
+                <span class="preference-tag">Business</span>
+                <span class="preference-tag">Health</span>
+                <span class="preference-tag">Education</span>
+                <span class="preference-tag">Community</span>
+                <span class="preference-tag">Charity</span>
+                <span class="preference-tag">Family</span>
+                <span class="preference-tag">Fashion</span>
+              </div>
+
+              <button class="btn btn-gradient rounded-pill px-5 py-2">
+                save Preferences
+              </button>
+            </div>
+            <div class="col-lg-6">
+              <div class="card border-0 shadow-lg">
+                <div class="card-body p-4">
+                  <h3 class="card-title text-xl font-bold mb-4">
+                    Your Recommended Events
+                  </h3>
+
+                  <div class="recommended-event d-flex mb-4">
+                    <div class="flex-shrink-0 me-3" style="
+                      width: 80px;
+                      height: 80px;
+                      background-image: url('../assets/images/art.jpg');
+                      background-size: cover;
+                      border-radius: 0.5rem;
+                    "></div>
+                    <div>
+                      <h4 class="text-lg font-semibold">
+                        Contemporary Art Exhibition
+                      </h4>
+                      <p class="text-sm text-gray-500 mb-1">
+                        <i class="far fa-calendar-alt me-1"></i> Jun 12, 2025
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <i class="fas fa-map-marker-alt me-1"></i> Modern Gallery,
+                        New York
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="recommended-event d-flex mb-4">
+                    <div class="flex-shrink-0 me-3" style="
+                      width: 80px;
+                      height: 80px;
+                      background-image: url('../assets/images/tech.jpg');
+                      background-size: cover;
+                      border-radius: 0.5rem;
+                    "></div>
+                    <div>
+                      <h4 class="text-lg font-semibold">
+                        AI & Machine Learning Workshop
+                      </h4>
+                      <p class="text-sm text-gray-500 mb-1">
+                        <i class="far fa-calendar-alt me-1"></i> Jun 18, 2025
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <i class="fas fa-map-marker-alt me-1"></i> Tech Hub, San
+                        Francisco
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="recommended-event d-flex">
+                    <div class="flex-shrink-0 me-3" style="
+                      width: 80px;
+                      height: 80px;
+                      background-image: url('../assets/images/photography.jpg');
+                      background-size: cover;
+                      border-radius: 0.5rem;
+                    "></div>
+                    <div>
+                      <h4 class="text-lg font-semibold">
+                        Photography Masterclass
+                      </h4>
+                      <p class="text-sm text-gray-500 mb-1">
+                        <i class="far fa-calendar-alt me-1"></i> Jun 25, 2025
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <i class="fas fa-map-marker-alt me-1"></i> Creative
+                        Studio, Chicago
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="text-center mt-4">
+                    <a href="#" class="btn btn-outline-primary rounded-pill px-4">View All Recommendations</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    </div>
-  </section>
+      </section>
 
-  <?php include "../partials/footer.php"; ?>
+      <?php include "../partials/footer.php"; ?>
 
-  <?php
-  $error_signin && '
+      <?php
+      $error_signin && '
               <script>
               Swal.fire({
               icon: "error",
@@ -478,54 +483,61 @@ try {
               text: data.message,
               confirmButtonText: "OK",
             });
-            </script>
-            ';
-  ?>
+              </script>
+    ';
+      ?>
 
-  <!-- Script for navbar scroll effect -->
+      <!-- Script for navbar scroll effect -->
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- Bootstrap JS -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- flow bite JS -->
-  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+      <!-- flow bite JS -->
+      <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
-  <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+      <!-- Swiper JS -->
+      <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 
-  <!-- Custom JavaScript -->
-  <script>
-    // Initialize Swiper
-    const swiper = new Swiper(".featured-events-swiper", {
-      slidesPerView: 1,
-      spaceBetween: 20,
-      loop: true,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      breakpoints: {
-        640: {
+      <!-- Custom JavaScript -->
+      <script>
+        // Initialize Swiper
+        const swiper = new Swiper(".featured-events-swiper", {
           slidesPerView: 1,
           spaceBetween: 20,
-        },
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 30,
-        },
-        1024: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-      },
-    });
-  </script>
-  <script src="../scripts/landing.js"></script>
-  <script src="../scripts/preferences.js"></script>
+          loop: true,
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          breakpoints: {
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          },
+        });
+
+        // Preference tags
+        const preferenceTags = document.querySelectorAll(".preference-tag");
+        preferenceTags.forEach((tag) => {
+          tag.addEventListener("click", function() {
+            this.classList.toggle("active");
+          });
+        });
+      </script>
+      <script src="../scripts/landing.js"></script>
 </body>
 
 </html>
