@@ -606,9 +606,12 @@ function runTfIdfSearch($query, $events)
         $pythonScript = dirname(dirname(__FILE__)) . '/indexation/main.py';
 
         $eventsJson = json_encode($events);
+        // Use a temporary file for large JSON payloads to avoid escapeshellarg length limit
+        $tmpJsonFile = tempnam(sys_get_temp_dir(), 'tfidf_');
+        file_put_contents($tmpJsonFile, $eventsJson);
 
         $escapedQuery = escapeshellarg($query);
-        $escapedJson = escapeshellarg($eventsJson);
+        $escapedJsonFile = escapeshellarg($tmpJsonFile);
 
         $pythonCmd = 'python';
         if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
@@ -618,7 +621,7 @@ function runTfIdfSearch($query, $events)
             }
         }
 
-        $command = "$pythonCmd \"$pythonScript\" $escapedQuery $escapedJson 2>&1";
+        $command = "$pythonCmd \"$pythonScript\" $escapedQuery $escapedJsonFile 2>&1";
         $output = [];
         $returnVar = 0;
 
@@ -650,6 +653,9 @@ function runTfIdfSearch($query, $events)
             ]);
             return false;
         }
+
+        // Clean up temporary file
+        @unlink($tmpJsonFile);
 
         return $result;
     } catch (Exception $e) {
