@@ -308,6 +308,15 @@ $totalEvents = count($results);
 
   <script src="../scripts/landing.js"></script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.querySelector('input[name="query"]');
+      if (searchInput) {
+        searchInput.focus();
+      }
+    });
+  </script>
+
 </body>
 
 </html>
