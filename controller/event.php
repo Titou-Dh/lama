@@ -116,7 +116,7 @@ function createEvent($pdo, $eventData, $fileData = null)
 function getEventById($pdo, $id)
 {
     try {
-        $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name 
+        $sql = "SELECT e.*, c.name as category_name, u.username, u.profile_image 
                FROM events e
                LEFT JOIN categories c ON e.category_id = c.id
                LEFT JOIN users u ON e.organizer_id = u.id
@@ -590,8 +590,44 @@ function countEvents($pdo, $filters = [])
         return 0;
     }
 }
+function getEventTickets($pdo, $eventId) {
+    $sql = "SELECT * FROM tickets WHERE event_id = :event_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':event_id', $eventId);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
+function getEventFaqs($pdo, $eventId) {
+    $sql = "SELECT * FROM faqs WHERE event_id = :event_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':event_id', $eventId);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
+function getOrganizerById($pdo, $organizerId) {
+    $sql = "SELECT * FROM users WHERE id = :organizer_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':organizer_id', $organizerId);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+function getCategoryById($pdo, $categoryId) {
+    $sql = "SELECT * FROM categories WHERE id = :category_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':category_id', $categoryId);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function getEventAttendees($pdo, $eventId) {
+    $sql = "SELECT COUNT(*) as count FROM attendees WHERE event_id = :event_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':event_id', $eventId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
 /**
  * Run TF-IDF search using Python script

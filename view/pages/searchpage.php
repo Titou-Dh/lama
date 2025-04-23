@@ -144,9 +144,9 @@ $totalEvents = count($results);
       <div
         class="absolute inset-0 flex flex-col items-center justify-center z-20 text-white">
         <h1 class="text-3xl md:text-4xl font-bold text-center">
-          MADE FOR THOSE
+        BECAUSE LIFE IS BETTER
         </h1>
-        <h1 class="text-3xl md:text-4xl font-bold text-center">WHO DO</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-center">WHEN SHARED </h1>
       </div>
     </div>
     <div class="relative -mt-10 mx-auto w-11/12 md:w-4/5 lg:w-3/4 z-30">

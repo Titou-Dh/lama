@@ -313,7 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
                     <div class="col-md-6">
                       <label class="form-label font-medium">Price</label>
                       <div class="input-group">
-                        <span class="input-group-text bg-primary-light text-primary-dark">$</span>
+                        <span class="input-group-text bg-primary-light text-primary-dark">dt</span>
                         <input type="number" class="form-control" name="tickets[0][price]" placeholder="0.00" step="0.01">
                       </div>
                     </div>

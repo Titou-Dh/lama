@@ -53,8 +53,28 @@ if (isset($_GET['code'])) {
     }
   } catch (Exception $e) {
     error_log("Google OAuth Error: " . $e->getMessage());
+
   }
+  $events = [];
+try {
+    $stmt = $cnx->query("
+        SELECT e.*, c.name AS category_name 
+        FROM events e
+        LEFT JOIN categories c ON e.category_id = c.id
+        WHERE e.start_date >= NOW()
+        ORDER BY e.start_date ASC
+        LIMIT 6
+    ");
+    $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Database error: " . $e->getMessage());
+    $events = []; // Fallback to empty array
 }
+}
+
+
+
+
 
 ?>
 
@@ -223,195 +243,110 @@ if (isset($_GET['code'])) {
     </section>
   </main>
 
-  <!-- Featured Events Section -->
-  <section class="py-5 bg-gradient-light">
+<!-- Featured Events Section -->
+<section class="py-5 bg-gradient-light">
     <div class="container">
-      <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
-        Featured Events
-      </h2>
-      <p class="text-gray-500 text-center mb-5">
-        Discover the most popular events happening around you
-      </p>
+        <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
+            Featured Events
+        </h2>
+        <p class="text-gray-500 text-center mb-5">
+            Discover the most popular events happening around you
+        </p>
 
-      <!-- Swiper Carousel -->
-      <div class="swiper featured-events-swiper">
-        <div class="swiper-wrapper">
-          <!-- Event Card 1 -->
-          <div class="swiper-slide">
-            <div class="event-card">
-              <div class="event-image" style="background-image: url('../assets/images/music.jpg')">
-                <div class="event-date">Jun 15, 2025</div>
-                <div class="event-category">Music</div>
-              </div>
-              <div class="event-content">
-                <h3 class="event-title">Summer Music Festival 2025</h3>
-                <div class="event-location">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>sousse</span>
+        <!-- Swiper Carousel -->
+        <div class="swiper featured-events-swiper">
+            <div class="swiper-wrapper">
+                <?php foreach ($events as $event): ?>
+                <div class="swiper-slide">
+                    <a href="event-details.php?id=<?php echo $event['id']; ?>">
+                        <div class="event-card">
+                            <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
+                                <div class="event-date">
+                                    <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
+                                </div>
+                                <div class="event-category">
+                                    <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
+                                </div>
+                            </div>
+                            <div class="event-content">
+                                <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
+                                <div class="event-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>
+                                        <?php echo $event['event_type'] === 'online' 
+                                            ? 'Online Event' 
+                                            : htmlspecialchars($event['location']); 
+                                        ?>
+                                    </span>
+                                </div>
+                                <p class="event-description">
+                                    <?php echo htmlspecialchars(
+                                        strlen($event['description']) > 100 
+                                            ? substr($event['description'], 0, 100) . '...' 
+                                            : $event['description']
+                                    ); ?>
+                                </p>
+                                <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <p class="event-description">
-                  Join us for the biggest music festival of the summer
-                  featuring top artists. Experience amazing performances,
-                  food, and activities.
-                </p>
-                <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-              </div>
+                <?php endforeach; ?>
             </div>
-          </div>
 
-          <!-- Event Card 2 -->
-          <div class="swiper-slide">
-            <div class="event-card">
-              <div class="event-image" style="background-image: url('../assets/images/ras.jpg')">
-                <div class="event-date">Jul 22, 2025</div>
-                <div class="event-category">Technology</div>
-              </div>
-              <div class="event-content">
-                <h3 class="event-title">Future Tech Conference 2025</h3>
-                <div class="event-location">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>hammam sousse,essths</span>
-                </div>
-                <p class="event-description">
-                  Explore the latest innovations in technology with industry
-                  leaders. Network with professionals and gain insights into
-                  future trends.
-                </p>
-                <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Event Card 3 -->
-          <div class="swiper-slide">
-            <div class="event-card">
-              <div class="event-image" style="background-image: url('../assets/images/robot.jpg')">
-                <div class="event-date">Aug 5, 2025</div>
-                <div class="event-category">Tech</div>
-              </div>
-              <div class="event-content">
-                <h3 class="event-title">robotics competetion</h3>
-                <div class="event-location">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>tunis,esprit</span>
-                </div>
-                <p class="event-description">
-                  enjoy making your own robot and competing with it.
-                </p>
-                <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Event Card 4 -->
-          <div class="swiper-slide">
-            <div class="event-card">
-              <div class="event-image" style="background-image: url('../assets/images/stamp.jpg')">
-                <div class="event-date">Sep 18, 2025</div>
-                <div class="event-category">Business</div>
-              </div>
-              <div class="event-content">
-                <h3 class="event-title">Global Business Summit</h3>
-                <div class="event-location">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>Grand Hotel, London</span>
-                </div>
-                <p class="event-description">
-                  Connect with business leaders and entrepreneurs from around
-                  the world. Learn strategies for success in the global
-                  market.
-                </p>
-                <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-              </div>
-            </div>
-          </div>
+            <!-- Swiper Navigation and Pagination -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
         </div>
-
-        <!-- Swiper Navigation and Pagination -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-pagination"></div>
-      </div>
     </div>
-  </section>
 
+<
   <!-- Upcoming Events Section -->
-  <section class="py-5">
+<section class="py-5">
     <div class="container">
-      <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
-        Upcoming Events
-      </h2>
-      <p class="text-gray-500 text-center mb-5">
-        Don't miss out on these exciting events happening soon
-      </p>
+        <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
+            Upcoming Events
+        </h2>
+        <p class="text-gray-500 text-center mb-5">
+            Don't miss out on these exciting events happening soon
+        </p>
 
-      <div class="row g-4">
-        <!-- Event Card 1 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="event-card">
-            <div class="event-image" style="background-image: url('../assets/images/art.jpg')">
-              <div class="event-date">Jun 10, 2025</div>
-              <div class="event-category">Arts</div>
+        <div class="row g-4">
+            <?php foreach ($events as $event): ?>
+            <div class="col-lg-4 col-md-6">
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
+                        <div class="event-date">
+                            <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
+                        </div>
+                        <div class="event-category">
+                            <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
+                        </div>
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>
+                                <?php echo $event['event_type'] === 'online' 
+                                    ? 'Online Event' 
+                                    : htmlspecialchars($event['location']); 
+                                ?>
+                            </span>
+                        </div>
+                        <p class="event-description">
+                            <?php echo htmlspecialchars(
+                                strlen($event['description']) > 100 
+                                    ? substr($event['description'], 0, 100) . '...' 
+                                    : $event['description']
+                            ); ?>
+                        </p>
+                        <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
+                    </div>
+                </div>
             </div>
-            <div class="event-content">
-              <h3 class="event-title">Modern Art Exhibition</h3>
-              <div class="event-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>nabeul, centre</span>
-              </div>
-              <p class="event-description">
-                Explore contemporary art from emerging artists around the
-                world. Experience innovative installations and
-                thought-provoking pieces.
-              </p>
-              <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Event Card 2 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="event-card">
-            <div class="event-image" style="background-image: url('../assets/images/marathon.jpg')">
-              <div class="event-date">Jun 20, 2025</div>
-              <div class="event-category">Sports</div>
-            </div>
-            <div class="event-content">
-              <h3 class="event-title">Marathon Championship</h3>
-              <div class="event-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Downtown, Boston</span>
-              </div>
-              <p class="event-description">
-                Join thousands of runners in this annual marathon event.
-                Challenge yourself and compete for amazing prizes.
-              </p>
-              <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Event Card 3 -->
-        <div class="col-lg-4 col-md-6">
-          <div class="event-card">
-            <div class="event-image" style="background-image: url('../assets/images/yoga.jpg')">
-              <div class="event-date">Jun 25, 2025</div>
-              <div class="event-category">Health</div>
-            </div>
-            <div class="event-content">
-              <h3 class="event-title">Wellness & Mindfulness Retreat</h3>
-              <div class="event-location">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Serenity Resort, Malibu</span>
-              </div>
-              <p class="event-description">
-                Escape the hustle and bustle of daily life with this
-                rejuvenating wellness retreat. Learn meditation techniques and
-                healthy living practices.
-              </p>
-              <a href="#" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-            </div>
-          </div>
+            <?php endforeach; ?>
         </div>
 
         <!-- Event Card 4 -->
@@ -488,7 +423,7 @@ if (isset($_GET['code'])) {
         <a href="searchpage.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
       </div>
     </div>
-  </section>
+</section>
 
   <!-- Personalization Section -->
   <section class="personalization-section">
