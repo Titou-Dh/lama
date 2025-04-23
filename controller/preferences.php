@@ -11,24 +11,19 @@
 function saveUserPreferences(PDO $pdo, int $userId, array $categoryIds): bool
 {
     try {
-        // Begin transaction
         $pdo->beginTransaction();
 
-        // First delete existing preferences
         $stmt = $pdo->prepare("DELETE FROM user_preferences WHERE user_id = ?");
         $stmt->execute([$userId]);
 
-        // Insert new preferences
         $stmt = $pdo->prepare("INSERT INTO user_preferences (user_id, category_id) VALUES (?, ?)");
         foreach ($categoryIds as $categoryId) {
             $stmt->execute([$userId, $categoryId]);
         }
 
-        // Commit transaction
         $pdo->commit();
         return true;
     } catch (PDOException $e) {
-        // Rollback on error
         $pdo->rollBack();
         error_log("Save Preferences Error: " . $e->getMessage());
         return false;
@@ -70,7 +65,6 @@ function getUserPreferences(PDO $pdo, int $userId): array
 function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6): array
 {
     try {
-        // Get recommended events based on user preferences
         $stmt = $pdo->prepare("
             SELECT DISTINCT e.*, c.name as category_name 
             FROM events e
@@ -89,7 +83,6 @@ function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6): array
 
         $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // If no events found based on preferences, return popular upcoming events
         if (empty($events)) {
             $stmt = $pdo->prepare("
                 SELECT e.*, c.name as category_name 
