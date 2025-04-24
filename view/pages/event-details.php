@@ -1,7 +1,8 @@
 <?php
 include "../../config/database.php";
 include "../../controller/event.php";
-include '../partials/navbar.php';
+include "../../controller/user.php";
+include "../../config/session.php";
 
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
   $eventId = (int) $_GET["id"];
@@ -72,26 +73,26 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    
+
     .gradient-bg {
       background: linear-gradient(135deg, #4F46E5, #8B5CF6);
     }
-    
+
     .ticket-card {
       transition: all 0.3s ease;
     }
-    
+
     .ticket-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2), 0 10px 10px -5px rgba(59, 130, 246, 0.1);
     }
-    
+
     .event-image-container {
       position: relative;
       overflow: hidden;
       border-radius: 1rem;
     }
-    
+
     .event-image-container::after {
       content: '';
       position: absolute;
@@ -99,52 +100,59 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%);
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 50%);
     }
-    
+
     .sticky-sidebar {
       position: sticky;
       top: 100px;
     }
-    
+
     .btn-gradient {
       background: linear-gradient(90deg, #4F46E5, #8B5CF6);
       color: white;
       transition: all 0.3s ease;
     }
-    
+
     .btn-gradient:hover {
       background: linear-gradient(90deg, #3730A3, #7C3AED);
       transform: translateY(-2px);
       box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
     }
-    
+
     .feature-icon {
       transition: all 0.3s ease;
     }
-    
+
     .feature-card:hover .feature-icon {
       transform: scale(1.1);
     }
-    
+
     .countdown-container {
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
-    
+
     .share-icon {
       transition: all 0.3s ease;
     }
-    
+
     .share-icon:hover {
       transform: scale(1.1);
     }
+
+    #mainNav {
+      background-color: rgba(37, 99, 235, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
   </style>
 </head>
 
 <body class="bg-gray-50">
-  
+
+  <?php include '../partials/navbar.php'; ?>
 
   <!-- Breadcrumb -->
   <div class="bg-gray-50 py-3">
@@ -174,7 +182,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     <!-- Hero Section -->
     <div class="event-image-container mb-10" data-aos="fade-up">
       <img src="<?php echo htmlspecialchars($res['image']); ?>" alt="<?php echo htmlspecialchars($res['title']); ?>" class="w-full h-[400px] object-cover rounded-xl" />
-      
+
       <!-- Event Date Overlay -->
       <div class="absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-md">
         <div class="text-center">
@@ -183,7 +191,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
           <span class="block text-xs text-gray-500"><?php echo date("Y", strtotime($res["start_date"])); ?></span>
         </div>
       </div>
-      
+
       <!-- Category Badge -->
       <div class="absolute top-6 right-6">
         <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md">
@@ -199,7 +207,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         <div class="bg-white rounded-xl p-6 shadow-custom" data-aos="fade-up">
           <div class="flex flex-wrap justify-between items-start mb-6">
             <h1 class="text-4xl font-bold gradient-text"><?php echo htmlspecialchars($res['title']); ?></h1>
-            
+
             <div class="flex space-x-3 mt-2 md:mt-0">
               <button class="flex items-center space-x-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-2 transition-all duration-300" id="shareBtn">
                 <i class="fas fa-share-alt"></i>
@@ -223,7 +231,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
                 <p class="font-medium text-gray-800"><?php echo date("d M Y à H:i", strtotime($res["start_date"])); ?></p>
               </div>
             </div>
-            
+
             <div class="flex items-center">
               <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4 feature-icon">
                 <i class="fas fa-map-marker-alt text-purple-500 text-xl"></i>
@@ -233,7 +241,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
                 <p class="font-medium text-gray-800"><?php echo htmlspecialchars($res["location"]); ?></p>
               </div>
             </div>
-            
+
             <div class="flex items-center">
               <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mr-4 feature-icon">
                 <i class="fas fa-user text-pink-500 text-xl"></i>
@@ -243,7 +251,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
                 <p class="font-medium text-gray-800"><?php echo htmlspecialchars($res["username"] ?? "not defined"); ?></p>
               </div>
             </div>
-            
+
             <div class="flex items-center">
               <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mr-4 feature-icon">
                 <i class="fas fa-users text-green-500 text-xl"></i>
@@ -264,11 +272,11 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
             </span>
             About This Event
           </h2>
-          
+
           <div class="prose max-w-none text-gray-600 mb-4 overflow-hidden" id="eventDescription">
             <p><?= nl2br(htmlspecialchars($event['description'])) ?></p>
           </div>
-          
+
           <button class="text-blue-500 hover:text-blue-700 flex items-center font-medium" id="readMoreBtn">
             <span>Read more</span>
             <i class="fas fa-chevron-down ml-1"></i>
@@ -299,7 +307,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
                   <div class="mb-3 md:mb-0">
                     <h3 class="text-xl font-bold text-gray-800"><?php echo htmlspecialchars($ticket['name']); ?></h3>
                     <p class="text-gray-600 mt-1"><?php echo htmlspecialchars($ticket['description']); ?></p>
-                    
+
                     <?php if (!empty($tickets)): ?>
                       <p class="text-sm text-gray-500 mt-2">
                         <i class="far fa-clock mr-1"></i>
@@ -336,7 +344,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
             </span>
             Organizer
           </h2>
-          
+
           <div class="flex items-start">
             <div class="flex-shrink-0">
               <img src="<?= $event['profile_image'] ?>" alt="<?= $event['username'] ?>" class="w-20 h-20 rounded-xl object-cover border-4 border-white shadow-md" />
@@ -344,7 +352,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
             <div class="ml-5">
               <h3 class="text-xl font-bold"><?= htmlspecialchars($event['username']) ?></h3>
               <p class="text-gray-600 mb-3">Event organizer</p>
-              
+
             </div>
           </div>
         </div>
@@ -375,45 +383,45 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
               </div>
             </div>
           </div>
-          
+
           <!-- Registration Card -->
           <div class="bg-white rounded-xl overflow-hidden shadow-custom" data-aos="fade-left" data-aos-delay="100">
             <div class="gradient-bg p-6 text-white">
               <h3 class="text-xl font-bold mb-2">Register for This Event</h3>
               <p class="text-white/80 text-sm">Secure your spot before tickets sell out!</p>
             </div>
-            
+
             <div class="p-6 space-y-5">
               <div class="flex justify-between items-center pb-4 border-b border-gray-100">
                 <span class="text-gray-600">Starting from</span>
                 <span class="text-2xl font-bold text-blue-600">
-                  <?php 
-                    if (!empty($tickets)) {
-                      $prices = array_column($tickets, 'price');
-                      echo min($prices) . ' dt';
-                    } else {
-                      echo 'Free';
-                    }
+                  <?php
+                  if (!empty($tickets)) {
+                    $prices = array_column($tickets, 'price');
+                    echo min($prices) . ' dt';
+                  } else {
+                    echo 'Free';
+                  }
                   ?>
                 </span>
               </div>
-              
+
               <a href="checkout.php?event_id=<?php echo $event['id']; ?>">
                 <button class="btn-gradient w-full py-3 rounded-xl font-medium flex items-center justify-center">
                   <i class="fas fa-ticket-alt mr-2"></i> Register Now
                 </button>
               </a>
-            
+
             </div>
           </div>
-          
+
           <!-- Event Details Card -->
           <div class="bg-white rounded-xl p-6 shadow-custom" data-aos="fade-left" data-aos-delay="200">
             <h3 class="text-lg font-bold mb-4 flex items-center">
               <i class="fas fa-info-circle text-blue-500 mr-2"></i>
               Event Details
             </h3>
-            
+
             <div class="space-y-4">
               <!-- Capacity -->
               <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
@@ -447,7 +455,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
                   <p class="font-medium"><?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?></p>
                 </div>
               </div>
-              
+
               <!-- Event Type -->
               <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
                 <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3 feature-icon">
@@ -460,14 +468,14 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
               </div>
             </div>
           </div>
-          
+
           <!-- Share Card -->
           <div class="bg-white rounded-xl p-6 shadow-custom" data-aos="fade-left" data-aos-delay="300">
             <h3 class="text-lg font-bold mb-4 flex items-center">
               <i class="fas fa-share-alt text-blue-500 mr-2"></i>
               Share This Event
             </h3>
-            
+
             <div class="flex justify-between items-center">
               <a href="#" class="share-icon w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
                 <i class="fab fa-facebook-f"></i>
@@ -628,47 +636,47 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
       duration: 800,
       once: true
     });
-    
+
     // User menu toggle
     const userMenuButton = document.getElementById('userMenuButton');
     const userMenu = document.getElementById('userMenu');
-    
+
     if (userMenuButton && userMenu) {
       userMenuButton.addEventListener('click', () => {
         userMenu.classList.toggle('hidden');
       });
-      
+
       document.addEventListener('click', (e) => {
         if (!userMenuButton.contains(e.target) && !userMenu.contains(e.target)) {
           userMenu.classList.add('hidden');
         }
       });
     }
-    
+
     // Mobile menu toggle
     const mobileMenuButton = document.getElementById('mobileMenuButton');
     const mobileMenu = document.getElementById('mobileMenu');
-    
+
     if (mobileMenuButton && mobileMenu) {
       mobileMenuButton.addEventListener('click', () => {
         mobileMenu.classList.toggle('hidden');
       });
     }
-    
+
     // Share modal functionality
     const shareBtn = document.getElementById('shareBtn');
     const shareModal = document.getElementById('shareModal');
     const closeShareModal = document.getElementById('closeShareModal');
-    
+
     if (shareBtn && shareModal && closeShareModal) {
       shareBtn.addEventListener('click', () => {
         shareModal.classList.remove('hidden');
       });
-      
+
       closeShareModal.addEventListener('click', () => {
         shareModal.classList.add('hidden');
       });
-      
+
       // Close modal when clicking outside
       shareModal.addEventListener('click', (e) => {
         if (e.target === shareModal) {
@@ -676,7 +684,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         }
       });
     }
-    
+
     // Save/bookmark functionality
     const saveBtn = document.getElementById('saveBtn');
     if (saveBtn) {
@@ -693,16 +701,16 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         }
       });
     }
-    
+
     // Read more functionality
     const readMoreBtn = document.getElementById('readMoreBtn');
     if (readMoreBtn) {
       const eventDescription = document.getElementById('eventDescription');
       let isExpanded = false;
-      
+
       // Initially limit the height
       eventDescription.style.maxHeight = '150px';
-      
+
       readMoreBtn.addEventListener('click', () => {
         if (!isExpanded) {
           // Expand
@@ -720,25 +728,25 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         isExpanded = !isExpanded;
       });
     }
-    
+
     // Countdown timer
     function updateCountdown() {
       const eventDate = new Date('<?php echo $res["start_date"]; ?>').getTime();
       const now = new Date().getTime();
       const distance = eventDate - now;
-      
+
       // Time calculations
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      
+
       // Display the result
       document.getElementById('days').textContent = days.toString().padStart(2, '0');
       document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
       document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
       document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-      
+
       // If the countdown is over
       if (distance < 0) {
         clearInterval(countdownTimer);
@@ -748,7 +756,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         document.getElementById('seconds').textContent = '00';
       }
     }
-    
+
     // Update countdown every second
     updateCountdown();
     const countdownTimer = setInterval(updateCountdown, 1000);

@@ -4,6 +4,8 @@ session_start();
 require_once __DIR__ . '/../../config/google.php';
 include_once __DIR__ . '/../../config/database.php';
 include_once __DIR__ . '/../../controller/auth.php';
+include_once __DIR__ . '/../../controller/categories.php';
+include_once __DIR__ . '/../../controller/preferences.php';
 
 $error_signin = '';
 $categories = getCategories($cnx);
@@ -70,7 +72,6 @@ try {
   $events = []; // Fallback to an empty array
 }
 
-// Debugging: Log the $events variable to check if data is being fetched
 error_log(print_r($events, true));
 
 ?>
@@ -302,180 +303,135 @@ error_log(print_r($events, true));
       </div>
     </div>
 
-    <
-      <!-- Upcoming Events Section -->
-      <section class="py-5">
-        <div class="container">
-          <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
-            Upcoming Events
+  </section>
+  <!-- Upcoming Events Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-3xl font-bold mb-4 text-gradient text-center">
+        Upcoming Events
+      </h2>
+      <p class="text-gray-500 text-center mb-5">
+        Don't miss out on these exciting events happening soon
+      </p>
+
+      <div class="row g-4">
+        <?php foreach ($events as $event): ?>
+          <div class="col-lg-4 col-md-6">
+            <div class="event-card">
+              <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
+                <div class="event-date">
+                  <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
+                </div>
+                <div class="event-category">
+                  <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
+                </div>
+              </div>
+              <div class="event-content">
+                <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
+                <div class="event-location">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>
+                    <?php echo $event['event_type'] === 'online'
+                      ? 'Online Event'
+                      : htmlspecialchars($event['location']);
+                    ?>
+                  </span>
+                </div>
+                <p class="event-description">
+                  <?php echo htmlspecialchars(
+                    strlen($event['description']) > 100
+                      ? substr($event['description'], 0, 100) . '...'
+                      : $event['description']
+                  ); ?>
+                </p>
+                <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
+              </div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+
+      <div class="text-center mt-5">
+        <a href="searchpage.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Personalization Section -->
+  <section class="personalization-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h2 class="text-3xl font-bold mb-4 text-gradient">
+            let's make it personal!
           </h2>
-          <p class="text-gray-500 text-center mb-5">
-            Don't miss out on these exciting events happening soon
+          <p class="text-gray-700 mb-4">
+            Tell us what you're interested in, and we'll recommend events
+            tailored just for you. Select your preferences below:
           </p>
 
-          <div class="row g-4">
-            <?php foreach ($events as $event): ?>
-              <div class="col-lg-4 col-md-6">
-                <div class="event-card">
-                  <div class="event-image" style="background-image: url('<?php echo $event['image'] ?? '../assets/images/default.jpg'; ?>')">
-                    <div class="event-date">
-                      <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
-                    </div>
-                    <div class="event-category">
-                      <?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?>
-                    </div>
-                  </div>
-                  <div class="event-content">
-                    <h3 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h3>
-                    <div class="event-location">
-                      <i class="fas fa-map-marker-alt"></i>
-                      <span>
-                        <?php echo $event['event_type'] === 'online'
-                          ? 'Online Event'
-                          : htmlspecialchars($event['location']);
-                        ?>
-                      </span>
-                    </div>
-                    <p class="event-description">
-                      <?php echo htmlspecialchars(
-                        strlen($event['description']) > 100
-                          ? substr($event['description'], 0, 100) . '...'
-                          : $event['description']
-                      ); ?>
-                    </p>
-                    <a href="event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-gradient rounded-pill px-4">Get Tickets</a>
-                  </div>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-
-          <div class="text-center mt-5">
-            <a href="searchpage.php" class="btn btn-outline-gradient rounded-pill px-5 py-2">View All Events</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Personalization Section -->
-      <section class="personalization-section">
-        <div class="personalization-bg"></div>
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-lg-6 mb-5 mb-lg-0">
-              <h2 class="text-3xl font-bold mb-4 text-gradient">
-                let's make it personal!
-              </h2>
-              <p class="text-gray-700 mb-4">
-                Tell us what you're interested in, and we'll recommend events
-                tailored just for you. Select your preferences below:
-              </p>
-
-              <div class="preference-tags mb-4">
-                <span class="preference-tag">Music</span>
-                <span class="preference-tag active">Art</span>
-                <span class="preference-tag">Sports</span>
-                <span class="preference-tag active">Technology</span>
-                <span class="preference-tag">Food & Drink</span>
-                <span class="preference-tag">Business</span>
-                <span class="preference-tag">Health</span>
-                <span class="preference-tag">Education</span>
-                <span class="preference-tag">Community</span>
-                <span class="preference-tag">Charity</span>
-                <span class="preference-tag">Family</span>
-                <span class="preference-tag">Fashion</span>
-              </div>
-
-              <button class="btn btn-gradient rounded-pill px-5 py-2">
-                save Preferences
-              </button>
+          <form id="preferencesForm">
+            <div class="preference-tags mb-4">
+              <?php foreach ($categories as $category): ?>
+                <span class="preference-tag rounded-pill px-3 py-2 me-2 mb-2 <?php echo in_array($category['id'], $user_preferences) ? 'active' : ''; ?>" data-id="<?php echo $category['id']; ?>">
+                  <?php echo htmlspecialchars($category['name']); ?>
+                </span>
+              <?php endforeach; ?>
             </div>
-            <div class="col-lg-6">
-              <div class="card border-0 shadow-lg">
-                <div class="card-body p-4">
-                  <h3 class="card-title text-xl font-bold mb-4">
-                    Your Recommended Events
-                  </h3>
+            <input type="hidden" id="selectedCategories" name="selectedCategories" value="<?php echo implode(',', $user_preferences); ?>" />
 
+            <button type="submit" class="btn btn-gradient rounded-pill px-5 py-2">
+              save Preferences
+            </button>
+          </form>
+        </div>
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-lg">
+            <div class="card-body p-4">
+              <h3 class="card-title text-xl font-bold mb-4">
+                Your Recommended Events
+              </h3>
+
+              <?php if (!empty($recommended_events)): ?>
+                <?php foreach ($recommended_events as $event): ?>
                   <div class="recommended-event d-flex mb-4">
                     <div class="flex-shrink-0 me-3" style="
-                      width: 80px;
-                      height: 80px;
-                      background-image: url('../assets/images/art.jpg');
-                      background-size: cover;
-                      border-radius: 0.5rem;
-                    "></div>
+                          width: 80px;
+                          height: 80px;
+                          background-image: url('<?php echo $event['image'] ?? '../assets/images/default-event.jpg'; ?>');
+                          background-size: cover;
+                          border-radius: 0.5rem;
+                        "></div>
                     <div>
                       <h4 class="text-lg font-semibold">
-                        Contemporary Art Exhibition
+                        <?php echo htmlspecialchars($event['title']); ?>
                       </h4>
                       <p class="text-sm text-gray-500 mb-1">
-                        <i class="far fa-calendar-alt me-1"></i> Jun 12, 2025
+                        <i class="far fa-calendar-alt me-1"></i> <?php echo date('M d, Y', strtotime($event['start_date'])); ?>
                       </p>
                       <p class="text-sm text-gray-500">
-                        <i class="fas fa-map-marker-alt me-1"></i> Modern Gallery,
-                        New York
+                        <i class="fas fa-map-marker-alt me-1"></i> <?php echo $event['location'] ?? 'Online Event'; ?>
                       </p>
                     </div>
                   </div>
-
-                  <div class="recommended-event d-flex mb-4">
-                    <div class="flex-shrink-0 me-3" style="
-                      width: 80px;
-                      height: 80px;
-                      background-image: url('../assets/images/tech.jpg');
-                      background-size: cover;
-                      border-radius: 0.5rem;
-                    "></div>
-                    <div>
-                      <h4 class="text-lg font-semibold">
-                        AI & Machine Learning Workshop
-                      </h4>
-                      <p class="text-sm text-gray-500 mb-1">
-                        <i class="far fa-calendar-alt me-1"></i> Jun 18, 2025
-                      </p>
-                      <p class="text-sm text-gray-500">
-                        <i class="fas fa-map-marker-alt me-1"></i> Tech Hub, San
-                        Francisco
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="recommended-event d-flex">
-                    <div class="flex-shrink-0 me-3" style="
-                      width: 80px;
-                      height: 80px;
-                      background-image: url('../assets/images/photography.jpg');
-                      background-size: cover;
-                      border-radius: 0.5rem;
-                    "></div>
-                    <div>
-                      <h4 class="text-lg font-semibold">
-                        Photography Masterclass
-                      </h4>
-                      <p class="text-sm text-gray-500 mb-1">
-                        <i class="far fa-calendar-alt me-1"></i> Jun 25, 2025
-                      </p>
-                      <p class="text-sm text-gray-500">
-                        <i class="fas fa-map-marker-alt me-1"></i> Creative
-                        Studio, Chicago
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="text-center mt-4">
-                    <a href="#" class="btn btn-outline-primary rounded-pill px-4">View All Recommendations</a>
-                  </div>
-                </div>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <p class="text-center text-gray-500 mb-4">No recommended events yet. Select your interests to see personalized recommendations!</p>
+              <?php endif; ?> <div class="text-center mt-4">
+                <a href="recommended-events.php" class="btn btn-outline-primary rounded-pill px-4">View All Recommendations</a>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
+  <div id="preferencesSection"></div>
 
-      <?php include "../partials/footer.php"; ?>
+  <?php include "../partials/footer.php"; ?>
 
-      <?php
-      $error_signin && '
+  <?php
+  $error_signin && '
               <script>
               Swal.fire({
               icon: "error",
@@ -485,59 +441,52 @@ error_log(print_r($events, true));
             });
               </script>
     ';
-      ?>
+  ?>
 
-      <!-- Script for navbar scroll effect -->
+  <!-- Script for navbar scroll effect -->
 
-      <!-- Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-      <!-- flow bite JS -->
-      <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+  <!-- flow bite JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
-      <!-- Swiper JS -->
-      <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 
-      <!-- Custom JavaScript -->
-      <script>
-        // Initialize Swiper
-        const swiper = new Swiper(".featured-events-swiper", {
+  <!-- Custom JavaScript -->
+  <script>
+    // Initialize Swiper
+    const swiper = new Swiper(".featured-events-swiper", {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        640: {
           slidesPerView: 1,
           spaceBetween: 20,
-          loop: true,
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          breakpoints: {
-            640: {
-              slidesPerView: 1,
-              spaceBetween: 20,
-            },
-            768: {
-              slidesPerView: 2,
-              spaceBetween: 30,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 30,
-            },
-          },
-        });
-
-        // Preference tags
-        const preferenceTags = document.querySelectorAll(".preference-tag");
-        preferenceTags.forEach((tag) => {
-          tag.addEventListener("click", function() {
-            this.classList.toggle("active");
-          });
-        });
-      </script>
-      <script src="../scripts/landing.js"></script>
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      },
+    });
+  </script>
+  <script src="../scripts/landing.js"></script>
+  <script src="../scripts/preferences.js"></script>
 </body>
 
 </html>

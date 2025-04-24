@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     html += `<div class="text-center mt-4">
-                <a href="#" class="btn btn-outline-primary rounded-pill px-4">View All Recommendations</a>
+                <a href="recommended-events.php" class="btn btn-outline-primary rounded-pill px-4">View All Recommendations</a>
               </div>`;
     container.innerHTML = html;
   }

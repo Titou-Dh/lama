@@ -60,41 +60,92 @@ function getUserPreferences(PDO $pdo, int $userId): array
  * @param PDO $pdo Database connection
  * @param int $userId The user ID
  * @param int $limit Maximum number of events to return
+ * @param int $offset Number of events to skip for pagination
+ * @param int $categoryId Filter by specific category ID (0 = all categories)
+ * @param string $sortBy Sort order ('newest', 'oldest', 'title_asc', 'title_desc')
  * @return array Array of recommended events
  */
-function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6): array
+function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6, int $offset = 0, int $categoryId = 0, string $sortBy = 'newest'): array
 {
     try {
+        // Build the WHERE clause
+        $where = "WHERE up.user_id = :user_id
+                AND e.start_date >= CURRENT_TIMESTAMP()
+                AND e.status = 'published'";
+
+        // Add category filter if specified
+        if ($categoryId > 0) {
+            $where .= " AND e.category_id = :category_id";
+        }
+
+        // Determine sort order
+        $orderBy = "ORDER BY ";
+        switch ($sortBy) {
+            case 'oldest':
+                $orderBy .= "e.start_date ASC";
+                break;
+            case 'title_asc':
+                $orderBy .= "e.title ASC";
+                break;
+            case 'title_desc':
+                $orderBy .= "e.title DESC";
+                break;
+            case 'newest':
+            default:
+                $orderBy .= "e.start_date DESC";
+                break;
+        }
         $stmt = $pdo->prepare("
             SELECT DISTINCT e.*, c.name as category_name 
             FROM events e
             INNER JOIN user_preferences up ON e.category_id = up.category_id
             INNER JOIN categories c ON e.category_id = c.id
-            WHERE up.user_id = :user_id
-            AND e.start_date >= CURRENT_TIMESTAMP()
-            AND e.status = 'published'
-            ORDER BY e.start_date ASC
+            $where
+            $orderBy
             LIMIT :limit
+            OFFSET :offset
         ");
 
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+        // Bind category ID if filtering by category
+        if ($categoryId > 0) {
+            $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+        }
+
         $stmt->execute();
 
         $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($events)) {
+            // Build fallback WHERE clause
+            $fallbackWhere = "WHERE e.start_date >= CURRENT_TIMESTAMP()
+                          AND e.status = 'published'";
+
+            // Add category filter to fallback if specified
+            if ($categoryId > 0) {
+                $fallbackWhere .= " AND e.category_id = :category_id";
+            }
             $stmt = $pdo->prepare("
                 SELECT e.*, c.name as category_name 
                 FROM events e
                 INNER JOIN categories c ON e.category_id = c.id
-                WHERE e.start_date >= CURRENT_TIMESTAMP()
-                AND e.status = 'published'
-                ORDER BY e.start_date ASC
+                $fallbackWhere
+                $orderBy
                 LIMIT :limit
+                OFFSET :offset
             ");
 
             $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+            // Bind category ID for fallback query if filtering by category
+            if ($categoryId > 0) {
+                $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+            }
+
             $stmt->execute();
             $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
@@ -103,5 +154,77 @@ function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6): array
     } catch (PDOException $e) {
         error_log("Get Recommended Events Error: " . $e->getMessage());
         return [];
+    }
+}
+
+/**
+ * Count total number of recommended events for a user
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $userId User ID
+ * @param int $categoryId Filter by specific category ID (0 = all categories)
+ * @return int Total number of recommended events
+ */
+function countRecommendedEvents($pdo, $userId, $categoryId = 0)
+{
+    try {
+        // Build the WHERE clause
+        $where = "WHERE up.user_id = :user_id
+                AND e.start_date >= CURRENT_TIMESTAMP()
+                AND e.status = 'published'";
+
+        // Add category filter if specified
+        if ($categoryId > 0) {
+            $where .= " AND e.category_id = :category_id";
+        }
+        $stmt = $pdo->prepare("
+            SELECT COUNT(DISTINCT e.id) as total
+            FROM events e
+            INNER JOIN user_preferences up ON e.category_id = up.category_id
+            INNER JOIN categories c ON e.category_id = c.id
+            $where
+        ");
+
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+
+        // Bind category ID if filtering by category
+        if ($categoryId > 0) {
+            $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $count = $result['total'] ?? 0;
+
+        if ($count == 0) {
+            // Build the WHERE clause for fallback query
+            $fallbackWhere = "WHERE e.start_date >= CURRENT_TIMESTAMP()
+                          AND e.status = 'published'";
+
+            // Add category filter to fallback if specified
+            if ($categoryId > 0) {
+                $fallbackWhere .= " AND e.category_id = :category_id";
+            }
+            $stmt = $pdo->prepare("
+                SELECT COUNT(DISTINCT e.id) as total
+                FROM events e
+                INNER JOIN categories c ON e.category_id = c.id
+                $fallbackWhere
+            ");
+
+            // Bind category ID for fallback query if filtering by category
+            if ($categoryId > 0) {
+                $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+            }
+
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $result['total'] ?? 0;
+        }
+
+        return $count;
+    } catch (PDOException $e) {
+        error_log("Count Recommended Events Error: " . $e->getMessage());
+        return 0;
     }
 }

@@ -426,3 +426,11 @@
 [2025-04-23 02:38:03] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"testt","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
 [2025-04-23 02:38:03] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"testt"}
 
+[2025-04-24 02:07:23] [INFO] [UserID: not-logged-in] Fetched event with ID: 7
+[2025-04-24 02:08:54] [INFO] [UserID: not-logged-in] Fetched event with ID: 7
+[2025-04-24 02:19:44] [INFO] [UserID: not-logged-in] Fetched event with ID: 47
+[2025-04-24 02:23:18] [INFO] [UserID: not-logged-in] Fetched event with ID: 47
+[2025-04-24 02:23:36] [INFO] [UserID: not-logged-in] Fetched event with ID: 47
+[2025-04-24 02:25:17] [INFO] [UserID: 2] Fetched event with ID: 47
+[2025-04-24 02:25:29] [INFO] [UserID: 2] Fetched event with ID: 47
+[2025-04-24 02:26:26] [INFO] [UserID: 2] Fetched event with ID: 47
