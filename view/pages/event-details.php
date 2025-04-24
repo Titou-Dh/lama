@@ -363,404 +363,417 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         <div class="sticky-sidebar space-y-6">
           <!-- Countdown Timer -->
           <div class="countdown-container bg-white rounded-xl p-6 shadow-custom" data-aos="fade-left">
-            <h3 class="text-lg font-bold mb-3 text-center">Event Starts In</h3>
-            <div class="grid grid-cols-4 gap-2 text-center">
-              <div class="bg-blue-50 rounded-lg p-2">
-                <span class="block text-2xl font-bold text-blue-600" id="days">00</span>
-                <span class="text-xs text-gray-500">Days</span>
+            <?php
+            $eventDate = strtotime($res["start_date"]);
+            $currentTime = time();
+            $hasStarted = $eventDate <= $currentTime;
+            ?>
+
+            <?php if ($hasStarted): ?>
+              <span class="inline-flex items-center px-4 py-2 rounded-full text-base font-medium bg-green-100 text-green-800">
+                <i class="fas fa-check-circle mr-2"></i> Event Already Started
+              </span>
+              <p class="text-gray-600 mt-2 text-sm">Started on <?php echo date("d M Y \a\t H:i", $eventDate); ?></p>
+            <?php else: ?>
+              <h3 class="text-lg font-bold mb-3 text-center">Event Starts In</h3>
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="bg-blue-50 rounded-lg p-2">
+                  <span class="block text-2xl font-bold text-blue-600" id="days">00</span>
+                  <span class="text-xs text-gray-500">Days</span>
+
+                  <div class="bg-blue-50 rounded-lg p-2">
+                    <span class="block text-2xl font-bold text-blue-600" id="hours">00</span>
+                    <span class="text-xs text-gray-500">Hours</span>
+                  </div>
+                  <div class="bg-blue-50 rounded-lg p-2">
+                    <span class="block text-2xl font-bold text-blue-600" id="minutes">00</span>
+                    <span class="text-xs text-gray-500">Mins</span>
+                  </div>
+                  <div class="bg-blue-50 rounded-lg p-2">
+                    <span class="block text-2xl font-bold text-blue-600" id="seconds">00</span>
+                    <span class="text-xs text-gray-500">Secs</span>
+                  </div>
+                </div>
+              <?php endif; ?>
               </div>
-              <div class="bg-blue-50 rounded-lg p-2">
-                <span class="block text-2xl font-bold text-blue-600" id="hours">00</span>
-                <span class="text-xs text-gray-500">Hours</span>
+
+              <!-- Registration Card -->
+              <div class="bg-white rounded-xl overflow-hidden shadow-custom" data-aos="fade-left" data-aos-delay="100">
+                <div class="gradient-bg p-6 text-white">
+                  <h3 class="text-xl font-bold mb-2">Register for This Event</h3>
+                  <p class="text-white/80 text-sm">Secure your spot before tickets sell out!</p>
+                </div>
+
+                <div class="p-6 space-y-5">
+                  <div class="flex justify-between items-center pb-4 border-b border-gray-100">
+                    <span class="text-gray-600">Starting from</span>
+                    <span class="text-2xl font-bold text-blue-600">
+                      <?php
+                      if (!empty($tickets)) {
+                        $prices = array_column($tickets, 'price');
+                        echo min($prices) . ' dt';
+                      } else {
+                        echo 'Free';
+                      }
+                      ?>
+                    </span>
+                  </div>
+
+                  <a href="checkout.php?event_id=<?php echo $event['id']; ?>">
+                    <button class="btn-gradient w-full py-3 rounded-xl font-medium flex items-center justify-center">
+                      <i class="fas fa-ticket-alt mr-2"></i> Register Now
+                    </button>
+                  </a>
+
+                </div>
               </div>
-              <div class="bg-blue-50 rounded-lg p-2">
-                <span class="block text-2xl font-bold text-blue-600" id="minutes">00</span>
-                <span class="text-xs text-gray-500">Mins</span>
+
+              <!-- Event Details Card -->
+              <div class="bg-white rounded-xl p-6 shadow-custom" data-aos="fade-left" data-aos-delay="200">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                  <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                  Event Details
+                </h3>
+
+                <div class="space-y-4">
+                  <!-- Capacity -->
+                  <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3 feature-icon">
+                      <i class="fas fa-users text-blue-500"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Capacity</p>
+                      <p class="font-medium"><?php echo htmlspecialchars($event['capacity']); ?> attendees</p>
+                    </div>
+                  </div>
+
+                  <!-- Location -->
+                  <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3 feature-icon">
+                      <i class="fas fa-map-marker-alt text-green-500"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Location</p>
+                      <p class="font-medium"><?php echo htmlspecialchars($event['location']); ?></p>
+                    </div>
+                  </div>
+
+                  <!-- Category -->
+                  <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3 feature-icon">
+                      <i class="fas fa-layer-group text-yellow-500"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Category</p>
+                      <p class="font-medium"><?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?></p>
+                    </div>
+                  </div>
+
+                  <!-- Event Type -->
+                  <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
+                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3 feature-icon">
+                      <i class="fas fa-globe text-purple-500"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500">Event Type</p>
+                      <p class="font-medium"><?php echo ucfirst($event['event_type'] ?? 'In-person'); ?></p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="bg-blue-50 rounded-lg p-2">
-                <span class="block text-2xl font-bold text-blue-600" id="seconds">00</span>
-                <span class="text-xs text-gray-500">Secs</span>
+
+              <!-- Share Card -->
+              <div class="bg-white rounded-xl p-6 shadow-custom" data-aos="fade-left" data-aos-delay="300">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                  <i class="fas fa-share-alt text-blue-500 mr-2"></i>
+                  Share This Event
+                </h3>
+
+                <div class="flex justify-between items-center">
+                  <a href="#" class="share-icon w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="#" class="share-icon w-10 h-10 bg-blue-400 text-white rounded-full flex items-center justify-center">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                  <a href="#" class="share-icon w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center">
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                  <a href="#" class="share-icon w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                  <a href="#" class="share-icon w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center">
+                    <i class="fas fa-envelope"></i>
+                  </a>
+                </div>
               </div>
-            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm" id="shareModal">
+      <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold">Share This Event</h3>
+          <button class="text-gray-500 hover:text-gray-700" id="closeShareModal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="flex justify-center space-x-6">
+            <a href="#" class="flex flex-col items-center">
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors duration-300">
+                <i class="fab fa-facebook-f text-xl"></i>
+              </div>
+              <span class="text-sm mt-1">Facebook</span>
+            </a>
+            <a href="#" class="flex flex-col items-center">
+              <div class="w-12 h-12 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors duration-300">
+                <i class="fab fa-twitter text-xl"></i>
+              </div>
+              <span class="text-sm mt-1">Twitter</span>
+            </a>
+            <a href="#" class="flex flex-col items-center">
+              <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition-colors duration-300">
+                <i class="fab fa-whatsapp text-xl"></i>
+              </div>
+              <span class="text-sm mt-1">WhatsApp</span>
+            </a>
+            <a href="#" class="flex flex-col items-center">
+              <div class="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors duration-300">
+                <i class="fab fa-linkedin-in text-xl"></i>
+              </div>
+              <span class="text-sm mt-1">LinkedIn</span>
+            </a>
           </div>
 
-          <!-- Registration Card -->
-          <div class="bg-white rounded-xl overflow-hidden shadow-custom" data-aos="fade-left" data-aos-delay="100">
-            <div class="gradient-bg p-6 text-white">
-              <h3 class="text-xl font-bold mb-2">Register for This Event</h3>
-              <p class="text-white/80 text-sm">Secure your spot before tickets sell out!</p>
-            </div>
-
-            <div class="p-6 space-y-5">
-              <div class="flex justify-between items-center pb-4 border-b border-gray-100">
-                <span class="text-gray-600">Starting from</span>
-                <span class="text-2xl font-bold text-blue-600">
-                  <?php
-                  if (!empty($tickets)) {
-                    $prices = array_column($tickets, 'price');
-                    echo min($prices) . ' dt';
-                  } else {
-                    echo 'Free';
-                  }
-                  ?>
-                </span>
-              </div>
-
-              <a href="checkout.php?event_id=<?php echo $event['id']; ?>">
-                <button class="btn-gradient w-full py-3 rounded-xl font-medium flex items-center justify-center">
-                  <i class="fas fa-ticket-alt mr-2"></i> Register Now
-                </button>
-              </a>
-
-            </div>
-          </div>
-
-          <!-- Event Details Card -->
-          <div class="bg-white rounded-xl p-6 shadow-custom" data-aos="fade-left" data-aos-delay="200">
-            <h3 class="text-lg font-bold mb-4 flex items-center">
-              <i class="fas fa-info-circle text-blue-500 mr-2"></i>
-              Event Details
-            </h3>
-
-            <div class="space-y-4">
-              <!-- Capacity -->
-              <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
-                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3 feature-icon">
-                  <i class="fas fa-users text-blue-500"></i>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-500">Capacity</p>
-                  <p class="font-medium"><?php echo htmlspecialchars($event['capacity']); ?> attendees</p>
-                </div>
-              </div>
-
-              <!-- Location -->
-              <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
-                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3 feature-icon">
-                  <i class="fas fa-map-marker-alt text-green-500"></i>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-500">Location</p>
-                  <p class="font-medium"><?php echo htmlspecialchars($event['location']); ?></p>
-                </div>
-              </div>
-
-              <!-- Category -->
-              <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
-                <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3 feature-icon">
-                  <i class="fas fa-layer-group text-yellow-500"></i>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-500">Category</p>
-                  <p class="font-medium"><?php echo htmlspecialchars($event['category_name'] ?? 'Uncategorized'); ?></p>
-                </div>
-              </div>
-
-              <!-- Event Type -->
-              <div class="flex items-center feature-card p-3 rounded-lg hover:bg-gray-50 transition-colors duration-300">
-                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3 feature-icon">
-                  <i class="fas fa-globe text-purple-500"></i>
-                </div>
-                <div>
-                  <p class="text-sm text-gray-500">Event Type</p>
-                  <p class="font-medium"><?php echo ucfirst($event['event_type'] ?? 'In-person'); ?></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Share Card -->
-          <div class="bg-white rounded-xl p-6 shadow-custom" data-aos="fade-left" data-aos-delay="300">
-            <h3 class="text-lg font-bold mb-4 flex items-center">
-              <i class="fas fa-share-alt text-blue-500 mr-2"></i>
-              Share This Event
-            </h3>
-
-            <div class="flex justify-between items-center">
-              <a href="#" class="share-icon w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" class="share-icon w-10 h-10 bg-blue-400 text-white rounded-full flex items-center justify-center">
-                <i class="fab fa-twitter"></i>
-              </a>
-              <a href="#" class="share-icon w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center">
-                <i class="fab fa-whatsapp"></i>
-              </a>
-              <a href="#" class="share-icon w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center">
-                <i class="fab fa-linkedin-in"></i>
-              </a>
-              <a href="#" class="share-icon w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center">
-                <i class="fas fa-envelope"></i>
-              </a>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">Copy Link</label>
+            <div class="flex">
+              <input type="text" value="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" class="form-control rounded-r-none" readonly />
+              <button class="btn btn-outline-primary rounded-l-none">
+                Copy
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Share Modal -->
-  <div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm" id="shareModal">
-    <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold">Share This Event</h3>
-        <button class="text-gray-500 hover:text-gray-700" id="closeShareModal">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-16">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="d-flex align-items-center mb-4">
+              <img src="../assets/images/logo.png" alt="EventLama" style="height: 60px" />
+            </div>
+            <p class="text-gray-400 mb-4">
+              Discover and create events that matter to you.
+            </p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
 
-      <div class="space-y-6">
-        <div class="flex justify-center space-x-6">
-          <a href="#" class="flex flex-col items-center">
-            <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors duration-300">
-              <i class="fab fa-facebook-f text-xl"></i>
-            </div>
-            <span class="text-sm mt-1">Facebook</span>
-          </a>
-          <a href="#" class="flex flex-col items-center">
-            <div class="w-12 h-12 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors duration-300">
-              <i class="fab fa-twitter text-xl"></i>
-            </div>
-            <span class="text-sm mt-1">Twitter</span>
-          </a>
-          <a href="#" class="flex flex-col items-center">
-            <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition-colors duration-300">
-              <i class="fab fa-whatsapp text-xl"></i>
-            </div>
-            <span class="text-sm mt-1">WhatsApp</span>
-          </a>
-          <a href="#" class="flex flex-col items-center">
-            <div class="w-12 h-12 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors duration-300">
-              <i class="fab fa-linkedin-in text-xl"></i>
-            </div>
-            <span class="text-sm mt-1">LinkedIn</span>
-          </a>
+          <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+            <h5 class="text-xl font-semibold mb-4">Company</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a href="#" class="text-gray-400 hover:text-white">About Us</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+            <h5 class="text-xl font-semibold mb-4">Support</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a href="#" class="text-gray-400 hover:text-white">Help Center</a>
+              </li>
+              <li class="mb-2">
+                <a href="#" class="text-gray-400 hover:text-white">Contact Us</a>
+              </li>
+              <li class="mb-2">
+                <a href="#" class="text-gray-400 hover:text-white">Safety Center</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Community Guidelines</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
+            <h5 class="text-xl font-semibold mb-4">Legal</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
+              </li>
+              <li class="mb-2">
+                <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
+              </li>
+              <li class="mb-2">
+                <a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a>
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-white">Intellectual Property</a>
+              </li>
+            </ul>
+          </div>
         </div>
-
-        <div>
-          <label class="text-sm text-gray-600 mb-1 block">Copy Link</label>
-          <div class="flex">
-            <input type="text" value="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>" class="form-control rounded-r-none" readonly />
-            <button class="btn btn-outline-primary rounded-l-none">
-              Copy
-            </button>
+        <hr class="my-5 border-gray-700" />
+        <div class="row align-items-center">
+          <div class="col-md-6 text-center text-md-start">
+            <p class="text-gray-400 mb-0">
+              &copy; 2025 EventLama. All rights reserved.
+            </p>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </footer>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12 mt-16">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 mb-5 mb-lg-0">
-          <div class="d-flex align-items-center mb-4">
-            <img src="../assets/images/logo.png" alt="EventLama" style="height: 60px" />
-          </div>
-          <p class="text-gray-400 mb-4">
-            Discover and create events that matter to you.
-          </p>
-          <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
-
-        <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
-          <h5 class="text-xl font-semibold mb-4">Company</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2">
-              <a href="#" class="text-gray-400 hover:text-white">About Us</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
-          <h5 class="text-xl font-semibold mb-4">Support</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2">
-              <a href="#" class="text-gray-400 hover:text-white">Help Center</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-gray-400 hover:text-white">Contact Us</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-gray-400 hover:text-white">Safety Center</a>
-            </li>
-            <li>
-              <a href="#" class="text-gray-400 hover:text-white">Community Guidelines</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-md-4 mb-5 mb-md-0">
-          <h5 class="text-xl font-semibold mb-4">Legal</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2">
-              <a href="#" class="text-gray-400 hover:text-white">Terms of Service</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="text-gray-400 hover:text-white">Cookie Policy</a>
-            </li>
-            <li>
-              <a href="#" class="text-gray-400 hover:text-white">Intellectual Property</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <hr class="my-5 border-gray-700" />
-      <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-start">
-          <p class="text-gray-400 mb-0">
-            &copy; 2025 EventLama. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- AOS Animation Library -->
-  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <!-- Custom JavaScript -->
-  <script>
-    // Initialize AOS
-    AOS.init({
-      duration: 800,
-      once: true
-    });
-
-    // User menu toggle
-    const userMenuButton = document.getElementById('userMenuButton');
-    const userMenu = document.getElementById('userMenu');
-
-    if (userMenuButton && userMenu) {
-      userMenuButton.addEventListener('click', () => {
-        userMenu.classList.toggle('hidden');
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <!-- Custom JavaScript -->
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 800,
+        once: true
       });
 
-      document.addEventListener('click', (e) => {
-        if (!userMenuButton.contains(e.target) && !userMenu.contains(e.target)) {
-          userMenu.classList.add('hidden');
-        }
-      });
-    }
+      // User menu toggle
+      const userMenuButton = document.getElementById('userMenuButton');
+      const userMenu = document.getElementById('userMenu');
 
-    // Mobile menu toggle
-    const mobileMenuButton = document.getElementById('mobileMenuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
+      if (userMenuButton && userMenu) {
+        userMenuButton.addEventListener('click', () => {
+          userMenu.classList.toggle('hidden');
+        });
 
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-      });
-    }
-
-    // Share modal functionality
-    const shareBtn = document.getElementById('shareBtn');
-    const shareModal = document.getElementById('shareModal');
-    const closeShareModal = document.getElementById('closeShareModal');
-
-    if (shareBtn && shareModal && closeShareModal) {
-      shareBtn.addEventListener('click', () => {
-        shareModal.classList.remove('hidden');
-      });
-
-      closeShareModal.addEventListener('click', () => {
-        shareModal.classList.add('hidden');
-      });
-
-      // Close modal when clicking outside
-      shareModal.addEventListener('click', (e) => {
-        if (e.target === shareModal) {
-          shareModal.classList.add('hidden');
-        }
-      });
-    }
-
-    // Save/bookmark functionality
-    const saveBtn = document.getElementById('saveBtn');
-    if (saveBtn) {
-      saveBtn.addEventListener('click', function() {
-        const icon = this.querySelector('i');
-        if (icon.classList.contains('far')) {
-          icon.classList.remove('far');
-          icon.classList.add('fas');
-          this.querySelector('span').textContent = 'Saved';
-        } else {
-          icon.classList.remove('fas');
-          icon.classList.add('far');
-          this.querySelector('span').textContent = 'Save';
-        }
-      });
-    }
-
-    // Read more functionality
-    const readMoreBtn = document.getElementById('readMoreBtn');
-    if (readMoreBtn) {
-      const eventDescription = document.getElementById('eventDescription');
-      let isExpanded = false;
-
-      // Initially limit the height
-      eventDescription.style.maxHeight = '150px';
-
-      readMoreBtn.addEventListener('click', () => {
-        if (!isExpanded) {
-          // Expand
-          eventDescription.style.maxHeight = 'none';
-          readMoreBtn.querySelector('span').textContent = 'Read less';
-          readMoreBtn.querySelector('i').classList.remove('fa-chevron-down');
-          readMoreBtn.querySelector('i').classList.add('fa-chevron-up');
-        } else {
-          // Collapse
-          eventDescription.style.maxHeight = '150px';
-          readMoreBtn.querySelector('span').textContent = 'Read more';
-          readMoreBtn.querySelector('i').classList.remove('fa-chevron-up');
-          readMoreBtn.querySelector('i').classList.add('fa-chevron-down');
-        }
-        isExpanded = !isExpanded;
-      });
-    }
-
-    // Countdown timer
-    function updateCountdown() {
-      const eventDate = new Date('<?php echo $res["start_date"]; ?>').getTime();
-      const now = new Date().getTime();
-      const distance = eventDate - now;
-
-      // Time calculations
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      // Display the result
-      document.getElementById('days').textContent = days.toString().padStart(2, '0');
-      document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-      document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-      document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-
-      // If the countdown is over
-      if (distance < 0) {
-        clearInterval(countdownTimer);
-        document.getElementById('days').textContent = '00';
-        document.getElementById('hours').textContent = '00';
-        document.getElementById('minutes').textContent = '00';
-        document.getElementById('seconds').textContent = '00';
+        document.addEventListener('click', (e) => {
+          if (!userMenuButton.contains(e.target) && !userMenu.contains(e.target)) {
+            userMenu.classList.add('hidden');
+          }
+        });
       }
-    }
 
-    // Update countdown every second
-    updateCountdown();
-    const countdownTimer = setInterval(updateCountdown, 1000);
-  </script>
+      // Mobile menu toggle
+      const mobileMenuButton = document.getElementById('mobileMenuButton');
+      const mobileMenu = document.getElementById('mobileMenu');
+
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+
+      // Share modal functionality
+      const shareBtn = document.getElementById('shareBtn');
+      const shareModal = document.getElementById('shareModal');
+      const closeShareModal = document.getElementById('closeShareModal');
+
+      if (shareBtn && shareModal && closeShareModal) {
+        shareBtn.addEventListener('click', () => {
+          shareModal.classList.remove('hidden');
+        });
+
+        closeShareModal.addEventListener('click', () => {
+          shareModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        shareModal.addEventListener('click', (e) => {
+          if (e.target === shareModal) {
+            shareModal.classList.add('hidden');
+          }
+        });
+      }
+
+      // Save/bookmark functionality
+      const saveBtn = document.getElementById('saveBtn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+          const icon = this.querySelector('i');
+          if (icon.classList.contains('far')) {
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+            this.querySelector('span').textContent = 'Saved';
+          } else {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+            this.querySelector('span').textContent = 'Save';
+          }
+        });
+      }
+
+      // Read more functionality
+      const readMoreBtn = document.getElementById('readMoreBtn');
+      if (readMoreBtn) {
+        const eventDescription = document.getElementById('eventDescription');
+        let isExpanded = false;
+
+        // Initially limit the height
+        eventDescription.style.maxHeight = '150px';
+
+        readMoreBtn.addEventListener('click', () => {
+          if (!isExpanded) {
+            // Expand
+            eventDescription.style.maxHeight = 'none';
+            readMoreBtn.querySelector('span').textContent = 'Read less';
+            readMoreBtn.querySelector('i').classList.remove('fa-chevron-down');
+            readMoreBtn.querySelector('i').classList.add('fa-chevron-up');
+          } else {
+            // Collapse
+            eventDescription.style.maxHeight = '150px';
+            readMoreBtn.querySelector('span').textContent = 'Read more';
+            readMoreBtn.querySelector('i').classList.remove('fa-chevron-up');
+            readMoreBtn.querySelector('i').classList.add('fa-chevron-down');
+          }
+          isExpanded = !isExpanded;
+        });
+      }
+
+      // Countdown timer
+      function updateCountdown() {
+        const eventDate = new Date('<?php echo $res["start_date"]; ?>').getTime();
+        const now = new Date().getTime();
+        const distance = eventDate - now;
+
+        // Time calculations
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+        // If the countdown is over
+        if (distance < 0) {
+          clearInterval(countdownTimer);
+          document.getElementById('days').textContent = '00';
+          document.getElementById('hours').textContent = '00';
+          document.getElementById('minutes').textContent = '00';
+          document.getElementById('seconds').textContent = '00';
+        }
+      }
+
+      // Update countdown every second
+      updateCountdown();
+      const countdownTimer = setInterval(updateCountdown, 1000);
+    </script>
 </body>
 
 </html>
