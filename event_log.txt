@@ -434,3 +434,58 @@
 [2025-04-24 02:25:17] [INFO] [UserID: 2] Fetched event with ID: 47
 [2025-04-24 02:25:29] [INFO] [UserID: 2] Fetched event with ID: 47
 [2025-04-24 02:26:26] [INFO] [UserID: 2] Fetched event with ID: 47
+[2025-04-24 02:40:40] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"lian-tomtit-b7PyQBkyzD4-unsplash.jpg","size":1563664}
+[2025-04-24 02:40:40] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"Keep it short and sweet","type":"in-person"}
+[2025-04-24 02:40:40] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/68098888aed38_lian-tomtit-b7PyQBkyzD4-unsplash.jpg
+[2025-04-24 02:40:40] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"Keep it short and sweet","description":"ehm","start_date":"2025-04-01 08:39:00","end_date":"2025-05-10","door_time":"03:40","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"21+","status":"published"}
+[2025-04-24 02:40:40] [INFO] [UserID: 2] Event created successfully with ID: 68
+[2025-04-24 02:40:40] [INFO] [UserID: 2] User ID: 1 promoted from attendee to organizer
+[2025-04-24 02:40:42] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"lian-tomtit-b7PyQBkyzD4-unsplash.jpg","size":1563664}
+[2025-04-24 02:40:42] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"Keep it short and sweet","type":"in-person"}
+[2025-04-24 02:40:42] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/6809888a43100_lian-tomtit-b7PyQBkyzD4-unsplash.jpg
+[2025-04-24 02:40:42] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"Keep it short and sweet","description":"ehm","start_date":"2025-04-01 08:39:00","end_date":"2025-05-10","door_time":"03:40","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"21+","status":"published"}
+[2025-04-24 02:40:42] [INFO] [UserID: 2] Event created successfully with ID: 69
+[2025-04-24 02:40:43] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"lian-tomtit-b7PyQBkyzD4-unsplash.jpg","size":1563664}
+[2025-04-24 02:40:43] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"Keep it short and sweet","type":"in-person"}
+[2025-04-24 02:40:43] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/6809888b23ef3_lian-tomtit-b7PyQBkyzD4-unsplash.jpg
+[2025-04-24 02:40:43] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"Keep it short and sweet","description":"ehm","start_date":"2025-04-01 08:39:00","end_date":"2025-05-10","door_time":"03:40","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"21+","status":"published"}
+[2025-04-24 02:40:43] [INFO] [UserID: 2] Event created successfully with ID: 70
+[2025-04-24 02:40:52] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"lian-tomtit-b7PyQBkyzD4-unsplash.jpg","size":1563664}
+[2025-04-24 02:40:52] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"Keep it short and sweet","type":"in-person"}
+[2025-04-24 02:40:52] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/68098894841a8_lian-tomtit-b7PyQBkyzD4-unsplash.jpg
+[2025-04-24 02:40:52] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"Keep it short and sweet","description":"ehm","start_date":"2025-04-01 08:39:00","end_date":"2025-05-10","door_time":"03:40","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"21+","status":"published"}
+[2025-04-24 02:40:52] [INFO] [UserID: 2] Event created successfully with ID: 71
+[2025-04-24 02:50:27] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"kyle-szegedi-tRQfEwP5P_0-unsplash.jpg","size":522192}
+[2025-04-24 02:50:27] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"yes","type":"in-person"}
+[2025-04-24 02:50:27] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/68098ad30cd3d_kyle-szegedi-tRQfEwP5P_0-unsplash.jpg
+[2025-04-24 02:50:27] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"yes","description":"it works","start_date":"2025-04-01 01:51:00","end_date":"2025-05-10","door_time":"01:51","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"18+","status":"published"}
+[2025-04-24 02:50:27] [INFO] [UserID: 2] Event created successfully with ID: 72
+[2025-04-24 02:54:21] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"kyle-szegedi-tRQfEwP5P_0-unsplash.jpg","size":522192}
+[2025-04-24 02:54:21] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"yes","type":"in-person"}
+[2025-04-24 02:54:21] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/68098bbdcce82_kyle-szegedi-tRQfEwP5P_0-unsplash.jpg
+[2025-04-24 02:54:21] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"yes","description":"it works","start_date":"2025-04-01 01:51:00","end_date":"2025-05-10","door_time":"01:51","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"18+","status":"published"}
+[2025-04-24 02:54:21] [INFO] [UserID: 2] Event created successfully with ID: 73
+[2025-04-24 02:56:40] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"kyle-szegedi-tRQfEwP5P_0-unsplash.jpg","size":522192}
+[2025-04-24 02:56:40] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"yes","type":"in-person"}
+[2025-04-24 02:56:40] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/68098c488cabf_kyle-szegedi-tRQfEwP5P_0-unsplash.jpg
+[2025-04-24 02:56:40] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"yes","description":"it works","start_date":"2025-04-01 01:51:00","end_date":"2025-05-10","door_time":"01:51","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"18+","status":"published"}
+[2025-04-24 02:56:40] [INFO] [UserID: 2] Event created successfully with ID: 74
+[2025-04-24 02:57:25] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"kyle-szegedi-tRQfEwP5P_0-unsplash.jpg","size":522192}
+[2025-04-24 02:57:25] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"yes","type":"in-person"}
+[2025-04-24 02:57:25] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/68098c75e0876_kyle-szegedi-tRQfEwP5P_0-unsplash.jpg
+[2025-04-24 02:57:25] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"yes","description":"it works","start_date":"2025-04-01 01:51:00","end_date":"2025-05-10","door_time":"01:51","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"18+","status":"published"}
+[2025-04-24 02:57:25] [INFO] [UserID: 2] Event created successfully with ID: 75
+[2025-04-24 02:57:25] [INFO] [UserID: 2] Event created - Data: {"event_id":"0","title":"yes","type":"in-person"}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"kyle-szegedi-tRQfEwP5P_0-unsplash.jpg","size":522192}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"yes","type":"in-person"}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/68098cdc6a380_kyle-szegedi-tRQfEwP5P_0-unsplash.jpg
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"yes","description":"it works","start_date":"2025-04-01 01:51:00","end_date":"2025-05-10","door_time":"01:51","location":"safra","online_link":"","event_type":"in-person","category_id":"16","capacity":"30","age_restriction":"18+","status":"published"}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Event created successfully with ID: 76
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Event created - Data: {"event_id":"76","title":"yes","type":"in-person"}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"76"}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Ticket created: {"name":"test ticket","price":"30","quantity":"30","sale_start":"2025-04-01","sale_end":"2025-05-10"} - Data: {"event_id":"76","ticket":{"name":"test ticket","price":"30","quantity":"30","sale_start":"2025-04-01","sale_end":"2025-05-10"}}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"76","tickets_count":1,"result":"success"}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"76"}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] FAQ created: {"question":"win ","answer":"safra"} - Data: {"event_id":"76","faq":{"question":"win ","answer":"safra"}}
+[2025-04-24 02:59:08] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"76","faqs_count":1,"result":"success"}
+[2025-04-24 03:01:43] [INFO] [UserID: 2] Fetched event with ID: 76

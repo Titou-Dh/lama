@@ -49,24 +49,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
 
     $eventId = createEvent($cnx, $eventData, $fileData);
 
+    event_log('Event created', 'INFO', ['event_id' => $eventId, 'title' => $eventData['title'], 'type' => $eventData['event_type']]);
     if ($eventId) {
       $response['success'] = true;
       $response['event_id'] = $eventId;
       $response['status'] = $eventData['status'];
       $response['message'] = "Your event has been " .
         ($eventData['status'] === 'published' ? "published" : "saved as draft");
-
-      if ($eventId) {
-        if (isset($_POST['tickets'])) {
-          $tickets = json_decode($_POST['tickets'], true);
-          if (is_array($tickets) && !empty($tickets)) {
-            saveEventTickets($cnx, $eventId, $tickets);
+      if (isset($_POST['tickets'])) {
+        event_log('Saving tickets for event', 'INFO', ['event_id' => $eventId]);
+        $tickets = json_decode($_POST['tickets'], true);
+        if (is_array($tickets) && !empty($tickets)) {
+          $ticketsResult = saveEventTickets($cnx, $eventId, $tickets);
+          event_log('Saving tickets for event', 'INFO', [
+            'event_id' => $eventId,
+            'tickets_count' => count($tickets),
+            'result' => $ticketsResult ? 'success' : 'failed'
+          ]);
+          if (!$ticketsResult) {
+            $response['message'] .= " Note: There was an issue saving the tickets.";
           }
         }
-        if (isset($_POST['faqs'])) {
-          $faqs = json_decode($_POST['faqs'], true);
-          if (is_array($faqs) && !empty($faqs)) {
-            saveEventFaqs($cnx, $eventId, $faqs);
+      }
+
+      if (isset($_POST['faqs'])) {
+        event_log('Saving FAQs for event', 'INFO', ['event_id' => $eventId]);
+        $faqs = json_decode($_POST['faqs'], true);
+        if (is_array($faqs) && !empty($faqs)) {
+          $faqsResult = saveEventFaqs($cnx, $eventId, $faqs);
+          event_log('Saving FAQs for event', 'INFO', [
+            'event_id' => $eventId,
+            'faqs_count' => count($faqs),
+            'result' => $faqsResult ? 'success' : 'failed'
+          ]);
+          if (!$faqsResult) {
+            $response['message'] .= " Note: There was an issue saving the FAQs.";
           }
         }
       }
@@ -108,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/css/createevent2.css">
   <script src="../../scripts/tailwind.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -1018,7 +1036,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
         // formData.set('promos', JSON.stringify(promos));
 
         $.ajax({
-          url: window.location.href, // Submit to the current page
+          url: window.location.href,
           type: "POST",
           data: formData,
           contentType: false,
@@ -1030,8 +1048,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
               if (result.success) {
                 // Update success modal content
                 $("#successMessage").text(result.message);
-                $("#viewEventBtn").attr("href", "/lama/view/pages/event-detail.php?id=" + result.event_id);
-
+                $("#viewEventBtn").attr("href", "/lama/view/pages/event-details.php?id=" + result.event_id);
                 // Show success modal
                 const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                 successModal.show();
@@ -1042,6 +1059,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
                 }
               } else {
                 // Show error message
+                Swal.fire({
+                  icon: "error",
+                  title: "Error Creating the Event",
+                  text: result.message,
+                  confirmButtonText: "OK"
+                });
                 $("#formAlert").removeClass("alert-info alert-success").addClass("alert-danger").html('<i class="fas fa-exclamation-circle me-2"></i> ' + result.message);
               }
             } catch (e) {

@@ -80,7 +80,8 @@ function createEvent($pdo, $eventData, $fileData = null)
         $stmt->bindParam(':status', $eventData['status']);
 
         $stmt->execute();
-        event_log("Event created successfully with ID: " . $pdo->lastInsertId());
+        $eventId = $pdo->lastInsertId();
+        event_log("Event created successfully with ID: " . $eventId);
         if ($eventData['organizer_id']) {
             $checkUserSql = "SELECT is_organizer FROM users WHERE id = :user_id";
             $checkUserStmt = $pdo->prepare($checkUserSql);
@@ -98,7 +99,7 @@ function createEvent($pdo, $eventData, $fileData = null)
                 event_log("User ID: {$eventData['organizer_id']} promoted from attendee to organizer");
             }
         }
-        return $pdo->lastInsertId();
+        return $eventId;
     } catch (PDOException $e) {
         error_log("Event Creation Error: " . $e->getMessage());
         event_log("Event creation failed: " . $e->getMessage(), 'ERROR', ['eventData' => $eventData]);
@@ -590,7 +591,16 @@ function countEvents($pdo, $filters = [])
         return 0;
     }
 }
-function getEventTickets($pdo, $eventId) {
+
+/**
+ * Get all tickets for an event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $eventId Event ID
+ * @return array List of tickets
+ */
+function getEventTickets($pdo, $eventId)
+{
     $sql = "SELECT * FROM tickets WHERE event_id = :event_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':event_id', $eventId);
@@ -598,7 +608,16 @@ function getEventTickets($pdo, $eventId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getEventFaqs($pdo, $eventId) {
+
+/**
+ * Get all FAQs for an event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $eventId Event ID
+ * @return array List of FAQs
+ */
+function getEventFaqs($pdo, $eventId)
+{
     $sql = "SELECT * FROM faqs WHERE event_id = :event_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':event_id', $eventId);
@@ -606,14 +625,31 @@ function getEventFaqs($pdo, $eventId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getOrganizerById($pdo, $organizerId) {
+/**
+ * Get organizer by ID
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $organizerId Organizer ID
+ * @return array|false Organizer data or false if not found
+ */
+function getOrganizerById($pdo, $organizerId)
+{
     $sql = "SELECT * FROM users WHERE id = :organizer_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':organizer_id', $organizerId);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-function getCategoryById($pdo, $categoryId) {
+
+/**
+ * Get category by ID
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $categoryId Category ID
+ * @return array|false Category data or false if not found
+ */
+function getCategoryById($pdo, $categoryId)
+{
     $sql = "SELECT * FROM categories WHERE id = :category_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':category_id', $categoryId);
@@ -621,7 +657,15 @@ function getCategoryById($pdo, $categoryId) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function getEventAttendees($pdo, $eventId) {
+/**
+ * Get the number of attendees for an event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $eventId Event ID
+ * @return array|false Number of attendees or false on error
+ */
+function getEventAttendees($pdo, $eventId)
+{
     $sql = "SELECT COUNT(*) as count FROM attendees WHERE event_id = :event_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':event_id', $eventId, PDO::PARAM_INT);
