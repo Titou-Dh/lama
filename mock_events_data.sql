@@ -1,19 +1,3 @@
--- Mock data for LAMA event platform
--- Created on April 24, 2025
-
--- First, let's insert some categories
-INSERT INTO `categories` (`id`, `name`, `description`) VALUES
-(1, 'Music', 'Concerts, festivals, and other music-related events'),
-(2, 'Technology', 'Tech conferences, workshops, hackathons, and meetups'),
-(3, 'Business', 'Networking events, conferences, and business workshops'),
-(4, 'Arts & Culture', 'Exhibitions, performances, and cultural events'),
-(5, 'Sports', 'Sporting events, tournaments, and fitness activities'),
-(6, 'Food & Drink', 'Food festivals, cooking classes, and tasting events'),
-(7, 'Education', 'Seminars, workshops, and learning opportunities'),
-(8, 'Health & Wellness', 'Yoga sessions, meditation retreats, and health seminars'),
-(9, 'Charity & Causes', 'Fundraisers and awareness events'),
-(10, 'Gaming', 'Gaming tournaments, conventions, and meetups');
-
 -- Let's assume we have some organizers (users) in the system
 -- If you need to insert users first, you can adjust this script accordingly
 SET @organizer1 = 1; -- Replace with an actual user ID from your system

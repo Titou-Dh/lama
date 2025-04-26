@@ -495,3 +495,81 @@
 [2025-04-24 03:06:59] [INFO] [UserID: 2] Fetched event with ID: 76
 [2025-04-24 03:09:38] [INFO] [UserID: 2] Fetched event with ID: 76
 [2025-04-24 03:10:04] [INFO] [UserID: 2] Fetched event with ID: 76
+[2025-04-24 03:14:24] [INFO] [UserID: 2] Fetched event with ID: 76
+[2025-04-24 13:33:05] [INFO] [UserID: 2] Fetched event with ID: 26
+[2025-04-24 13:33:42] [INFO] [UserID: 2] Fetched event with ID: 72
+[2025-04-24 13:33:52] [INFO] [UserID: 2] Fetched event with ID: 69
+[2025-04-24 13:34:03] [INFO] [UserID: 2] Fetched event with ID: 17
+[2025-04-24 13:35:08] [INFO] [UserID: 2] Fetched event with ID: 26
+[2025-04-24 13:35:17] [INFO] [UserID: 2] Fetched event with ID: 26
+[2025-04-24 13:35:29] [INFO] [UserID: 2] Fetched event with ID: 2
+[2025-04-24 13:35:35] [INFO] [UserID: 2] Fetched event with ID: 17
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event 3438","description":"This is a test event created through automated testing.","start_date":"2025-05-03 00:03:48","end_date":"2025-05-03 02:03:48","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Event created successfully with ID: 77
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Retrieval 7806","description":"This is a test event for retrieval testing.","start_date":"2025-05-03 00:03:48","end_date":"2025-05-03 02:03:48","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Event created successfully with ID: 78
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Update 2429","description":"This is a test event for update testing.","start_date":"2025-05-03 00:03:48","end_date":"2025-05-03 02:03:48","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Event created successfully with ID: 79
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Deletion 8903","description":"This is a test event for deletion testing.","start_date":"2025-05-03 00:03:48","end_date":"2025-05-03 02:03:48","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Event created successfully with ID: 80
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 8006","description":"This is test event #1 for listing testing.","start_date":"2025-05-03 00:03:48","end_date":"2025-05-03 02:03:48","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Event created successfully with ID: 81
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 3968","description":"This is test event #2 for listing testing.","start_date":"2025-05-10 00:03:48","end_date":"2025-05-10 02:03:48","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Event created successfully with ID: 82
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 1457","description":"This is test event #3 for listing testing.","start_date":"2025-05-17 00:03:48","end_date":"2025-05-17 02:03:48","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 00:03:48] [INFO] [UserID: not-logged-in] Event created successfully with ID: 83
+[2025-04-26 00:52:33] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi10BD.tmp\" 2>&1","return_code":1}
+[2025-04-26 00:52:33] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 00:52:33] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test"}
+[2025-04-26 00:52:40] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"yes","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yes\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi2FBF.tmp\" 2>&1","return_code":1}
+[2025-04-26 00:52:40] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"yes","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 00:52:40] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"yes"}
+[2025-04-26 00:52:49] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"m","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"m\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi524C.tmp\" 2>&1","return_code":1}
+[2025-04-26 00:52:49] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"m","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 00:52:49] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"m"}
+[2025-04-26 00:52:59] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"m","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"m\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi769E.tmp\" 2>&1","return_code":1}
+[2025-04-26 00:52:59] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"m","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 00:52:59] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"m"}
+[2025-04-26 00:54:34] [INFO] [UserID: 2] Fetched event with ID: 45
+[2025-04-26 13:44:33] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"test","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiE1C3.tmp\" 2>&1","return_code":1}
+[2025-04-26 13:44:33] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"test","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 13:44:33] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"test"}
+[2025-04-26 13:45:20] [INFO] [UserID: 2] Fetched event with ID: 73
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event 8076","description":"This is a test event created through automated testing.","start_date":"2025-05-03 17:39:30","end_date":"2025-05-03 19:39:30","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Event created successfully with ID: 85
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Retrieval 4704","description":"This is a test event for retrieval testing.","start_date":"2025-05-03 17:39:30","end_date":"2025-05-03 19:39:30","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Event created successfully with ID: 86
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Update 4878","description":"This is a test event for update testing.","start_date":"2025-05-03 17:39:30","end_date":"2025-05-03 19:39:30","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Event created successfully with ID: 87
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Deletion 5460","description":"This is a test event for deletion testing.","start_date":"2025-05-03 17:39:30","end_date":"2025-05-03 19:39:30","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Event created successfully with ID: 88
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 7978","description":"This is test event #1 for listing testing.","start_date":"2025-05-03 17:39:30","end_date":"2025-05-03 19:39:30","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Event created successfully with ID: 89
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 1872","description":"This is test event #2 for listing testing.","start_date":"2025-05-10 17:39:30","end_date":"2025-05-10 19:39:30","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Event created successfully with ID: 90
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 1596","description":"This is test event #3 for listing testing.","start_date":"2025-05-17 17:39:30","end_date":"2025-05-17 19:39:30","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:39:30] [INFO] [UserID: not-logged-in] Event created successfully with ID: 91
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event 2274","description":"This is a test event created through automated testing.","start_date":"2025-05-03 17:53:53","end_date":"2025-05-03 19:53:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 92
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Fetched event with ID: 92
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Fetched event with ID: 92
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Fetched event with ID: 92
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 2795","description":"This is test event #1 for listing testing.","start_date":"2025-05-03 17:53:53","end_date":"2025-05-03 19:53:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 93
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 7234","description":"This is test event #2 for listing testing.","start_date":"2025-05-10 17:53:53","end_date":"2025-05-10 19:53:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 94
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 7428","description":"This is test event #3 for listing testing.","start_date":"2025-05-17 17:53:53","end_date":"2025-05-17 19:53:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:53:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 95
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event 1813","description":"This is a test event created through automated testing.","start_date":"2025-05-03 17:56:10","end_date":"2025-05-03 19:56:10","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Event created successfully with ID: 96
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Fetched event with ID: 96
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Fetched event with ID: 96
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Fetched event with ID: 96
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Fetched event with ID: 96
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 7764","description":"This is test event #1 for listing testing.","start_date":"2025-05-03 17:56:10","end_date":"2025-05-03 19:56:10","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Event created successfully with ID: 97
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 2793","description":"This is test event #2 for listing testing.","start_date":"2025-05-10 17:56:10","end_date":"2025-05-10 19:56:10","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Event created successfully with ID: 98
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 5013","description":"This is test event #3 for listing testing.","start_date":"2025-05-17 17:56:10","end_date":"2025-05-17 19:56:10","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Event created successfully with ID: 99
+[2025-04-26 18:03:25] [INFO] [UserID: 2] Fetched event with ID: 56
