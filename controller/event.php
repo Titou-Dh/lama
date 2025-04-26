@@ -147,10 +147,10 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
 {
     try {
         $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name 
-               FROM events e
-               LEFT JOIN categories c ON e.category_id = c.id
-               LEFT JOIN users u ON e.organizer_id = u.id
-               WHERE 1=1";
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                LEFT JOIN users u ON e.organizer_id = u.id
+                WHERE 1=1";
 
         $params = [];
 
@@ -186,13 +186,17 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
 
         $sql .= " ORDER BY e.start_date ASC";
 
-        $offset = ($page - 1) * $limit;
-        $sql .= " LIMIT :limit OFFSET :offset";
-        $params[':limit'] = $limit;
-        $params[':offset'] = $offset;
+        // Add pagination if needed
+        if ($page > 0 && $limit > 0) {
+            $offset = ($page - 1) * $limit;
+            $sql .= " LIMIT :limit OFFSET :offset";
+            $params[':limit'] = $limit;
+            $params[':offset'] = $offset;
+        }
 
         $stmt = $pdo->prepare($sql);
 
+        // Bind parameters
         foreach ($params as $key => $value) {
             if ($key == ':limit' || $key == ':offset') {
                 $stmt->bindValue($key, $value, PDO::PARAM_INT);
@@ -202,7 +206,6 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
         }
 
         $stmt->execute();
-
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         error_log("Get Events Error: " . $e->getMessage());
@@ -334,11 +337,11 @@ function searchEvents($pdo, $query, $page = 1, $limit = 10)
 {
     try {
         $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name
-               FROM events e
-               LEFT JOIN categories c ON e.category_id = c.id
-               LEFT JOIN users u ON e.organizer_id = u.id
-               WHERE e.start_date >= CURRENT_DATE
-               ORDER BY e.start_date ASC";
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                LEFT JOIN users u ON e.organizer_id = u.id
+                WHERE e.start_date >= CURRENT_DATE
+                ORDER BY e.start_date ASC";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
@@ -354,13 +357,13 @@ function searchEvents($pdo, $query, $page = 1, $limit = 10)
             event_log("TF-IDF search failed, falling back to basic search", "WARNING", ['query' => $query]);
 
             $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name
-                   FROM events e
-                   LEFT JOIN categories c ON e.category_id = c.id
-                   LEFT JOIN users u ON e.organizer_id = u.id
-                   WHERE e.title LIKE :query
-                      OR e.description LIKE :query
-                      OR e.location LIKE :query
-                   ORDER BY e.start_date DESC";
+                    FROM events e
+                    LEFT JOIN categories c ON e.category_id = c.id
+                    LEFT JOIN users u ON e.organizer_id = u.id
+                    WHERE e.title LIKE :query
+                        OR e.description LIKE :query
+                        OR e.location LIKE :query
+                    ORDER BY e.start_date DESC";
 
             $offset = ($page - 1) * $limit;
             $sql .= " LIMIT :limit OFFSET :offset";
@@ -409,12 +412,12 @@ function getFeaturedEvents($pdo, $limit = 5)
 {
     try {
         $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name 
-               FROM events e
-               LEFT JOIN categories c ON e.category_id = c.id
-               LEFT JOIN users u ON e.organizer_id = u.id
-               WHERE e.start_date >= CURRENT_DATE()
-               ORDER BY e.start_date ASC
-               LIMIT :limit";
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                LEFT JOIN users u ON e.organizer_id = u.id
+                WHERE e.start_date >= CURRENT_DATE()
+                ORDER BY e.start_date ASC
+                LIMIT :limit";
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -440,10 +443,10 @@ function getUserEvents($pdo, $userId, $page = 1, $limit = 10)
 {
     try {
         $sql = "SELECT e.*, c.name as category_name
-               FROM events e
-               LEFT JOIN categories c ON e.category_id = c.id
-               WHERE e.organizer_id = :user_id
-               ORDER BY e.created_at DESC";
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                WHERE e.organizer_id = :user_id
+                ORDER BY e.created_at DESC";
 
         // Add pagination
         $offset = ($page - 1) * $limit;

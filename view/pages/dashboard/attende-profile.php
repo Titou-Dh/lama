@@ -7,6 +7,7 @@ include_once "../../../config/database.php";
 include_once "../../../controller/user.php";
 include_once "../../../controller/event.php";
 
+
 $userId = $_SESSION['user_id'];
 
 $userData = getUserById($cnx, $userId);
@@ -182,7 +183,7 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer bg-white border-0 pt-0">
-                                                        <a href="../events/view.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                        <a href="../../event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
                                                             View
                                                         </a>
                                                     </div>
@@ -229,7 +230,7 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer bg-white border-0 pt-0">
-                                                        <a href="../events/view.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                        <a href="../../event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
                                                             View
                                                         </a>
                                                     </div>
