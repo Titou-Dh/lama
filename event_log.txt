@@ -425,3 +425,16 @@
 [2025-04-23 02:38:03] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"testt","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"testt\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi9A65.tmp\" 2>&1","return_code":1}
 [2025-04-23 02:38:03] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"testt","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
 [2025-04-23 02:38:03] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"testt"}
+[2025-04-26 15:09:32] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:45:19] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:45:30] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:45:35] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:45:47] [INFO] [UserID: not-logged-in] Fetched event with ID: 5
+[2025-04-26 15:46:07] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:49:24] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:49:25] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:49:25] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 15:49:29] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 16:05:47] [INFO] [UserID: not-logged-in] Fetched event with ID: 4
+[2025-04-26 16:05:52] [INFO] [UserID: not-logged-in] Fetched event with ID: 2
+[2025-04-26 16:05:57] [INFO] [UserID: not-logged-in] Fetched event with ID: 1

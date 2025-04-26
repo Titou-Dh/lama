@@ -1,15 +1,16 @@
-<!DOCTYPE html>
+<!DOCTYPE
+html>
 <?php
-include "../../../config/session.php";
-checkSession();
+    include ("../../../config/session.php");
+    checkSession();
 
-// Include database connection and user/event controllers
-include_once "../../../config/database.php"; // This will give us $cnx
-include_once "../../../controller/user.php";
-include_once "../../../controller/event.php";
+    // Include database connection and user/event controllers
+    include_once ("../../../config/database.php") ;// This will give us $cnx
+    include_once ("../../../controller/user.php");
+    include_once ("../../../controller/event.php");
 
 // Get user ID from session
-$userId = $_SESSION['user_id'];
+$userId = $_SESSION["user_id"];
 
 // Get user data
 $userData = getUserById($cnx, $userId);
@@ -34,7 +35,7 @@ $draftEvents = getEvents($cnx, [
 
 // Default avatar URL
 $defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-$profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] : $defaultAvatar;
+$profileImage = !empty($userData["profile_image"]) ? $userData["profile_image"] : $defaultAvatar;
 ?>
 <html lang="en">
 
@@ -55,11 +56,14 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
         href="../../styles/css/soft-ui-dashboard.css"
         rel="stylesheet" />
     <link rel="stylesheet" href="../../styles/css/usersprofiles.css" />
-    <link rel="icon" type="image/png" href="../../assets/images/logo.png" />
+    <link rel="icon"
+type = "image/png"
+href="../../assets/images/logo.png" />
 
 </head>
 
-<body class="g-sidenav-show bg-gray-100">
+<body
+class="g-sidenav-show bg-gray-100">
     <?php include '../../partials/dashboar-sidebar.php' ?>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
         <?php include '../../partials/dashboard-navbar.php' ?>
@@ -84,24 +88,20 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                             </p>
                         </div>
                     </div>
-                </div>
-
-                <div class="profile-stats">
+                    <div class="profile-stats">
                     <div class="profile-stat-item">
                         <div class="number"><?php echo count($pastEvents) + count($upcomingEvents); ?></div>
                         <div class="label">Events Organized</div>
-                    </div>
-                    <div class="profile-stat-item">
-                        <div class="number">0</div>
-                        <div class="label">Total Attendees</div>
                     </div>
                     <div class="profile-stat-item">
                         <div class="number"><?php echo count($upcomingEvents); ?></div>
                         <div class="label">Upcoming Events</div>
                     </div>
                 </div>
-            </div>
+                </div>
 
+                
+            </div>
             <!-- Profile Content -->
             <div class="row">
                 <!-- Left Column -->
@@ -131,79 +131,6 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                 <p><?php echo $userData['is_organizer'] ? 'Organizer' : 'Attendee'; ?></p>
                             </div>
                         </form>
-                    </div>
-
-                    <!-- Expertise -->
-                    <div class="info-card">
-                        <h3 class="section-title">Areas of Expertise</h3>
-                        <div>
-                            <span class="expertise-badge">Tech Conferences</span>
-                            <span class="expertise-badge">Workshops</span>
-                            <span class="expertise-badge">Corporate Events</span>
-                            <span class="expertise-badge">Networking</span>
-                            <span class="expertise-badge">Product Launches</span>
-                            <span class="expertise-badge">Team Building</span>
-                            <span class="expertise-badge">Virtual Events</span>
-                            <span class="expertise-badge">Hybrid Events</span>
-                        </div>
-                    </div>
-
-                    <!-- Reviews -->
-                    <div class="info-card">
-                        <div
-                            class="d-flex justify-content-between align-items-center mb-4">
-                            <h3 class="section-title mb-0">Recent Reviews</h3>
-                            <a href="#" class="text-muted small">View All</a>
-                        </div>
-
-                        <div class="review-card">
-                            <div class="reviewer-info">
-                                <img
-                                    src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1780&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    alt="Reviewer"
-                                    class="reviewer-avatar" />
-                                <div>
-                                    <div class="reviewer-name">Michael Chen</div>
-                                    <div class="review-date">2 days ago</div>
-                                </div>
-                            </div>
-                            <div class="star-rating mb-2">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="review-text">
-                                Sarah organized our tech conference flawlessly. Her attention
-                                to detail and ability to handle last-minute changes was
-                                impressive. Would definitely work with her again!
-                            </p>
-                        </div>
-                        <div class="review-card">
-                            <div class="reviewer-info">
-                                <img
-                                    src="https://plus.unsplash.com/premium_photo-1670884441012-c5cf195c062a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                    alt="Reviewer"
-                                    class="reviewer-avatar" />
-                                <div>
-                                    <div class="reviewer-name">Jessica Williams</div>
-                                    <div class="review-date">1 week ago</div>
-                                </div>
-                            </div>
-                            <div class="star-rating mb-2">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <p class="review-text">
-                                Great experience working with Sarah on our company's annual
-                                retreat. She managed to keep everything within budget while
-                                still delivering a memorable experience.
-                            </p>
-                        </div>
                     </div>
                 </div>
                 <!-- Right Column -->
@@ -279,8 +206,8 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer bg-white border-0 pt-0">
-                                                        <a href="../events/edit.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
-                                                            Edit
+                                                        <a href="../../event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                            delete
                                                         </a>
                                                     </div>
                                                 </div>
@@ -326,7 +253,7 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer bg-white border-0 pt-0">
-                                                        <a href="../events/view.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                        <a href="../../event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
                                                             View
                                                         </a>
                                                     </div>
@@ -373,8 +300,8 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
                                                         </div>
                                                     </div>
                                                     <div class="card-footer bg-white border-0 pt-0">
-                                                        <a href="../events/edit.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
-                                                            Edit
+                                                        <a href="../../event-details.php?id=<?php echo $event['id']; ?>" class="btn btn-sm btn-outline-primary w-100">
+                                                            view
                                                         </a>
                                                     </div>
                                                 </div>
@@ -408,10 +335,33 @@ $profileImage = !empty($userData['profile_image']) ? $userData['profile_image'] 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const tabButtons = document.querySelectorAll("#profileTabs .nav-link");
+            const tabPanes = document.querySelectorAll("#profileTabsContent .tab-pane");
+            
             tabButtons.forEach((button) => {
-                button.addEventListener("click", function() {
-                    sidebarNavItems.forEach((el) => el.classList.remove("active"));
-                    activeSidebarItem.classList.add("active");
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all buttons and panes
+                    tabButtons.forEach(btn => btn.classList.remove("active"));
+                    tabPanes.forEach(pane => {
+                        pane.classList.remove("show", "active");
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add("active");
+                    
+                    // Get target from data attribute and activate corresponding pane
+                    const target = this.getAttribute("data-bs-target");
+                    const pane = document.querySelector(target);
+                    if (pane) {
+                        pane.classList.add("show", "active");
+                    }
+                    
+                    // Keep sidebar active state
+                    if (typeof sidebarNavItems !== 'undefined' && typeof activeSidebarItem !== 'undefined') {
+                        sidebarNavItems.forEach((el) => el.classList.remove("active"));
+                        activeSidebarItem.classList.add("active");
+                    }
                 });
             });
 

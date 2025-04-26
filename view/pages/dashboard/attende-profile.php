@@ -7,6 +7,7 @@ include_once "../../../config/database.php";
 include_once "../../../controller/user.php";
 include_once "../../../controller/event.php";
 
+
 $userId = $_SESSION['user_id'];
 
 $userData = getUserById($cnx, $userId);
