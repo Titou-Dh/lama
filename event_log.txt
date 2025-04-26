@@ -588,3 +588,6 @@
 [2025-04-26 18:27:29] [INFO] [UserID: 2] Fetched event with ID: 100
 [2025-04-26 18:27:39] [INFO] [UserID: 2] Fetched event with ID: 100
 [2025-04-26 18:29:57] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 19:57:55] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 19:59:09] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 19:59:37] [INFO] [UserID: 2] Fetched event with ID: 100
