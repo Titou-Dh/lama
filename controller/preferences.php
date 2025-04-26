@@ -110,7 +110,6 @@ function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6, int $offset
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
-        // Bind category ID if filtering by category
         if ($categoryId > 0) {
             $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
         }
@@ -120,11 +119,9 @@ function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6, int $offset
         $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($events)) {
-            // Build fallback WHERE clause
             $fallbackWhere = "WHERE e.start_date >= CURRENT_TIMESTAMP()
                           AND e.status = 'published'";
 
-            // Add category filter to fallback if specified
             if ($categoryId > 0) {
                 $fallbackWhere .= " AND e.category_id = :category_id";
             }
@@ -141,7 +138,6 @@ function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6, int $offset
             $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
             $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
-            // Bind category ID for fallback query if filtering by category
             if ($categoryId > 0) {
                 $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
             }
@@ -168,12 +164,10 @@ function getRecommendedEvents(PDO $pdo, int $userId, int $limit = 6, int $offset
 function countRecommendedEvents($pdo, $userId, $categoryId = 0)
 {
     try {
-        // Build the WHERE clause
         $where = "WHERE up.user_id = :user_id
                 AND e.start_date >= CURRENT_TIMESTAMP()
                 AND e.status = 'published'";
 
-        // Add category filter if specified
         if ($categoryId > 0) {
             $where .= " AND e.category_id = :category_id";
         }
@@ -187,7 +181,6 @@ function countRecommendedEvents($pdo, $userId, $categoryId = 0)
 
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
 
-        // Bind category ID if filtering by category
         if ($categoryId > 0) {
             $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
         }
@@ -197,11 +190,9 @@ function countRecommendedEvents($pdo, $userId, $categoryId = 0)
         $count = $result['total'] ?? 0;
 
         if ($count == 0) {
-            // Build the WHERE clause for fallback query
             $fallbackWhere = "WHERE e.start_date >= CURRENT_TIMESTAMP()
                           AND e.status = 'published'";
 
-            // Add category filter to fallback if specified
             if ($categoryId > 0) {
                 $fallbackWhere .= " AND e.category_id = :category_id";
             }
@@ -212,7 +203,6 @@ function countRecommendedEvents($pdo, $userId, $categoryId = 0)
                 $fallbackWhere
             ");
 
-            // Bind category ID for fallback query if filtering by category
             if ($categoryId > 0) {
                 $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
             }

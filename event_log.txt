@@ -573,3 +573,18 @@
 [2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 5013","description":"This is test event #3 for listing testing.","start_date":"2025-05-17 17:56:10","end_date":"2025-05-17 19:56:10","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
 [2025-04-26 17:56:10] [INFO] [UserID: not-logged-in] Event created successfully with ID: 99
 [2025-04-26 18:03:25] [INFO] [UserID: 2] Fetched event with ID: 56
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"wallpaperflare.com_wallpaper.jpg","size":307055}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"test","type":"in-person"}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/680d096c6c6d9_wallpaperflare.com_wallpaper.jpg
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":"1","title":"test","description":"test","start_date":"2025-04-01 18:26:00","end_date":"2025-05-10","door_time":"10:10","location":"Sousse, TUN","online_link":"","event_type":"in-person","category_id":"5","capacity":"20","age_restriction":"All Ages","status":"published"}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Event created successfully with ID: 100
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Event created - Data: {"event_id":"100","title":"test","type":"in-person"}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"100"}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Ticket created: {"name":"test","price":"20","quantity":"20","sale_start":"2025-04-01","sale_end":"2025-05-10"} - Data: {"event_id":"100","ticket":{"name":"test","price":"20","quantity":"20","sale_start":"2025-04-01","sale_end":"2025-05-10"}}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"100","tickets_count":1,"result":"success"}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"100"}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] FAQ created: {"question":"win ","answer":"safra"} - Data: {"event_id":"100","faq":{"question":"win ","answer":"safra"}}
+[2025-04-26 18:27:24] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"100","faqs_count":1,"result":"success"}
+[2025-04-26 18:27:29] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 18:27:39] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 18:29:57] [INFO] [UserID: 2] Fetched event with ID: 100
