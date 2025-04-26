@@ -1,0 +1,775 @@
+<?php
+
+/**
+ * Event Controller Functions
+ * 
+ * Contains all functions for managing events using a procedural approach
+ */
+
+/**
+ * Create a new event
+ * 
+ * @param PDO $pdo Database connection
+ * @param array $eventData Event data
+ * @param array $fileData Optional file data for image
+ * @return int|false ID of created event or false on failure
+ */
+function createEvent($pdo, $eventData, $fileData = null)
+{
+    try {
+        $imagePath = null;
+        if ($fileData && !empty($fileData['name'])) {
+            $imageUploadResult = uploadEventImage($fileData);
+            if ($imageUploadResult['success']) {
+                $imagePath = $imageUploadResult['filepath'];
+                event_log("Event image uploaded successfully: {$imagePath}");
+            } else {
+                event_log("Event image upload failed: {$imageUploadResult['error']}");
+            }
+        }
+        $sql = "INSERT INTO events (
+                                organizer_id,
+                                title,
+                                description,
+                                start_date,
+                                end_date, 
+                                location,
+                                image,
+                                category_id,
+                                capacity, 
+                                age_restriction,
+                                event_type, 
+                                online_link,
+                                door_time,
+                                status
+                            ) 
+                            VALUES (
+                                :organizer_id, 
+                                :title, 
+                                :description, 
+                                :start_date, 
+                                :end_date, 
+                                :location,  
+                                :image, 
+                                :category_id, 
+                                :capacity, 
+                                :age_restriction, 
+                                :event_type, 
+                                :online_link, 
+                                :door_time, 
+                                :status
+                            )";
+
+        $stmt = $pdo->prepare($sql);
+        event_log("Preparing to create event with data: " . json_encode($eventData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+
+
+        $stmt->bindParam(':organizer_id', $eventData['organizer_id']);
+        $stmt->bindParam(':title', $eventData['title']);
+        $stmt->bindParam(':description', $eventData['description']);
+        $stmt->bindParam(':start_date', $eventData['start_date']);
+        $stmt->bindParam(':end_date', $eventData['end_date']);
+        $stmt->bindParam(':door_time', $eventData['door_time']);
+        $stmt->bindParam(':location', $eventData['location']);
+        $stmt->bindParam(':online_link', $eventData['online_link']);
+        $stmt->bindParam(':event_type', $eventData['event_type']);
+        $stmt->bindParam(':image', $imagePath);
+        $stmt->bindParam(':category_id', $eventData['category_id']);
+        $stmt->bindParam(':capacity', $eventData['capacity']);
+        $stmt->bindParam(':age_restriction', $eventData['age_restriction']);
+        $stmt->bindParam(':status', $eventData['status']);
+
+        $stmt->execute();
+        $eventId = $pdo->lastInsertId();
+        event_log("Event created successfully with ID: " . $eventId);
+        if ($eventData['organizer_id']) {
+            $checkUserSql = "SELECT is_organizer FROM users WHERE id = :user_id";
+            $checkUserStmt = $pdo->prepare($checkUserSql);
+            $checkUserStmt->bindParam(':user_id', $eventData['organizer_id']);
+            $checkUserStmt->execute();
+
+            $userData = $checkUserStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($userData && $userData['is_organizer'] == 0) {
+                $updateUserSql = "UPDATE users SET is_organizer = 1 WHERE id = :user_id";
+                $updateUserStmt = $pdo->prepare($updateUserSql);
+                $updateUserStmt->bindParam(':user_id', $eventData['organizer_id']);
+                $updateUserStmt->execute();
+
+                event_log("User ID: {$eventData['organizer_id']} promoted from attendee to organizer");
+            }
+        }
+        return $eventId;
+    } catch (PDOException $e) {
+        error_log("Event Creation Error: " . $e->getMessage());
+        event_log("Event creation failed: " . $e->getMessage(), 'ERROR', ['eventData' => $eventData]);
+        return false;
+    }
+}
+
+/**
+ * Get a single event by ID
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $id Event ID
+ * @return array|false Event data or false if not found
+ */
+function getEventById($pdo, $id)
+{
+    try {
+        $sql = "SELECT e.*, c.name as category_name, u.username, u.profile_image 
+               FROM events e
+               LEFT JOIN categories c ON e.category_id = c.id
+               LEFT JOIN users u ON e.organizer_id = u.id
+               WHERE e.id = :id";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        event_log("Fetched event with ID: {$id}");
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get Event Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Get list of events with optional filtering
+ * 
+ * @param PDO $pdo Database connection
+ * @param array $filters Optional filters (category, date range, etc.)
+ * @param int $page Page number for pagination
+ * @param int $limit Items per page
+ * @return array Array of events
+ */
+function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
+{
+    try {
+        $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name 
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                LEFT JOIN users u ON e.organizer_id = u.id
+                WHERE 1=1";
+
+        $params = [];
+
+        if (!empty($filters['category_id'])) {
+            $sql .= " AND e.category_id = :category_id";
+            $params[':category_id'] = $filters['category_id'];
+        }
+
+        if (!empty($filters['organizer_id'])) {
+            $sql .= " AND e.organizer_id = :organizer_id";
+            $params[':organizer_id'] = $filters['organizer_id'];
+        }
+
+        if (!empty($filters['event_type'])) {
+            $sql .= " AND e.event_type = :event_type";
+            $params[':event_type'] = $filters['event_type'];
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND e.status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        if (!empty($filters['date_from'])) {
+            $sql .= " AND e.start_date >= :date_from";
+            $params[':date_from'] = $filters['date_from'];
+        }
+
+        if (!empty($filters['date_to'])) {
+            $sql .= " AND e.start_date <= :date_to";
+            $params[':date_to'] = $filters['date_to'];
+        }
+
+        $sql .= " ORDER BY e.start_date ASC";
+
+        // Add pagination if needed
+        if ($page > 0 && $limit > 0) {
+            $offset = ($page - 1) * $limit;
+            $sql .= " LIMIT :limit OFFSET :offset";
+            $params[':limit'] = $limit;
+            $params[':offset'] = $offset;
+        }
+
+        $stmt = $pdo->prepare($sql);
+
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            if ($key == ':limit' || $key == ':offset') {
+                $stmt->bindValue($key, $value, PDO::PARAM_INT);
+            } else {
+                $stmt->bindValue($key, $value);
+            }
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get Events Error: " . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Update an existing event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $id Event ID
+ * @param array $eventData Updated event data
+ * @param array $fileData Optional file data for image
+ * @return boolean Success or failure
+ */
+function updateEvent($pdo, $id, $eventData, $fileData = null)
+{
+    try {
+        $currentEvent = getEventById($pdo, $id);
+        if (!$currentEvent) {
+            return false;
+        }
+
+        $imagePath = $currentEvent['image'];
+        if ($fileData && !empty($fileData['name'])) {
+            $imageUploadResult = uploadEventImage($fileData);
+            if ($imageUploadResult['success']) {
+                $imagePath = $imageUploadResult['filepath'];
+
+                $oldImagePath = $currentEvent['image'];
+                if (!empty($oldImagePath)) {
+                    if (isset($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['DOCUMENT_ROOT'])) {
+                        $absoluteOldImagePath = $_SERVER['DOCUMENT_ROOT'] . $oldImagePath;
+                    } else {
+                        $absoluteOldImagePath = dirname(dirname(__FILE__)) . '/public' . $oldImagePath;
+                    }
+                    if (file_exists($absoluteOldImagePath)) {
+                        @unlink($absoluteOldImagePath);
+                    }
+                }
+            } else {
+                event_log("Event image upload failed during update: " . $imageUploadResult['error'], 'ERROR');
+            }
+        }
+
+        $sql = "UPDATE events SET 
+                title = :title, 
+                description = :description, 
+                start_date = :start_date, 
+                end_date = :end_date, 
+                door_time = :door_time, 
+                location = :location, 
+                online_link = :online_link, 
+                event_type = :event_type, 
+                image = :image,
+                category_id = :category_id, 
+                capacity = :capacity, 
+                age_restriction = :age_restriction, 
+                status = :status
+                WHERE id = :id";
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':title', $eventData['title']);
+        $stmt->bindParam(':description', $eventData['description']);
+        $stmt->bindParam(':start_date', $eventData['start_date']);
+        $stmt->bindParam(':end_date', $eventData['end_date']);
+        $stmt->bindParam(':door_time', $eventData['door_time']);
+        $stmt->bindParam(':location', $eventData['location']);
+        $stmt->bindParam(':online_link', $eventData['online_link']);
+        $stmt->bindParam(':event_type', $eventData['event_type']);
+        $stmt->bindParam(':image', $imagePath);
+        $stmt->bindParam(':category_id', $eventData['category_id']);
+        $stmt->bindParam(':capacity', $eventData['capacity']);
+        $stmt->bindParam(':age_restriction', $eventData['age_restriction']);
+        $stmt->bindParam(':status', $eventData['status']);
+
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        error_log("Update Event Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Delete an event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $id Event ID
+ * @param int $userId User ID (for authorization)
+ * @param bool $isAdmin Whether the user is an admin
+ * @return boolean Success or failure
+ */
+function deleteEvent($pdo, $id, $userId, $isAdmin = false)
+{
+    try {
+        $currentEvent = getEventById($pdo, $id);
+        if (!$currentEvent || ($currentEvent['organizer_id'] != $userId && !$isAdmin)) {
+            return false;
+        }
+
+        if (!empty($currentEvent['image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image'])) {
+            unlink($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image']);
+        }
+
+        $sql = "DELETE FROM events WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        error_log("Delete Event Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Search for events by keywords
+ * 
+ * @param PDO $pdo Database connection
+ * @param string $query Search query
+ * @param int $page Page number
+ * @param int $limit Items per page
+ * @return array Search results
+ */
+function searchEvents($pdo, $query, $page = 1, $limit = 10)
+{
+    try {
+        $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                LEFT JOIN users u ON e.organizer_id = u.id
+                WHERE e.start_date >= CURRENT_DATE
+                ORDER BY e.start_date ASC";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $allEvents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($query) || empty($allEvents)) {
+            return [];
+        }
+
+        $results = runTfIdfSearch($query, $allEvents);
+
+        if ($results === false) {
+            event_log("TF-IDF search failed, falling back to basic search", "WARNING", ['query' => $query]);
+
+            $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name
+                    FROM events e
+                    LEFT JOIN categories c ON e.category_id = c.id
+                    LEFT JOIN users u ON e.organizer_id = u.id
+                    WHERE e.title LIKE :query
+                        OR e.description LIKE :query
+                        OR e.location LIKE :query
+                    ORDER BY e.start_date DESC";
+
+            $offset = ($page - 1) * $limit;
+            $sql .= " LIMIT :limit OFFSET :offset";
+
+            $stmt = $pdo->prepare($sql);
+            $likeQuery = '%' . $query . '%';
+            $stmt->bindValue(':query', $likeQuery, PDO::PARAM_STR);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        $eventIds = $results['results'];
+
+        if (empty($eventIds)) {
+            return [];
+        }
+
+        $matchedEvents = [];
+        foreach ($allEvents as $event) {
+            if (in_array($event['id'], $eventIds)) {
+                $matchedEvents[] = $event;
+                if (count($matchedEvents) >= $limit) {
+                    break;
+                }
+            }
+        }
+
+        return $matchedEvents;
+    } catch (PDOException $e) {
+        error_log("Search Events Error: " . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Get events featured or upcoming for homepage
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $limit Number of events to fetch
+ * @return array Featured events
+ */
+function getFeaturedEvents($pdo, $limit = 5)
+{
+    try {
+        $sql = "SELECT e.*, c.name as category_name, u.username as organizer_name 
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                LEFT JOIN users u ON e.organizer_id = u.id
+                WHERE e.start_date >= CURRENT_DATE()
+                ORDER BY e.start_date ASC
+                LIMIT :limit";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get Featured Events Error: " . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Get events organized by a specific user
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $userId User ID
+ * @param int $page Page number
+ * @param int $limit Items per page
+ * @return array User's events
+ */
+function getUserEvents($pdo, $userId, $page = 1, $limit = 10)
+{
+    try {
+        $sql = "SELECT e.*, c.name as category_name
+                FROM events e
+                LEFT JOIN categories c ON e.category_id = c.id
+                WHERE e.organizer_id = :user_id
+                ORDER BY e.created_at DESC";
+
+        // Add pagination
+        $offset = ($page - 1) * $limit;
+        $sql .= " LIMIT :limit OFFSET :offset";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Get User Events Error: " . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Upload event image
+ * 
+ * @param array $fileData File data from $_FILES
+ * @return array Result with success status and filepath
+ */
+function uploadEventImage($fileData)
+{
+    $result = [
+        'success' => false,
+        'filepath' => '',
+        'error' => ''
+    ];
+
+
+
+    $relative_path = '/lama/uploads/events/';
+    $absolute_path = $_SERVER['DOCUMENT_ROOT'] . $relative_path;
+
+    if (!isset($_SERVER['DOCUMENT_ROOT']) || empty($_SERVER['DOCUMENT_ROOT'])) {
+        $absolute_path = dirname(dirname(__FILE__)) . '/public' . $relative_path;
+    }
+
+    if (!is_dir($absolute_path)) {
+        if (!@mkdir($absolute_path, 0755, true)) {
+            $absolute_path = sys_get_temp_dir() . '/lama_events/';
+            $relative_path = '/tmp/lama_events/';
+
+            if (!is_dir($absolute_path)) {
+                @mkdir($absolute_path, 0755, true);
+            }
+
+            if (!is_dir($absolute_path)) {
+                error_log("Event Image Upload Error: Cannot create upload directory: $absolute_path");
+                $result['error'] = "Server configuration error: Can't create upload directory.";
+                return $result;
+            }
+        }
+    }
+
+    $filename = uniqid() . '_' . basename($fileData['name']);
+    $target_file = "$absolute_path$filename";
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    if (filesize($fileData['tmp_name']) > 0) {
+        $check = @getimagesize($fileData['tmp_name']);
+        if ($check === false) {
+            $result['error'] = "File is not an image.";
+            return $result;
+        }
+    }
+
+    if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
+        $result['error'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        return $result;
+    }
+
+    if (@move_uploaded_file($fileData['tmp_name'], $target_file) || @copy($fileData['tmp_name'], $target_file)) {
+        $result['success'] = true;
+        $result['filepath'] = "$relative_path$filename"; // Store relative path
+        return $result;
+    } else {
+        error_log("Event Image Upload Error: Failed to move uploaded file from {$fileData['tmp_name']} to {$target_file}");
+        $result['error'] = "Sorry, there was an error uploading your file.";
+        return $result;
+    }
+}
+
+/**
+ * Count total events (for pagination)
+ * 
+ * @param PDO $pdo Database connection
+ * @param array $filters Optional filters
+ * @return int Total count of events matching criteria
+ */
+function countEvents($pdo, $filters = [])
+{
+    try {
+        $sql = "SELECT COUNT(*) FROM events e WHERE 1=1";
+
+        $params = [];
+
+        // Apply filters
+        if (!empty($filters['category_id'])) {
+            $sql .= " AND e.category_id = :category_id";
+            $params[':category_id'] = $filters['category_id'];
+        }
+
+        if (!empty($filters['organizer_id'])) {
+            $sql .= " AND e.organizer_id = :organizer_id";
+            $params[':organizer_id'] = $filters['organizer_id'];
+        }
+
+        if (!empty($filters['event_type'])) {
+            $sql .= " AND e.event_type = :event_type";
+            $params[':event_type'] = $filters['event_type'];
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND e.status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        if (!empty($filters['date_from'])) {
+            $sql .= " AND e.start_date >= :date_from";
+            $params[':date_from'] = $filters['date_from'];
+        }
+
+        if (!empty($filters['date_to'])) {
+            $sql .= " AND e.start_date <= :date_to";
+            $params[':date_to'] = $filters['date_to'];
+        }
+
+        $stmt = $pdo->prepare($sql);
+
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    } catch (PDOException $e) {
+        error_log("Count Events Error: " . $e->getMessage());
+        return 0;
+    }
+}
+
+/**
+ * Get all tickets for an event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $eventId Event ID
+ * @return array List of tickets
+ */
+function getEventTickets($pdo, $eventId)
+{
+    $sql = "SELECT * FROM tickets WHERE event_id = :event_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':event_id', $eventId);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+/**
+ * Get all FAQs for an event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $eventId Event ID
+ * @return array List of FAQs
+ */
+function getEventFaqs($pdo, $eventId)
+{
+    $sql = "SELECT * FROM faqs WHERE event_id = :event_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':event_id', $eventId);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get organizer by ID
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $organizerId Organizer ID
+ * @return array|false Organizer data or false if not found
+ */
+function getOrganizerById($pdo, $organizerId)
+{
+    $sql = "SELECT * FROM users WHERE id = :organizer_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':organizer_id', $organizerId);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get category by ID
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $categoryId Category ID
+ * @return array|false Category data or false if not found
+ */
+function getCategoryById($pdo, $categoryId)
+{
+    $sql = "SELECT * FROM categories WHERE id = :category_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':category_id', $categoryId);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get the number of attendees for an event
+ * 
+ * @param PDO $pdo Database connection
+ * @param int $eventId Event ID
+ * @return array|false Number of attendees or false on error
+ */
+function getEventAttendees($pdo, $eventId)
+{
+    $sql = "SELECT COUNT(*) as count FROM attendees WHERE event_id = :event_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':event_id', $eventId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Run TF-IDF search using Python script
+ * 
+ * @param string $query Search query
+ * @param array $events Array of events to search through
+ * @return array|false Results with event IDs sorted by relevance or false on error
+ */
+function runTfIdfSearch($query, $events)
+{
+    try {
+        $pythonScript = dirname(dirname(__FILE__)) . '/indexation/main.py';
+
+        $eventsJson = json_encode($events);
+        // Use a temporary file for large JSON payloads to avoid escapeshellarg length limit
+        $tmpJsonFile = tempnam(sys_get_temp_dir(), 'tfidf_');
+        file_put_contents($tmpJsonFile, $eventsJson);
+
+        $escapedQuery = escapeshellarg($query);
+        $escapedJsonFile = escapeshellarg($tmpJsonFile);
+
+        $pythonCmd = 'python';
+        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+            exec('which python3', $output, $returnVar);
+            if ($returnVar === 0) {
+                $pythonCmd = 'python3';
+            }
+        }
+
+        $command = "$pythonCmd \"$pythonScript\" $escapedQuery $escapedJsonFile 2>&1";
+        $output = [];
+        $returnVar = 0;
+
+        exec($command, $output, $returnVar);
+
+        event_log("TF-IDF search executed", "INFO", [
+            'query' => $query,
+            'command' => $command,
+            'return_code' => $returnVar
+        ]);
+
+        if ($returnVar !== 0) {
+            event_log("TF-IDF search error: Python execution failed", "ERROR", [
+                'query' => $query,
+                'return_code' => $returnVar,
+                'output' => implode("\n", $output)
+            ]);
+            return false;
+        }
+
+        $jsonResult = implode("\n", $output);
+        $result = json_decode($jsonResult, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            event_log("TF-IDF search error: JSON parsing failed", "ERROR", [
+                'query' => $query,
+                'json_error' => json_last_error_msg(),
+                'output' => $jsonResult
+            ]);
+            return false;
+        }
+
+        // Clean up temporary file
+        @unlink($tmpJsonFile);
+
+        return $result;
+    } catch (Exception $e) {
+        event_log("TF-IDF search exception: " . $e->getMessage(), "ERROR", ['query' => $query]);
+        return false;
+    }
+}
+
+/**
+ * Log event information to a file
+ *
+ * @param string $message The message to log
+ * @param string $level The log level (INFO, WARNING, ERROR)
+ * @param array $data Additional data to include in the log entry
+ * @return void
+ */
+function event_log($message, $level = 'INFO', $data = [])
+{
+    $log_file = dirname(dirname(__FILE__)) . '/event_log.txt';
+    $timestamp = date('Y-m-d H:i:s');
+    $user_id = $_SESSION['user_id'] ?? 'not-logged-in';
+
+    $log_entry = "[{$timestamp}] [{$level}] [UserID: {$user_id}] {$message}";
+
+    if (!empty($data)) {
+        $log_entry .= " - Data: " . json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    $log_entry .= PHP_EOL;
+
+    if (!@file_put_contents($log_file, $log_entry, FILE_APPEND)) {
+        error_log("Failed to write to event log file: {$log_file}");
+    }
+}
