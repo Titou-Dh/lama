@@ -8,7 +8,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         id="sidenav-main">
         <div class="sidenav-header">
             <a
-                href="/"
+                href="/lama"
                 class="mx-auto"
                 target="_blank">
                 <img src="../../assets//images/logo.png" alt="main_logo" />
