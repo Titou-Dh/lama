@@ -1,46 +1,33 @@
 <?php
-require_once "../../config/database.php";
-require_once "../../controller/event.php";
+require_once __DIR__ . '/../common.php';
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../controller/event.php';
+require_once __DIR__ . "../../auth_check.php";
 
-$logFilePath = "../logs/functional_tests.log";
+
+$logFilePath = __DIR__ . '/../logs/test_results.log';
 $results = [];
 
-// Create logs directory if it doesn't exist
-if (!file_exists("../logs")) {
-    mkdir("../logs", 0755, true);
-}
-
-/**
- * Log test results to file
- */
-function logTestResult($testName, $status, $message, $response = "")
-{
-    global $logFilePath;
-    $date = date("Y-m-d H:i:s");
-    $logEntry = "[$date] TEST: $testName | STATUS: $status | MESSAGE: $message" . PHP_EOL;
-    if (!empty($response)) {
-        $logEntry .= "RESPONSE: " . json_encode($response) . PHP_EOL;
+if (isset($_GET['clear_log']) && $_GET['clear_log'] === 'true') {
+    if (file_exists($logFilePath)) {
+        file_put_contents($logFilePath, '');
+        $results[] = TestUtils::logTestResult("System", "SUCCESS", "Log file cleared successfully");
     }
-    $logEntry .= "-------------------------------------------------------------" . PHP_EOL;
-    file_put_contents($logFilePath, $logEntry, FILE_APPEND);
-
-    return [
-        'name' => $testName,
-        'status' => $status,
-        'message' => $message,
-        'response' => $response,
-        'timestamp' => $date
-    ];
+    header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?'));
+    exit;
 }
 
-// Run tests when form is submitted
+if (!file_exists(__DIR__ . '/../logs')) {
+    mkdir(__DIR__ . '/../logs', 0755, true);
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
     try {
         $pdo = $cnx;
 
-        // Test 1: Event Creation
-        if (isset($_POST['test_event_creation'])) {
-            // Create a test event
+        // Test 1: Create Event
+        if (isset($_POST['test_create_event'])) {
             $eventData = [
                 'organizer_id' => isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1,
                 'title' => 'Test Event ' . rand(1000, 9999),
@@ -57,14 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
             $result = createEvent($pdo, $eventData);
 
             if ($result && is_numeric($result)) {
-                $results[] = logTestResult("Event Creation", "SUCCESS", "Successfully created new event", [
+                $results[] = TestUtils::logTestResult("Event Creation", "SUCCESS", "Successfully created new event", [
                     "event_id" => $result,
                     "title" => $eventData['title']
                 ]);
                 // Store event ID for other tests
                 $_SESSION['test_event_id'] = $result;
             } else {
-                $results[] = logTestResult("Event Creation", "FAILURE", "Failed to create event", [
+                $results[] = TestUtils::logTestResult("Event Creation", "FAILURE", "Failed to create event", [
                     "error" => "Could not insert event"
                 ]);
             }
@@ -94,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                     $eventId = $createResult;
                     $_SESSION['test_event_id'] = $eventId;
                 } else {
-                    $results[] = logTestResult("Event Retrieval", "ERROR", "Could not create test event for retrieval");
+                    $results[] = TestUtils::logTestResult("Event Retrieval", "ERROR", "Could not create test event for retrieval");
                     $eventId = null;
                 }
             }
@@ -103,12 +90,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                 $event = getEventById($pdo, $eventId);
 
                 if ($event && isset($event['id']) && $event['id'] == $eventId) {
-                    $results[] = logTestResult("Event Retrieval", "SUCCESS", "Successfully retrieved event", [
+                    $results[] = TestUtils::logTestResult("Event Retrieval", "SUCCESS", "Successfully retrieved event", [
                         "event_id" => $event['id'],
                         "title" => $event['title']
                     ]);
                 } else {
-                    $results[] = logTestResult("Event Retrieval", "FAILURE", "Failed to retrieve event", [
+                    $results[] = TestUtils::logTestResult("Event Retrieval", "FAILURE", "Failed to retrieve event", [
                         "event_id" => $eventId,
                         "result" => $event
                     ]);
@@ -140,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                     $eventId = $createResult;
                     $_SESSION['test_event_id'] = $eventId;
                 } else {
-                    $results[] = logTestResult("Event Update", "ERROR", "Could not create test event for update");
+                    $results[] = TestUtils::logTestResult("Event Update", "ERROR", "Could not create test event for update");
                     $eventId = null;
                 }
             }
@@ -161,19 +148,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                     $event = getEventById($pdo, $eventId);
 
                     if ($event && $event['title'] == $updatedData['title']) {
-                        $results[] = logTestResult("Event Update", "SUCCESS", "Successfully updated event", [
+                        $results[] = TestUtils::logTestResult("Event Update", "SUCCESS", "Successfully updated event", [
                             "event_id" => $eventId,
                             "new_title" => $updatedData['title']
                         ]);
                     } else {
-                        $results[] = logTestResult("Event Update", "FAILURE", "Update reported success but data wasn't changed", [
+                        $results[] = TestUtils::logTestResult("Event Update", "FAILURE", "Update reported success but data wasn't changed", [
                             "event_id" => $eventId,
                             "expected_title" => $updatedData['title'],
                             "actual_title" => $event['title'] ?? 'Unknown'
                         ]);
                     }
                 } else {
-                    $results[] = logTestResult("Event Update", "FAILURE", "Failed to update event", [
+                    $results[] = TestUtils::logTestResult("Event Update", "FAILURE", "Failed to update event", [
                         "event_id" => $eventId,
                         "error" => "Update operation returned false"
                     ]);
@@ -205,13 +192,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                     $eventId = $createResult;
                     $_SESSION['test_event_id'] = $eventId;
                 } else {
-                    $results[] = logTestResult("Event Deletion", "ERROR", "Could not create test event for deletion");
+                    $results[] = TestUtils::logTestResult("Event Deletion", "ERROR", "Could not create test event for deletion");
                     $eventId = null;
                 }
             }
 
             if ($eventId) {
-                $userId =  $_SESSION['user_id'] ?? 1; // Use session user ID or default to 1
+                $userId = $_SESSION['user_id'] ?? 1; // Use session user ID or default to 1
                 $deleteResult = deleteEvent($pdo, $eventId, $userId);
 
                 if ($deleteResult) {
@@ -219,18 +206,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                     $event = getEventById($pdo, $eventId);
 
                     if (!$event) {
-                        $results[] = logTestResult("Event Deletion", "SUCCESS", "Successfully deleted event", [
+                        $results[] = TestUtils::logTestResult("Event Deletion", "SUCCESS", "Successfully deleted event", [
                             "event_id" => $eventId
                         ]);
                         // Clear the stored event ID since it's deleted
                         unset($_SESSION['test_event_id']);
                     } else {
-                        $results[] = logTestResult("Event Deletion", "FAILURE", "Deletion reported success but event still exists", [
+                        $results[] = TestUtils::logTestResult("Event Deletion", "FAILURE", "Deletion reported success but event still exists", [
                             "event_id" => $eventId
                         ]);
                     }
                 } else {
-                    $results[] = logTestResult("Event Deletion", "FAILURE", "Failed to delete event", [
+                    $results[] = TestUtils::logTestResult("Event Deletion", "FAILURE", "Failed to delete event", [
                         "event_id" => $eventId,
                         "error" => "Delete operation returned false"
                     ]);
@@ -262,18 +249,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
             $events = getEvents($pdo, ['limit' => 10, 'status' => 'published']);
 
             if ($events && is_array($events) && count($events) >= 3) {
-                $results[] = logTestResult("Event Listing", "SUCCESS", "Successfully listed events", [
+                $results[] = TestUtils::logTestResult("Event Listing", "SUCCESS", "Successfully listed events", [
                     "event_count" => count($events)
                 ]);
             } else {
-                $results[] = logTestResult("Event Listing", "FAILURE", "Failed to list events or fewer than expected", [
+                $results[] = TestUtils::logTestResult("Event Listing", "FAILURE", "Failed to list events or fewer than expected", [
                     "event_count" => is_array($events) ? count($events) : 0,
                     "expected" => "At least 3 events"
                 ]);
             }
         }
+
+        // Clean up test data
+        $cleanupResults = TestUtils::cleanupTestEvents($pdo);
+        if (is_array($cleanupResults)) {
+            $results = array_merge($results, $cleanupResults);
+        }
     } catch (Exception $e) {
-        $results[] = logTestResult("Test Suite", "ERROR", "Database connection error: " . $e->getMessage());
+        $results[] = TestUtils::logTestResult("Test Suite", "ERROR", "Database connection error: " . $e->getMessage());
     }
 }
 ?>
@@ -331,7 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                                             <div class="form-label">Select tests to run</div>
                                             <div class="form-selectgroup">
                                                 <label class="form-selectgroup-item">
-                                                    <input type="checkbox" name="test_event_creation" class="form-selectgroup-input">
+                                                    <input type="checkbox" name="test_create_event" class="form-selectgroup-input">
                                                     <span class="form-selectgroup-label">Event Creation</span>
                                                 </label>
                                                 <label class="form-selectgroup-item">
