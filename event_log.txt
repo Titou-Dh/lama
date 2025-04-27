@@ -793,3 +793,21 @@
 [2025-04-27 19:30:31] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"Test Event","description":"<svg onload=alert('XSS')>","start_date":"2025-04-27","end_date":"2025-04-28","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
 [2025-04-27 19:30:31] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"Test Event","description":"javascript:alert('XSS')","start_date":"2025-04-27","end_date":"2025-04-28","location":"Test location","capacity":10}
 [2025-04-27 19:30:31] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"Test Event","description":"javascript:alert('XSS')","start_date":"2025-04-27","end_date":"2025-04-28","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-27 20:15:01] [INFO] [UserID: 2] Fetched event with ID: 118
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"timothy-abraham-sfMV8vVBY50-unsplash.jpg","size":6302207}
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"test ","type":"in-person"}
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/680e74aff111e_timothy-abraham-sfMV8vVBY50-unsplash.jpg
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":2,"title":"test ","description":"event","start_date":"2025-05-01 20:15:00","end_date":"2025-07-01","door_time":"20:16","location":"safra","online_link":"","event_type":"in-person","category_id":"1","capacity":"200","age_restriction":"18+","status":"published"}
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Event created successfully with ID: 148
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Event created - Data: {"event_id":"148","title":"test ","type":"in-person"}
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"148"}
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Ticket created: {"name":"test ticket","price":"10","quantity":"20","sale_start":"2025-04-01","sale_end":"2025-05-10"} - Data: {"event_id":"148","ticket":{"name":"test ticket","price":"10","quantity":"20","sale_start":"2025-04-01","sale_end":"2025-05-10"}}
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"148","tickets_count":1,"result":"success"}
+[2025-04-27 20:17:19] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"148"}
+[2025-04-27 20:17:20] [INFO] [UserID: 2] FAQ created: {"question":"ez","answer":"win"} - Data: {"event_id":"148","faq":{"question":"ez","answer":"win"}}
+[2025-04-27 20:17:20] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"148","faqs_count":1,"result":"success"}
+[2025-04-27 20:17:21] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 20:29:05] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 20:29:33] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 20:29:40] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 20:31:38] [INFO] [UserID: 2] Fetched event with ID: 148
