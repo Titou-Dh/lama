@@ -591,3 +591,51 @@
 [2025-04-26 19:57:55] [INFO] [UserID: 2] Fetched event with ID: 100
 [2025-04-26 19:59:09] [INFO] [UserID: 2] Fetched event with ID: 100
 [2025-04-26 19:59:37] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 20:48:00] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 20:48:05] [INFO] [UserID: 2] Fetched event with ID: 138
+[2025-04-26 20:49:17] [INFO] [UserID: 2] Fetched event with ID: 138
+[2025-04-26 20:49:17] [INFO] [UserID: 2] Fetched event with ID: 138
+[2025-04-26 20:49:18] [INFO] [UserID: 2] Fetched event with ID: 138
+[2025-04-26 20:49:18] [INFO] [UserID: 2] Fetched event with ID: 138
+[2025-04-26 21:09:17] [INFO] [UserID: 2] Fetched event with ID: 138
+[2025-04-26 21:09:17] [INFO] [UserID: 2] Fetched event with ID: 138
+[2025-04-26 21:10:46] [INFO] [UserID: 2] Fetched event with ID: 137
+[2025-04-26 21:10:46] [INFO] [UserID: 2] Fetched event with ID: 137
+[2025-04-26 21:10:51] [INFO] [UserID: 2] Fetched event with ID: 127
+[2025-04-26 21:10:51] [INFO] [UserID: 2] Fetched event with ID: 127
+[2025-04-26 21:10:55] [INFO] [UserID: 2] Fetched event with ID: 113
+[2025-04-26 21:10:55] [INFO] [UserID: 2] Fetched event with ID: 113
+[2025-04-26 21:10:59] [INFO] [UserID: 2] Fetched event with ID: 110
+[2025-04-26 21:10:59] [INFO] [UserID: 2] Fetched event with ID: 110
+[2025-04-26 21:15:28] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:15:35] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:17:33] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:46] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:47] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:47] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:47] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:48] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:48] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:48] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:48] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:48] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:49] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:49] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:49] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:50] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-26 21:20:57] [INFO] [UserID: 2] Fetched event with ID: 118
+[2025-04-26 21:21:41] [INFO] [UserID: 2] Fetched event with ID: 118
+[2025-04-26 21:21:43] [INFO] [UserID: 2] Fetched event with ID: 118
+[2025-04-26 21:38:00] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"Yoga p","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"Yoga p\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi553B.tmp\" 2>&1","return_code":1}
+[2025-04-26 21:38:00] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Yoga p","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 21:38:00] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Yoga p"}
+[2025-04-26 21:38:04] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"Yoga par","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"Yoga par\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi652A.tmp\" 2>&1","return_code":1}
+[2025-04-26 21:38:04] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Yoga par","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 21:38:04] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Yoga par"}
+[2025-04-26 21:38:08] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"Yoga park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"Yoga park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi743F.tmp\" 2>&1","return_code":1}
+[2025-04-26 21:38:08] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Yoga park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 21:38:08] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Yoga park"}
+[2025-04-26 21:38:12] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"Yoga","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"Yoga\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi85A5.tmp\" 2>&1","return_code":1}
+[2025-04-26 21:38:12] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Yoga","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-26 21:38:12] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Yoga"}
+[2025-04-27 18:17:38] [INFO] [UserID: 2] Fetched event with ID: 100

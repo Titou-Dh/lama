@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
 
   try {
     $eventData = [
-      'organizer_id' => $_POST['organizer_id'] ?? null,
+      'organizer_id' => $_SESSION['user_id'],
       'title' => $_POST['title'] ?? null,
       'description' => $_POST['description'] ?? null,
       'start_date' => $_POST['start_date'] ?? null,

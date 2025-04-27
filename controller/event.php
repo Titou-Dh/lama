@@ -186,13 +186,10 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
 
         $sql .= " ORDER BY e.start_date ASC";
 
-        // Add pagination if needed
-        if ($page > 0 && $limit > 0) {
-            $offset = ($page - 1) * $limit;
-            $sql .= " LIMIT :limit OFFSET :offset";
-            $params[':limit'] = $limit;
-            $params[':offset'] = $offset;
-        }
+        $offset = ($page - 1) * $limit;
+        $sql .= " LIMIT :limit OFFSET :offset";
+        $params[':limit'] = $limit;
+        $params[':offset'] = $offset;
 
         $stmt = $pdo->prepare($sql);
 
@@ -225,8 +222,11 @@ function getEvents($pdo, $filters = [], $page = 1, $limit = 10)
 function updateEvent($pdo, $id, $eventData, $fileData = null)
 {
     try {
+        $pdo->beginTransaction();
+
         $currentEvent = getEventById($pdo, $id);
         if (!$currentEvent) {
+            $pdo->rollBack();
             return false;
         }
 
@@ -285,8 +285,63 @@ function updateEvent($pdo, $id, $eventData, $fileData = null)
         $stmt->bindParam(':age_restriction', $eventData['age_restriction']);
         $stmt->bindParam(':status', $eventData['status']);
 
-        return $stmt->execute();
+        if (!$stmt->execute()) {
+            $pdo->rollBack();
+            return false;
+        }
+
+        if (isset($eventData['tickets']) && is_array($eventData['tickets'])) {
+            $deleteTicketsSql = "DELETE FROM tickets WHERE event_id = :event_id";
+            $deleteTicketsStmt = $pdo->prepare($deleteTicketsSql);
+            $deleteTicketsStmt->bindParam(':event_id', $id);
+            $deleteTicketsStmt->execute();
+
+            $ticketSql = "INSERT INTO tickets (event_id, name, price, quantity, description) 
+                         VALUES (:event_id, :name, :price, :quantity, :description)";
+            $ticketStmt = $pdo->prepare($ticketSql);
+
+            foreach ($eventData['tickets'] as $ticket) {
+                $ticketStmt->bindParam(':event_id', $id);
+                $ticketStmt->bindParam(':name', $ticket['name']);
+                $ticketStmt->bindParam(':price', $ticket['price']);
+                $ticketStmt->bindParam(':quantity', $ticket['quantity']);
+                $ticketStmt->bindParam(':description', $ticket['description']);
+
+                if (!$ticketStmt->execute()) {
+                    $pdo->rollBack();
+                    return false;
+                }
+            }
+        }
+
+        if (isset($eventData['faqs']) && is_array($eventData['faqs'])) {
+            $deleteFaqsSql = "DELETE FROM event_faqs WHERE event_id = :event_id";
+            $deleteFaqsStmt = $pdo->prepare($deleteFaqsSql);
+            $deleteFaqsStmt->bindParam(':event_id', $id);
+            $deleteFaqsStmt->execute();
+
+            $faqSql = "INSERT INTO event_faqs (event_id, question, answer) 
+                      VALUES (:event_id, :question, :answer)";
+            $faqStmt = $pdo->prepare($faqSql);
+
+            foreach ($eventData['faqs'] as $faq) {
+                $faqStmt->bindParam(':event_id', $id);
+                $faqStmt->bindParam(':question', $faq['question']);
+                $faqStmt->bindParam(':answer', $faq['answer']);
+
+                if (!$faqStmt->execute()) {
+                    $pdo->rollBack();
+                    return false;
+                }
+            }
+        }
+
+        $pdo->commit();
+        return true;
     } catch (PDOException $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         error_log("Update Event Error: " . $e->getMessage());
         return false;
     }
@@ -312,6 +367,16 @@ function deleteEvent($pdo, $id, $userId, $isAdmin = false)
         if (!empty($currentEvent['image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image'])) {
             unlink($_SERVER['DOCUMENT_ROOT'] . $currentEvent['image']);
         }
+
+        $sql = "DELETE FROM tickets WHERE event_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        $sql = "DELETE FROM faqs WHERE event_id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
 
         $sql = "DELETE FROM events WHERE id = :id";
         $stmt = $pdo->prepare($sql);
