@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 26 avr. 2025 à 18:19
+-- Généré le : dim. 27 avr. 2025 à 19:56
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -96,6 +96,7 @@ CREATE TABLE `faqs` (
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
 -- --------------------------------------------------------
 
 --
@@ -162,6 +163,29 @@ CREATE TABLE `reviews` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `testers`
+--
+
+CREATE TABLE `testers` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `last_login` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `testers`
+--
+
+INSERT INTO `testers` (`id`, `username`, `password_hash`, `email`, `created_at`, `last_login`, `is_active`) VALUES
+(1, 'lama_tester', '$2y$10$8RHdLZvmv4wPwwdCNZo0UuRWamWNnvxckUaJ6PGMXVVyeaEKVmy5m', 'tester@lama.com', '2025-04-27 17:43:27', '2025-04-27 17:51:48', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `tickets`
 --
 
@@ -175,6 +199,13 @@ CREATE TABLE `tickets` (
   `sales_start` datetime DEFAULT NULL,
   `sales_end` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `tickets`
+--
+
+INSERT INTO `tickets` (`id`, `event_id`, `name`, `price`, `description`, `quantity_available`, `sales_start`, `sales_end`) VALUES
+(3, 100, 'test', 20.00, NULL, 20, '2025-04-01 00:00:00', '2025-05-10 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -271,6 +302,14 @@ ALTER TABLE `reviews`
   ADD KEY `event_id` (`event_id`);
 
 --
+-- Index pour la table `testers`
+--
+ALTER TABLE `testers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- Index pour la table `tickets`
 --
 ALTER TABLE `tickets`
@@ -301,19 +340,19 @@ ALTER TABLE `user_preferences`
 -- AUTO_INCREMENT pour la table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT pour la table `faqs`
 --
 ALTER TABLE `faqs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT pour la table `orders`
@@ -340,16 +379,22 @@ ALTER TABLE `reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT pour la table `testers`
+--
+ALTER TABLE `testers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT pour la table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=193;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
 
 --
 -- AUTO_INCREMENT pour la table `user_preferences`
