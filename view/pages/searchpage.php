@@ -4,15 +4,15 @@ require_once '../../controller/event.php';
 require_once '../../config/session.php';
 
 $query = $_GET['query'] ?? '';
-$location = $_GET['location'] ?? '';
 $when = $_GET['when'] ?? '';
+$category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 6 * $page;
 
 $filters = [];
 
-if (!empty($location)) {
-  $filters['location'] = $location;
+if ($category_id > 0) {
+  $filters['category_id'] = $category_id;
 }
 
 if (!empty($when)) {
@@ -144,7 +144,7 @@ $totalEvents = count($results);
       <div
         class="absolute inset-0 flex flex-col items-center justify-center z-20 text-white">
         <h1 class="text-3xl md:text-4xl font-bold text-center">
-        BECAUSE LIFE IS BETTER
+          BECAUSE LIFE IS BETTER
         </h1>
         <h1 class="text-3xl md:text-4xl font-bold text-center">WHEN SHARED </h1>
       </div>
@@ -153,7 +153,7 @@ $totalEvents = count($results);
       <div class="bg-indigo-900 rounded-lg p-4 shadow-lg">
         <form id="searchForm" method="GET" action="">
           <div class="flex flex-col md:flex-row items-end gap-2">
-            <div class="w-full md:w-1/3 mb-2 md:mb-0">
+            <div class="w-full md:w-1/2 mb-2 md:mb-0">
               <p class="text-white text-xs mb-1">Looking for</p>
               <input
                 type="text"
@@ -161,18 +161,28 @@ $totalEvents = count($results);
                 value="<?php echo htmlspecialchars($query); ?>"
                 placeholder="Search for events, venues, or experiences"
                 class="w-full p-2 rounded text-sm search-input" />
-            </div>
+            </div><?php
+                  try {
+                    // Get categories from categories table instead of events table
+                    $categoryStmt = $cnx->query("SELECT id, name FROM categories ORDER BY name");
+                    $categories = $categoryStmt->fetchAll(PDO::FETCH_ASSOC);
+                  } catch (PDOException $e) {
+                    error_log("Database error fetching categories: " . $e->getMessage());
+                    $categories = [];
+                  }
+                  ?>
             <div class="w-full md:w-1/3 mb-2 md:mb-0">
-              <p class="text-white text-xs mb-1">Location</p>
-              <select name="location" class="w-full p-2 rounded text-sm search-input">
-                <option value="">Choose location</option>
-                <option value="New York" <?php echo ($location == 'New York') ? 'selected' : ''; ?>>New York</option>
-                <option value="London" <?php echo ($location == 'London') ? 'selected' : ''; ?>>London</option>
-                <option value="Paris" <?php echo ($location == 'Paris') ? 'selected' : ''; ?>>Paris</option>
-                <option value="Tokyo" <?php echo ($location == 'Tokyo') ? 'selected' : ''; ?>>Tokyo</option>
+              <p class="text-white text-xs mb-1">Category</p>
+              <select name="category_id" class="w-full p-2 rounded text-sm search-input">
+                <option value="0">All Categories</option>
+                <?php foreach ($categories as $cat): ?>
+                  <option value="<?php echo $cat['id']; ?>" <?php echo ($category_id == $cat['id']) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($cat['name']); ?>
+                  </option>
+                <?php endforeach; ?>
               </select>
             </div>
-            <div class="w-full md:w-1/3 mb-2 md:mb-0">
+            <div class="w-full md:w-1/2 mb-2 md:mb-0">
               <p class="text-white text-xs mb-1">When</p>
               <select name="when" class="w-full p-2 rounded text-sm search-input">
                 <option value="">Choose date and time</option>
@@ -227,12 +237,14 @@ $totalEvents = count($results);
             </div>
           </div>
           <div class="relative">
-            <select
+            <select id="categoryFilter" onchange="filterByCategory(this.value)"
               class="bg-white border border-gray-300 rounded-md px-3 py-1 text-sm appearance-none pr-8">
-              <option>Any category</option>
-              <option>Music</option>
-              <option>Art</option>
-              <option>Business</option>
+              <option value="0">Any category</option>
+              <?php foreach ($categories as $cat): ?>
+                <option value="<?php echo $cat['id']; ?>" <?php echo ($category_id == $cat['id']) ? 'selected' : ''; ?>>
+                  <?php echo htmlspecialchars($cat['name']); ?>
+                </option>
+              <?php endforeach; ?>
             </select>
             <div
               class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -292,11 +304,10 @@ $totalEvents = count($results);
           <?php endforeach; ?>
         <?php endif; ?>
       </div>
-
       <div class="flex justify-center mt-8">
         <?php if (count($results) >= $limit): ?>
           <a
-            href="?query=<?php echo urlencode($query); ?>&location=<?php echo urlencode($location); ?>&when=<?php echo urlencode($when); ?>&page=<?php echo $page + 1; ?>"
+            href="?query=<?php echo urlencode($query); ?>&category_id=<?php echo $category_id; ?>&when=<?php echo urlencode($when); ?>&page=<?php echo $page + 1; ?>"
             class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-md">
             LOAD MORE
           </a>
@@ -307,7 +318,6 @@ $totalEvents = count($results);
   <?php include_once '../partials/footer.php'; ?>
 
   <script src="../scripts/landing.js"></script>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const searchInput = document.querySelector('input[name="query"]');
@@ -315,6 +325,20 @@ $totalEvents = count($results);
         searchInput.focus();
       }
     });
+
+    function filterByCategory(categoryId) {
+      // Get current URL and parameters
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // Update or set the category_id parameter
+      urlParams.set('category_id', categoryId);
+
+      // Reset to page 1 when changing filters
+      urlParams.set('page', '1');
+
+      // Redirect with the new parameters
+      window.location.href = '?' + urlParams.toString();
+    }
   </script>
 
 </body>
