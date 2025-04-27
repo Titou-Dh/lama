@@ -639,3 +639,75 @@
 [2025-04-26 21:38:12] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Yoga","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
 [2025-04-26 21:38:12] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Yoga"}
 [2025-04-27 18:17:38] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-27 18:36:43] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog pp","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog pp\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiBAFB.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:36:43] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog pp","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:36:43] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog pp"}
+[2025-04-27 18:36:44] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"kyog pp","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"kyog pp\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiBDCB.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:36:44] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"kyog pp","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:36:44] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"kyog pp"}
+[2025-04-27 18:36:47] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog pp","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog pp\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiC8B8.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:36:47] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog pp","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:36:47] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog pp"}
+[2025-04-27 18:36:48] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog p","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog p\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiCE09.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:36:48] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog p","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:36:48] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog p"}
+[2025-04-27 18:36:51] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiD86A.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:36:51] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:36:51] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog park"}
+[2025-04-27 18:39:41] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi707B.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:39:41] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:39:41] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog park"}
+[2025-04-27 18:39:44] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi7D4D.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:39:44] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:39:44] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog "}
+[2025-04-27 18:39:47] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi8A3F.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:39:47] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:39:47] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog "}
+[2025-04-27 18:39:50] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi94FE.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:39:50] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:39:50] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog "}
+[2025-04-27 18:39:55] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiA710.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:39:55] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:39:55] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog "}
+[2025-04-27 18:40:03] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yoga","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yoga\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiC910.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:40:03] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yoga","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:40:03] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yoga"}
+[2025-04-27 18:40:07] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiD805.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:40:07] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:40:07] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"park"}
+[2025-04-27 18:42:33] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi12C3.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:33] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:33] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"park"}
+[2025-04-27 18:42:38] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"غخل","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"غخل\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi268B.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:38] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"غخل","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:38] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"غخل"}
+[2025-04-27 18:42:44] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi3AC0.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:44] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:44] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog"}
+[2025-04-27 18:42:48] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yo ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yo \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi4D30.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:48] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yo ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:48] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yo "}
+[2025-04-27 18:42:51] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yo  ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yo  \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi55DB.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:51] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yo  ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:51] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yo  "}
+[2025-04-27 18:42:51] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"aryo  ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"aryo  \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi583E.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:51] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"aryo  ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:51] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"aryo  "}
+[2025-04-27 18:42:54] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yo  ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yo  \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi6212.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:54] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yo  ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:54] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yo  "}
+[2025-04-27 18:42:56] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yo  park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yo  park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi6C83.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:42:56] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yo  park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:42:56] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yo  park"}
+[2025-04-27 18:43:00] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog  park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog  park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi7A8E.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:43:00] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog  park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:43:00] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog  park"}
+[2025-04-27 18:43:03] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yog park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yog park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi86A5.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:43:03] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yog park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:43:03] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yog park"}
+[2025-04-27 18:43:27] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yoga park","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yoga park\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiE57F.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:43:27] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yoga park","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:43:27] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yoga park"}
+[2025-04-27 18:43:31] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"yoga","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"yoga\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiF445.tmp\" 2>&1","return_code":1}
+[2025-04-27 18:43:31] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"yoga","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 18:43:31] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"yoga"}
