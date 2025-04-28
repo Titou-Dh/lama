@@ -51,21 +51,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
             $vulnerableEndpoints = [];
 
             foreach ($maliciousInputs as $input) {
-                // Test login form (simulated - replace with actual login logic if needed)
                 $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND password_hash = ?");
                 $stmt->execute([$input, 'password_hash']);
                 $result1 = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                // Test raw query to show vulnerability (DO NOT USE IN REAL CODE)
                 $vulnerableQuery = "SELECT * FROM users WHERE email = '$input' AND password_hash = 'password_hash'";
 
                 try {
-                    // This should fail or return nothing for secure code
-                    // But would work for vulnerable code
+                    
                     $rawResult = $pdo->query($vulnerableQuery);
                     $result2 = $rawResult ? $rawResult->fetchAll(PDO::FETCH_ASSOC) : [];
 
-                    // If we get results with the injectable input, it's vulnerable
+                   
                     if (count($result2) > 0) {
                         $secureResults = false;
                         $vulnerableEndpoints[] = "Direct query vulnerable to: $input";
