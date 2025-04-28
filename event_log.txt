@@ -846,3 +846,14 @@
 [2025-04-28 17:57:06] [INFO] [UserID: 2] Fetched event with ID: 148
 [2025-04-28 18:04:05] [INFO] [UserID: 2] Fetched event with ID: 148
 [2025-04-28 18:04:56] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-28 18:42:43] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Attempting to update event - Data: {"event_id":148,"title":"test  100"}
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":148}
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Ticket created: {"name":"test ticket","price":"10.00","quantity":"20","sale_start":"","sale_end":""} - Data: {"event_id":"148","ticket":{"name":"test ticket","price":"10.00","quantity":"20","sale_start":"","sale_end":""}}
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":148,"tickets_count":1,"result":"success"}
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":148}
+[2025-04-28 18:42:54] [INFO] [UserID: 2] FAQ created: {"question":"ez","answer":"win"} - Data: {"event_id":"148","faq":{"question":"ez","answer":"win"}}
+[2025-04-28 18:42:54] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":148,"faqs_count":1,"result":"success"}
+[2025-04-28 18:42:57] [INFO] [UserID: 2] Fetched event with ID: 148
