@@ -289,23 +289,24 @@ function updateEvent($pdo, $id, $eventData, $fileData = null)
             $pdo->rollBack();
             return false;
         }
-
         if (isset($eventData['tickets']) && is_array($eventData['tickets'])) {
             $deleteTicketsSql = "DELETE FROM tickets WHERE event_id = :event_id";
             $deleteTicketsStmt = $pdo->prepare($deleteTicketsSql);
             $deleteTicketsStmt->bindParam(':event_id', $id);
             $deleteTicketsStmt->execute();
 
-            $ticketSql = "INSERT INTO tickets (event_id, name, price, quantity, description) 
-                         VALUES (:event_id, :name, :price, :quantity, :description)";
+            $ticketSql = "INSERT INTO tickets (event_id, name, price, description, quantity_available, sales_start, sales_end) 
+                         VALUES (:event_id, :name, :price, :description, :quantity_available, :sales_start, :sales_end)";
             $ticketStmt = $pdo->prepare($ticketSql);
 
             foreach ($eventData['tickets'] as $ticket) {
                 $ticketStmt->bindParam(':event_id', $id);
                 $ticketStmt->bindParam(':name', $ticket['name']);
                 $ticketStmt->bindParam(':price', $ticket['price']);
-                $ticketStmt->bindParam(':quantity', $ticket['quantity']);
                 $ticketStmt->bindParam(':description', $ticket['description']);
+                $ticketStmt->bindParam(':quantity_available', $ticket['quantity_available']);
+                $ticketStmt->bindParam(':sales_start', $ticket['sales_start']);
+                $ticketStmt->bindParam(':sales_end', $ticket['sales_end']);
 
                 if (!$ticketStmt->execute()) {
                     $pdo->rollBack();
@@ -313,14 +314,13 @@ function updateEvent($pdo, $id, $eventData, $fileData = null)
                 }
             }
         }
-
         if (isset($eventData['faqs']) && is_array($eventData['faqs'])) {
-            $deleteFaqsSql = "DELETE FROM event_faqs WHERE event_id = :event_id";
+            $deleteFaqsSql = "DELETE FROM faqs WHERE event_id = :event_id";
             $deleteFaqsStmt = $pdo->prepare($deleteFaqsSql);
             $deleteFaqsStmt->bindParam(':event_id', $id);
             $deleteFaqsStmt->execute();
 
-            $faqSql = "INSERT INTO event_faqs (event_id, question, answer) 
+            $faqSql = "INSERT INTO faqs (event_id, question, answer) 
                       VALUES (:event_id, :question, :answer)";
             $faqStmt = $pdo->prepare($faqSql);
 
