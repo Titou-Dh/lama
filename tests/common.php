@@ -9,7 +9,6 @@ class TestUtils
      */
     public static function init()
     {
-        // Create logs directory if it doesn't exist
         $log_dir = __DIR__ . '/logs';
         if (!file_exists($log_dir)) {
             mkdir($log_dir, 0755, true);
@@ -107,14 +106,6 @@ class TestUtils
     }
 
     /**
-     * Clean up test data
-     */
-    public static function cleanup()
-    {
-        // Add any cleanup logic here
-    }
-
-    /**
      * Delete test users from the database
      */
     public static function cleanupTestUsers($pdo)
@@ -125,7 +116,7 @@ class TestUtils
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $deleted = $stmt->rowCount();
-            
+
             if ($deleted > 0) {
                 $results[] = self::logTestResult("Cleanup", "SUCCESS", "Deleted $deleted test users");
             }
@@ -143,7 +134,7 @@ class TestUtils
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $deleted = $stmt->rowCount();
-            
+
             if ($deleted > 0) {
                 $results[] = self::logTestResult("Cleanup", "SUCCESS", "Deleted $deleted test events");
             }
@@ -157,12 +148,11 @@ class TestUtils
     {
         try {
             $results = [];
-            // Clean up any test data created during search tests
             $sql = "DELETE FROM events WHERE title LIKE 'Test Event for Listing%'";
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
             $deleted = $stmt->rowCount();
-            
+
             if ($deleted > 0) {
                 $results[] = self::logTestResult("Cleanup", "SUCCESS", "Deleted $deleted test search events");
             }
@@ -182,5 +172,4 @@ class TestUtils
     }
 }
 
-// Initialize test environment
 TestUtils::init();

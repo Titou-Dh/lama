@@ -30,7 +30,7 @@
                   <h5 class="text-xl font-semibold mb-4">Support</h5>
                   <ul class="list-unstyled">
                       <li class="mb-2">
-                          <a href="#" class="text-gray-400 hover:text-white">Help Center</a>
+                          <a href="helpcenter.html" class="text-gray-400 hover:text-white">Help Center</a>
                       </li>
                       <li class="mb-2">
                           <a href="#" class="text-gray-400 hover:text-white">Contact Us</a>

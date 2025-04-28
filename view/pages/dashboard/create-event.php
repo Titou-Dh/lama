@@ -523,19 +523,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['submit'])) {
                 </div>
 
                 <div class="col-lg-4">
-                  <!-- Location Section -->
-                  <div class="card mb-4">
-                    <div class="card-body">
-                      <h3 class="card-title"><i class="fas fa-map-marker-alt me-2 text-primary-blue"></i> Location</h3>
-                      <p class="card-text" id="fullPreviewLocation">Venue or Online</p>
-                      <div id="map" class="mt-3 bg-light" style="height: 200px; border-radius: 0.5rem;">
-                        <div class="d-flex justify-content-center align-items-center h-100 text-muted">
-                          <p><i class="fas fa-map me-2"></i> Map preview</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   <!-- Tickets Section -->
                   <div class="card mb-4">
                     <div class="card-body">
