@@ -857,3 +857,32 @@
 [2025-04-28 18:42:54] [INFO] [UserID: 2] FAQ created: {"question":"ez","answer":"win"} - Data: {"event_id":"148","faq":{"question":"ez","answer":"win"}}
 [2025-04-28 18:42:54] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":148,"faqs_count":1,"result":"success"}
 [2025-04-28 18:42:57] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-28 20:49:32] [INFO] [UserID: not-logged-in] Fetched event with ID: 148
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event 7466","description":"This is a test event created through automated testing.","start_date":"2025-05-05 20:51:53","end_date":"2025-05-05 22:51:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 149
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Fetched event with ID: 149
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Fetched event with ID: 149
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Fetched event with ID: 149
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Fetched event with ID: 149
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 4940","description":"This is test event #1 for listing testing.","start_date":"2025-05-05 20:51:53","end_date":"2025-05-05 22:51:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 150
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 6208","description":"This is test event #2 for listing testing.","start_date":"2025-05-12 20:51:53","end_date":"2025-05-12 22:51:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 151
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 8772","description":"This is test event #3 for listing testing.","start_date":"2025-05-19 20:51:53","end_date":"2025-05-19 22:51:53","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-28 20:51:53] [INFO] [UserID: not-logged-in] Event created successfully with ID: 152
+[2025-04-28 20:52:46] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test event","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test event\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiA4F6.tmp\" 2>&1","return_code":1}
+[2025-04-28 20:52:46] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test event","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 20:52:46] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test event"}
+[2025-04-28 20:52:46] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiA5B3.tmp\" 2>&1","return_code":1}
+[2025-04-28 20:52:46] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 20:52:46] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test"}
+[2025-04-28 20:52:46] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiA621.tmp\" 2>&1","return_code":1}
+[2025-04-28 20:52:46] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 20:52:46] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test"}
+[2025-04-28 21:08:16] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"musi","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"musi\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiD760.tmp\" 2>&1","return_code":1}
+[2025-04-28 21:08:16] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"musi","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 21:08:16] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"musi"}
+[2025-04-28 22:37:56] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"musi","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"musi\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiEC62.tmp\" 2>&1","return_code":1}
+[2025-04-28 22:37:56] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"musi","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 22:37:56] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"musi"}
+[2025-04-28 22:38:44] [INFO] [UserID: 2] Fetched event with ID: 153
