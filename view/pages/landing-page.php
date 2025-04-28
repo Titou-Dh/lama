@@ -25,13 +25,11 @@ if (isset($_GET['code'])) {
     if (isset($token['access_token'])) {
       $client->setAccessToken($token['access_token']);
 
-      // Get profile info
       $google_oauth = new Google\Service\Oauth2($client);
       $google_account_info = $google_oauth->userinfo->get();
 
       $userinfo = [
         'email' => $google_account_info['email'],
-        'full_name' => $google_account_info['name'],
       ];
 
       if ($userinfo) {
@@ -39,7 +37,8 @@ if (isset($_GET['code'])) {
         if ($res) {
           $_SESSION['user'] = $userinfo['email'];
           $_SESSION['user_id'] = $res['id'];
-          $_SESSION['user_full_name'] = $userinfo['full_name'];
+          $_SESSION['user_full_name'] = $res['full_name'];
+          $_SESSION['user_role'] = $res['is_organizer'] === 1 ? true : false;
         } else {
           $error_signin = "You need to sign up with your email first!";
         }
@@ -54,7 +53,6 @@ if (isset($_GET['code'])) {
   }
 }
 
-// Ensure $events is defined and populated
 try {
   $stmt = $cnx->query("SELECT e.*, c.name AS category_name 
                           FROM events e
@@ -69,7 +67,7 @@ try {
   }
 } catch (PDOException $e) {
   error_log("Database error while fetching events: " . $e->getMessage());
-  $events = []; // Fallback to an empty array
+  $events = [];
 }
 
 error_log(print_r($events, true));

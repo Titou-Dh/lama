@@ -811,3 +811,38 @@
 [2025-04-27 20:29:33] [INFO] [UserID: 2] Fetched event with ID: 148
 [2025-04-27 20:29:40] [INFO] [UserID: 2] Fetched event with ID: 148
 [2025-04-27 20:31:38] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 20:36:09] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 20:54:00] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"' OR '1'='1","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"' OR '1'='1\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi6A7A.tmp\" 2>&1","return_code":1}
+[2025-04-27 20:54:00] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"' OR '1'='1","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 20:54:00] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"' OR '1'='1"}
+[2025-04-27 20:54:00] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"'; DROP TABLE events; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"'; DROP TABLE events; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi6B18.tmp\" 2>&1","return_code":1}
+[2025-04-27 20:54:00] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"'; DROP TABLE events; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 20:54:00] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"'; DROP TABLE events; --"}
+[2025-04-27 20:54:00] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"' UNION SELECT * FROM users; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"' UNION SELECT * FROM users; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi6B86.tmp\" 2>&1","return_code":1}
+[2025-04-27 20:54:00] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"' UNION SELECT * FROM users; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 20:54:00] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"' UNION SELECT * FROM users; --"}
+[2025-04-27 20:54:00] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test' OR 1=1; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test' OR 1=1; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi6BF4.tmp\" 2>&1","return_code":1}
+[2025-04-27 20:54:00] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test' OR 1=1; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 20:54:00] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test' OR 1=1; --"}
+[2025-04-27 20:57:10] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-27 20:57:10] [INFO] [UserID: 2] Fetched event with ID: 100
+[2025-04-27 20:57:23] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 21:05:56] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-27 21:22:45] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"Yoga","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"Yoga\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiBB9E.tmp\" 2>&1","return_code":1}
+[2025-04-27 21:22:45] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Yoga","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-27 21:22:45] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Yoga"}
+[2025-04-28 15:45:06] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"' OR '1'='1","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"' OR '1'='1\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiF7B2.tmp\" 2>&1","return_code":1}
+[2025-04-28 15:45:06] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"' OR '1'='1","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 15:45:06] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"' OR '1'='1"}
+[2025-04-28 15:45:06] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"'; DROP TABLE events; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"'; DROP TABLE events; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiF85F.tmp\" 2>&1","return_code":1}
+[2025-04-28 15:45:06] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"'; DROP TABLE events; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 15:45:06] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"'; DROP TABLE events; --"}
+[2025-04-28 15:45:06] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"' UNION SELECT * FROM users; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"' UNION SELECT * FROM users; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiF8BD.tmp\" 2>&1","return_code":1}
+[2025-04-28 15:45:06] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"' UNION SELECT * FROM users; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 15:45:06] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"' UNION SELECT * FROM users; --"}
+[2025-04-28 15:45:06] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test' OR 1=1; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test' OR 1=1; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiF92C.tmp\" 2>&1","return_code":1}
+[2025-04-28 15:45:06] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test' OR 1=1; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-28 15:45:06] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test' OR 1=1; --"}
+[2025-04-28 17:57:06] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-28 18:04:05] [INFO] [UserID: 2] Fetched event with ID: 148
+[2025-04-28 18:04:56] [INFO] [UserID: 2] Fetched event with ID: 148
