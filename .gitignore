@@ -6,4 +6,4 @@ event_log.txt
 .env
 
 # Ignore uploads directory
-/uploads/
+# /uploads/

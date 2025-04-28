@@ -14,7 +14,7 @@ if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
   $authResult = loginUser($cnx, $email, $password);
 
   if ($authResult === AuthResult::SUCCESS) {
-    $stmt = $cnx->prepare("SELECT id, full_name, is_organizer FROM users WHERE email = ?");
+    $stmt = $cnx->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
