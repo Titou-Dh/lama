@@ -29,7 +29,6 @@ function isOrganizer(): bool
     return isset($_SESSION['user']) && $_SESSION['user_role'] === true;
 }
 
-// Handle logout action if requested via URL
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     logout();
 }

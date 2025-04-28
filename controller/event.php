@@ -754,7 +754,6 @@ function runTfIdfSearch($query, $events)
         $pythonScript = dirname(dirname(__FILE__)) . '/indexation/main.py';
 
         $eventsJson = json_encode($events);
-        // Use a temporary file for large JSON payloads to avoid escapeshellarg length limit
         $tmpJsonFile = tempnam(sys_get_temp_dir(), 'tfidf_');
         file_put_contents($tmpJsonFile, $eventsJson);
 
@@ -802,7 +801,6 @@ function runTfIdfSearch($query, $events)
             return false;
         }
 
-        // Clean up temporary file
         @unlink($tmpJsonFile);
 
         return $result;
