@@ -37,3 +37,18 @@ INSERT INTO `events` (`organizer_id`, `category_id`, `title`, `description`, `st
 (2, 6, 'Festival International de la Gastronomie', 'Sample cuisines from over 50 vendors, live shows.', '2025-05-28 11:00:00', '2025-05-30 22:00:00', 'Place Mohamed Ali, Tunis', '../assets/images/food-festival.jpg', 5000, 'in-person', 'published', CURRENT_TIMESTAMP);
 
 
+INSERT INTO `users`(`id`, `username`, `email`, `password_hash`, `full_name`, `profile_image`, `created_at`, `is_organizer`) 
+VALUES 
+        ('5','chaima_ayed','chaima@gmail.com','3456','Chaima Ayed','/uploads/userimages/chimou.jpg','[value-7]','1'),
+
+        ('6','manar_messaoudi','manar@gmail.com','8456','Manar Messaoudi','/uploads/userimages/manou.jpg','[value-7]','1'),
+
+        ('8','mahdi_baya','mahdi@gmail.com','3556','Mahdi Baya','/uploads/userimages/mahdi.jpg','[value-7]','0'),
+
+        ('7','youssef_benameur','youssef@gmail.com','3656','Youssef Ben Ameur','/uploads/userimages/yucef.jpg','[value-7]','0'),
+
+        ('9','koussay_jbeli','koussay@gmail.com','3456','Koussay Jbeli','/uploads/userimages/koussay.jpg','[value-7]','0'),
+
+        ('10','Amjed_H','amjed@gmail.com','3456','Amjed Houssaini','/uploads/userimages/amjed.jpg','[value-7]','0'),
+
+        ('11','Oussama_alouch','oussama@gmail.com','3456','Oussama Allouche','/uploads/userimages/oussama.jpg','[value-7]','0')
