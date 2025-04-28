@@ -118,7 +118,7 @@ $totalEvents = count($results);
       searchInputs.forEach(input => {
         input.addEventListener('input', debounce(function() {
           searchForm.submit();
-        }, 300));
+        }, 700));
         if (input.tagName === 'SELECT') {
           input.addEventListener('change', function() {
             searchForm.submit();
