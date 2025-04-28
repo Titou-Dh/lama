@@ -91,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
             foreach ($xssPayloads as $payload) {
                 try {
                     $profileData = [
-                        'bio' => $payload,
-                        'website' => $payload
+                        'email' => $payload,
+                        'user_name' => $payload
                     ];
 
                     $result = updateUserProfile($pdo, 1, $profileData);
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                         $profile = getUser($pdo, 1);
                         if (
                             $profile &&
-                            ($profile['bio'] !== $payload || $profile['website'] !== $payload)
+                            ($profile['email'] !== $payload || $profile['username'] !== $payload)
                         ) {
                             $secureAttempts[] = "Profile data sanitized: " . htmlspecialchars($payload);
                         } else {

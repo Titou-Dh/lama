@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * CRUD for the user 
+ */
+
+
+
+/**
  * Get user by ID
  * 
  * @param PDO $pdo Database connection
@@ -37,7 +43,6 @@ function getUserById($pdo, $id)
 function changeUserPassword($pdo, $id, $currentPassword, $newPassword)
 {
     try {
-        // Get user with password hash for verification
         $sql = "SELECT password_hash FROM users WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':id', $id);
@@ -49,7 +54,6 @@ function changeUserPassword($pdo, $id, $currentPassword, $newPassword)
             return ['success' => false, 'message' => 'Current password is incorrect'];
         }
 
-        // Update password
         $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
 
         $sql = "UPDATE users SET password_hash = :password_hash WHERE id = :id";
@@ -76,7 +80,6 @@ function changeUserPassword($pdo, $id, $currentPassword, $newPassword)
 function requestPasswordReset($pdo, $email)
 {
     try {
-        // Check if email exists
         $sql = "SELECT id, username FROM users WHERE email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':email', $email);
@@ -85,15 +88,12 @@ function requestPasswordReset($pdo, $email)
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$user) {
-            // Don't reveal whether email exists for security
             return ['success' => true, 'message' => 'If your email exists in our system, you will receive a password reset link.'];
         }
 
-        // Generate a unique token
         $token = bin2hex(random_bytes(32));
         $tokenExpiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-        // Store token in database (assuming a password_resets table)
         $sql = "INSERT INTO password_resets (user_id, token, expires_at) 
                 VALUES (:user_id, :token, :expires_at)
                 ON DUPLICATE KEY UPDATE token = :token, expires_at = :expires_at";
@@ -104,11 +104,8 @@ function requestPasswordReset($pdo, $email)
         $stmt->bindParam(':expires_at', $tokenExpiry);
         $stmt->execute();
 
-        // Send email with reset link
         $resetLink = "http://{$_SERVER['HTTP_HOST']}/lama/reset-password.php?token=$token";
 
-        // Here you would use your email sending function
-        // sendEmail($email, 'Password Reset', "Click here to reset your password: $resetLink");
 
         return ['success' => true, 'message' => 'If your email exists in our system, you will receive a password reset link.'];
     } catch (PDOException $e) {
@@ -128,7 +125,6 @@ function requestPasswordReset($pdo, $email)
 function resetPassword($pdo, $token, $newPassword)
 {
     try {
-        // Get token information
         $sql = "SELECT pr.user_id, pr.expires_at
                 FROM password_resets pr
                 WHERE pr.token = :token";
@@ -143,12 +139,10 @@ function resetPassword($pdo, $token, $newPassword)
             return ['success' => false, 'message' => 'Invalid or expired token'];
         }
 
-        // Check if token is expired
         if (strtotime($resetInfo['expires_at']) < time()) {
             return ['success' => false, 'message' => 'Token has expired'];
         }
 
-        // Update password
         $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
 
         $sql = "UPDATE users SET password_hash = :password_hash WHERE id = :user_id";
@@ -158,7 +152,6 @@ function resetPassword($pdo, $token, $newPassword)
 
         $result = $stmt->execute();
 
-        // Delete used token
         $sql = "DELETE FROM password_resets WHERE token = :token";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':token', $token);
@@ -189,7 +182,6 @@ function getUsers($pdo, $filters = [], $page = 1, $limit = 10)
 
         $params = [];
 
-        // Apply filters
         if (!empty($filters['username'])) {
             $sql .= " AND username LIKE :username";
             $params[':username'] = '%' . $filters['username'] . '%';
@@ -205,10 +197,8 @@ function getUsers($pdo, $filters = [], $page = 1, $limit = 10)
             $params[':is_organizer'] = $filters['is_organizer'] ? 1 : 0;
         }
 
-        // Add order by
         $sql .= " ORDER BY created_at DESC";
 
-        // Add pagination
         $offset = ($page - 1) * $limit;
         $sql .= " LIMIT :limit OFFSET :offset";
         $params[':limit'] = $limit;
@@ -216,7 +206,6 @@ function getUsers($pdo, $filters = [], $page = 1, $limit = 10)
 
         $stmt = $pdo->prepare($sql);
 
-        // Bind parameters
         foreach ($params as $key => $value) {
             if ($key == ':limit' || $key == ':offset') {
                 $stmt->bindValue($key, $value, PDO::PARAM_INT);
@@ -250,7 +239,6 @@ function uploadProfileImage($fileData)
 
     $upload_dir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/profiles/';
 
-    // Create directory if it doesn't exist
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0755, true);
     }
@@ -259,23 +247,20 @@ function uploadProfileImage($fileData)
     $target_file = $upload_dir . $filename;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // Check if image file is actual image
     $check = getimagesize($fileData['tmp_name']);
     if ($check === false) {
         $result['error'] = "File is not an image.";
         return $result;
     }
 
-    // Allow certain file formats
     if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
         $result['error'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
         return $result;
     }
 
-    // Try to upload file
     if (move_uploaded_file($fileData['tmp_name'], $target_file)) {
         $result['success'] = true;
-        $result['filepath'] = '/uploads/profiles/' . $filename; // Store relative path
+        $result['filepath'] = '/uploads/profiles/' . $filename;
         return $result;
     } else {
         $result['error'] = "Sorry, there was an error uploading your file.";
@@ -297,7 +282,6 @@ function countUsers($pdo, $filters = [])
 
         $params = [];
 
-        // Apply filters
         if (!empty($filters['username'])) {
             $sql .= " AND username LIKE :username";
             $params[':username'] = '%' . $filters['username'] . '%';
@@ -315,7 +299,6 @@ function countUsers($pdo, $filters = [])
 
         $stmt = $pdo->prepare($sql);
 
-        // Bind parameters
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value);
         }
@@ -340,13 +323,11 @@ function countUsers($pdo, $filters = [])
 function updateUserProfile($pdo, $id, $userData, $fileData = null)
 {
     try {
-        // First get current user data
         $currentUser = getUserById($pdo, $id);
         if (!$currentUser) {
             return false;
         }
 
-        // Check if email is being changed and already exists
         if (isset($userData['email']) && $userData['email'] !== $currentUser['email']) {
             $sql = "SELECT id FROM users WHERE email = :email AND id != :id";
             $stmt = $pdo->prepare($sql);
@@ -359,7 +340,6 @@ function updateUserProfile($pdo, $id, $userData, $fileData = null)
             }
         }
 
-        // Check if username is being changed and already exists
         if (isset($userData['username']) && $userData['username'] !== $currentUser['username']) {
             $sql = "SELECT id FROM users WHERE username = :username AND id != :id";
             $stmt = $pdo->prepare($sql);
@@ -372,21 +352,18 @@ function updateUserProfile($pdo, $id, $userData, $fileData = null)
             }
         }
 
-        // Handle image upload if present
-        $imagePath = $currentUser['profile_image']; // Default to current image
+        $imagePath = $currentUser['profile_image'];
         if ($fileData && !empty($fileData['name'])) {
             $imageUploadResult = uploadProfileImage($fileData);
             if ($imageUploadResult['success']) {
                 $imagePath = $imageUploadResult['filepath'];
 
-                // Delete old image if it exists
                 if (!empty($currentUser['profile_image']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $currentUser['profile_image'])) {
                     unlink($_SERVER['DOCUMENT_ROOT'] . $currentUser['profile_image']);
                 }
             }
         }
 
-        // Build SQL query based on provided fields
         $sql = "UPDATE users SET ";
         $params = [];
 
@@ -411,11 +388,9 @@ function updateUserProfile($pdo, $id, $userData, $fileData = null)
             $params[':is_organizer'] = $isOrganizer;
         }
 
-        // Set profile image
         $sql .= "profile_image = :profile_image ";
         $params[':profile_image'] = $imagePath;
 
-        // If password change requested, update it
         if (isset($userData['new_password']) && !empty($userData['new_password'])) {
             $sql .= ", password_hash = :password_hash ";
             $passwordHash = password_hash($userData['new_password'], PASSWORD_DEFAULT);
@@ -427,12 +402,10 @@ function updateUserProfile($pdo, $id, $userData, $fileData = null)
 
         $stmt = $pdo->prepare($sql);
 
-        // Bind parameters
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value);
         }
 
-        // Execute query
         $result = $stmt->execute();
 
         return $result;
@@ -450,20 +423,18 @@ function updateUserProfile($pdo, $id, $userData, $fileData = null)
  * @param string $password Password confirmation
  * @return boolean Success or failure
  */
-function deleteUserAccount($pdo, $userId, $password) {
+function deleteUserAccount($pdo, $userId, $password)
+{
     try {
-        // Fetch user data for password verification
         $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = :id");
         $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Verify password
         if (!$user || !password_verify($password, $user['password_hash'])) {
-            return false; // Incorrect password
+            return false;
         }
 
-        // Delete user from the database
         $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
         $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
         return $stmt->execute();

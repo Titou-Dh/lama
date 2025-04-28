@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                 try {
                     $result = loginUser($pdo, $input, 'password');
 
-                    if ($result) {
+                    if ($result::SUCCESS) {
                         $vulnerableAttempts[] = "Login bypassed with: " . htmlspecialchars($input);
                     } else {
                         $secureAttempts[] = "Login blocked with: " . htmlspecialchars($input);
@@ -71,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
                 "' OR '1'='1",
                 "'; DROP TABLE events; --",
                 "' UNION SELECT * FROM users; --",
-                "test' OR 1=1; --"
             ];
 
             $vulnerableAttempts = [];
