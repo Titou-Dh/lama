@@ -108,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_tests'])) {
             $eventId = $_SESSION['test_event_id'] ?? null;
 
             if (!$eventId) {
-                // Create a test event first
                 $eventData = [
                     'organizer_id' => isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1,
                     'title' => 'Test Event for Update ' . rand(1000, 9999),
