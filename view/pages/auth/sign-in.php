@@ -1,11 +1,70 @@
 <?php
-session_start();
 
 require_once __DIR__ . '/../../../config/google.php';
 include_once __DIR__ . '/../../../config/database.php';
+include_once __DIR__ . '/../../../config/session.php';
 include_once __DIR__ . '/../../../controller/auth.php';
 
 
+if (isset($_SESSION['user'])) {
+  $userEmail = $_SESSION['user'];
+  $userFullName = $_SESSION['user_full_name'];
+  $userRole = $_SESSION['user_role'] ? 'Organizer' : 'User';
+?>
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Already Logged In</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="../../styles/css/auth.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../scripts/tailwind.js"></script>
+  </head>
+
+  <body>
+    <div class="h-screen flex items-center justify-center">
+      <div class="right-section w-full lg:w-1/2">
+        <div class="form-container">
+          <div class="form-header">
+            <h2>You're Already Logged In</h2>
+            <p>Welcome back, <?php echo htmlspecialchars($userFullName); ?>!</p>
+          </div>
+
+          <div class="user-info p-6 bg-white rounded-lg shadow-md">
+            <div class="info-item mb-4">
+              <span class="font-semibold">Full Name:</span>
+              <span><?php echo htmlspecialchars($userFullName); ?></span>
+            </div>
+            <div class="info-item mb-4">
+              <span class="font-semibold">Email:</span>
+              <span><?php echo htmlspecialchars($userEmail); ?></span>
+            </div>
+            <div class="info-item mb-4">
+              <span class="font-semibold">Role:</span>
+              <span><?php echo htmlspecialchars($userRole); ?></span>
+            </div>
+
+            <div class="mt-6 flex justify-between">
+              <a href="/lama/view/pages/dashboard" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                Go to Dashboard
+              </a>
+              <a href="?action=logout" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  </html>
+<?php
+  exit;
+}
 
 if (!empty($_POST) && isset($_POST['email'], $_POST['password'])) {
   $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
