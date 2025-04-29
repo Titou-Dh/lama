@@ -26,42 +26,6 @@ if ($ticketId) {
         header("Location: /view/pages/error.php");
         exit();
     }
-} elseif ($eventId) {
-    $stmt = $cnx->prepare("
-        SELECT e.*, t.id as ticket_id, t.name as ticket_name, t.price, t.quantity_available
-        FROM events e
-        LEFT JOIN tickets t ON e.id = t.event_id
-        WHERE e.id = ?
-        ORDER BY t.price ASC
-        LIMIT 1
-    ");
-    $stmt->execute([$eventId]);
-    $event = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$event) {
-        header("Location: /view/pages/error.php");
-        exit();
-    }
-
-    if (!$event['ticket_id']) {
-        $stmt = $cnx->prepare("
-            INSERT INTO tickets (event_id, name, price, quantity_available, description)
-            VALUES (?, 'General Admission', 0, 1000, 'Default ticket for event registration')
-        ");
-        $stmt->execute([$eventId]);
-        $ticketId = $cnx->lastInsertId();
-
-        $stmt = $cnx->prepare("
-            SELECT t.*, e.title as event_title, e.start_date, e.location, e.image
-            FROM tickets t
-            JOIN events e ON t.event_id = e.id
-            WHERE t.id = ?
-        ");
-        $stmt->execute([$ticketId]);
-        $ticket = $stmt->fetch(PDO::FETCH_ASSOC);
-    } else {
-        $ticket = $event;
-    }
 } else {
     header("Location: /view/pages/error.php");
     exit();
@@ -192,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="flex items-center mb-4">
                                     <img src="<?php echo htmlspecialchars($ticket['image']); ?>" class="w-16 h-16 object-cover rounded-lg">
                                     <div class="ml-3">
-                                        <h4 class="font-medium"><?php echo htmlspecialchars($ticket['title']); ?></h4>
+                                        <h4 class="font-medium"><?php echo htmlspecialchars($ticket['event_title']); ?></h4>
                                         <p class="text-sm text-gray-500"><?php echo date('F j, Y', strtotime($ticket['start_date'])); ?></p>
                                         <p class="text-sm text-gray-500"><?php echo htmlspecialchars($ticket['location']); ?></p>
                                     </div>
@@ -201,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="border-t border-b py-4 mb-4">
                                 <div class="flex justify-between mb-2">
-                                    <span><?php echo htmlspecialchars($ticket['title']); ?> × <span id="ticketCount">1</span></span>
+                                    <span><?php echo htmlspecialchars($ticket['event_title']); ?> × <span id="ticketCount">1</span></span>
                                     <span class="ticket-price" id="ticketPrice"><?php echo number_format($ticket['price'], 2); ?> dt</span>
                                 </div>
                             </div>

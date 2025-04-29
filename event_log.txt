@@ -1017,3 +1017,133 @@
 [2025-04-29 00:34:05] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"haja ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
 [2025-04-29 00:34:05] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"haja "}
 [2025-04-29 01:20:56] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 14:37:07] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"haja ","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"haja \" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi155B.tmp\" 2>&1","return_code":1}
+[2025-04-29 14:37:07] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"haja ","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 14:37:07] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"haja "}
+[2025-04-29 14:38:35] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 14:38:54] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 14:38:54] [INFO] [UserID: 2] Attempting to update event - Data: {"event_id":165,"title":"Exposition d'Art Moderne"}
+[2025-04-29 14:38:54] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 14:38:54] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":165}
+[2025-04-29 14:38:54] [INFO] [UserID: 2] Ticket created: {"name":"tests","price":"20","quantity":"20","sale_start":"2025-04-01","sale_end":"2025-05-10"} - Data: {"event_id":"165","ticket":{"name":"tests","price":"20","quantity":"20","sale_start":"2025-04-01","sale_end":"2025-05-10"}}
+[2025-04-29 14:38:54] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":165,"tickets_count":1,"result":"success"}
+[2025-04-29 14:38:54] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":165}
+[2025-04-29 14:38:56] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 15:28:32] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"music","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"music\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi2759.tmp\" 2>&1","return_code":1}
+[2025-04-29 15:28:32] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"music","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 15:28:32] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"music"}
+[2025-04-29 15:28:48] [INFO] [UserID: 2] Fetched event with ID: 153
+[2025-04-29 15:29:02] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"music","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"music\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi9EBD.tmp\" 2>&1","return_code":1}
+[2025-04-29 15:29:02] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"music","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 15:29:02] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"music"}
+[2025-04-29 15:29:27] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 15:29:38] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 15:29:38] [INFO] [UserID: 2] Attempting to update event - Data: {"event_id":165,"title":"Exposition d'Art Moderne test"}
+[2025-04-29 15:29:38] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 15:29:38] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":165}
+[2025-04-29 15:29:38] [INFO] [UserID: 2] Ticket created: {"name":"tests","price":"20.00","quantity":"20","sale_start":"","sale_end":""} - Data: {"event_id":"165","ticket":{"name":"tests","price":"20.00","quantity":"20","sale_start":"","sale_end":""}}
+[2025-04-29 15:29:38] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":165,"tickets_count":1,"result":"success"}
+[2025-04-29 15:29:38] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":165}
+[2025-04-29 15:29:42] [INFO] [UserID: 2] Fetched event with ID: 165
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Image upload received for event creation - Data: {"filename":"jazz.jpg","size":111057}
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"test event music","type":"in-person"}
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Event image uploaded successfully: /lama/uploads/events/6810da27ab2ad_jazz.jpg
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":2,"title":"test event music","description":"description","start_date":"2025-05-01 22:00:00","end_date":"2025-05-10","door_time":"10:00","location":"Safra","online_link":"","event_type":"in-person","category_id":"1","capacity":null,"age_restriction":"All Ages","status":"published"}
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Event created successfully with ID: 172
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Event created - Data: {"event_id":"172","title":"test event music","type":"in-person"}
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"172"}
+[2025-04-29 15:54:47] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"172"}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Attempting to create event - Data: {"title":"Music Event ","type":"in-person"}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Preparing to create event with data: {"organizer_id":2,"title":"Music Event ","description":"Description","start_date":"2025-05-01 10:00:00","end_date":"2025-05-10","door_time":"10:00","location":"Safra","online_link":"","event_type":"in-person","category_id":"1","capacity":"30","age_restriction":"18+","status":"published"}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Event created successfully with ID: 173
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Event created - Data: {"event_id":"173","title":"Music Event ","type":"in-person"}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"173"}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Ticket created: {"name":"Attende ","price":"10","quantity":"20","sale_start":"2025-04-29","sale_end":"2025-05-01"} - Data: {"event_id":"173","ticket":{"name":"Attende ","price":"10","quantity":"20","sale_start":"2025-04-29","sale_end":"2025-05-01"}}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Ticket created: {"name":"VIP","price":"50","quantity":"10","sale_start":"2025-04-29","sale_end":"2025-05-01"} - Data: {"event_id":"173","ticket":{"name":"VIP","price":"50","quantity":"10","sale_start":"2025-04-29","sale_end":"2025-05-01"}}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":"173","tickets_count":2,"result":"success"}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"173"}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] FAQ created: {"question":"Win ","answer":"Safra"} - Data: {"event_id":"173","faq":{"question":"Win ","answer":"Safra"}}
+[2025-04-29 15:56:52] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":"173","faqs_count":1,"result":"success"}
+[2025-04-29 15:56:54] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 15:57:03] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 15:58:17] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 15:58:47] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 15:58:56] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 15:59:02] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 16:02:04] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 16:02:22] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 16:05:18] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 16:05:41] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 16:05:41] [INFO] [UserID: 2] Fetched event with ID: 173
+[2025-04-29 16:05:53] [INFO] [UserID: 2] Fetched event with ID: 167
+[2025-04-29 16:06:05] [INFO] [UserID: 2] Fetched event with ID: 167
+[2025-04-29 16:06:05] [INFO] [UserID: 2] Attempting to update event - Data: {"event_id":167,"title":"Spectacle de Danse: Evolution du Rythme (Edited)"}
+[2025-04-29 16:06:05] [INFO] [UserID: 2] Fetched event with ID: 167
+[2025-04-29 16:06:05] [INFO] [UserID: 2] Saving tickets for event - Data: {"event_id":167}
+[2025-04-29 16:06:05] [INFO] [UserID: 2] Saving FAQs for event - Data: {"event_id":167}
+[2025-04-29 16:06:06] [INFO] [UserID: 2] Fetched event with ID: 167
+[2025-04-29 16:06:54] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"Jazz","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"Jazz\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi4AE8.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:06:54] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Jazz","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:06:54] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Jazz"}
+[2025-04-29 16:06:59] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"music","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"music\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi5E71.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:06:59] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"music","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:06:59] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"music"}
+[2025-04-29 16:07:06] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"Sport","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"Sport\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi7749.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:07:06] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"Sport","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:07:06] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"Sport"}
+[2025-04-29 16:07:13] [INFO] [UserID: 2] TF-IDF search executed - Data: {"query":"tech","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"tech\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi939C.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:07:13] [ERROR] [UserID: 2] TF-IDF search error: Python execution failed - Data: {"query":"tech","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:07:13] [WARNING] [UserID: 2] TF-IDF search failed, falling back to basic search - Data: {"query":"tech"}
+[2025-04-29 16:07:19] [INFO] [UserID: 2] Fetched event with ID: 157
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event 3361","description":"This is a test event created through automated testing.","start_date":"2025-05-06 16:20:27","end_date":"2025-05-06 18:20:27","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"draft"}
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Event created successfully with ID: 174
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Fetched event with ID: 174
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Fetched event with ID: 174
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Fetched event with ID: 174
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Fetched event with ID: 174
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 7458","description":"This is test event #1 for listing testing.","start_date":"2025-05-06 16:20:27","end_date":"2025-05-06 18:20:27","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Event created successfully with ID: 175
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 8874","description":"This is test event #2 for listing testing.","start_date":"2025-05-13 16:20:27","end_date":"2025-05-13 18:20:27","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Event created successfully with ID: 176
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"organizer_id":1,"title":"Test Event for Listing 2449","description":"This is test event #3 for listing testing.","start_date":"2025-05-20 16:20:27","end_date":"2025-05-20 18:20:27","location":"Test Venue, 123 Test Street","event_type":"in-person","category_id":1,"capacity":100,"status":"published"}
+[2025-04-29 16:20:27] [INFO] [UserID: not-logged-in] Event created successfully with ID: 177
+[2025-04-29 16:20:48] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test event","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test event\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi123.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:20:48] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test event","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:20:48] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test event"}
+[2025-04-29 16:20:48] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi1D0.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:20:48] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:20:48] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test"}
+[2025-04-29 16:20:48] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi21F.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:20:48] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:20:48] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test"}
+[2025-04-29 16:21:02] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"' OR '1'='1","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"' OR '1'='1\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi3853.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:21:02] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"' OR '1'='1","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:21:02] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"' OR '1'='1"}
+[2025-04-29 16:21:02] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"'; DROP TABLE events; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"'; DROP TABLE events; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi38C1.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:21:02] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"'; DROP TABLE events; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:21:02] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"'; DROP TABLE events; --"}
+[2025-04-29 16:21:02] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"' UNION SELECT * FROM users; --","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"' UNION SELECT * FROM users; --\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfi393F.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:21:02] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"' UNION SELECT * FROM users; --","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:21:02] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"' UNION SELECT * FROM users; --"}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"<script>alert('XSS')</script>","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"<script>alert('XSS')</script>","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"<img src=x onerror=alert('XSS')>","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"<img src=x onerror=alert('XSS')>","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"<svg onload=alert('XSS')>","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"<svg onload=alert('XSS')>","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"javascript:alert('XSS')","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"javascript:alert('XSS')","description":"Test event","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"Test Event","description":"<script>alert('XSS')</script>","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"Test Event","description":"<script>alert('XSS')</script>","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"Test Event","description":"<img src=x onerror=alert('XSS')>","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"Test Event","description":"<img src=x onerror=alert('XSS')>","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"Test Event","description":"<svg onload=alert('XSS')>","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"Test Event","description":"<svg onload=alert('XSS')>","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:21:28] [INFO] [UserID: not-logged-in] Preparing to create event with data: {"title":"Test Event","description":"javascript:alert('XSS')","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":10}
+[2025-04-29 16:21:28] [ERROR] [UserID: not-logged-in] Event creation failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'organizer_id' cannot be null - Data: {"eventData":{"title":"Test Event","description":"javascript:alert('XSS')","start_date":"2025-04-29","end_date":"2025-04-30","location":"Test location","capacity":"10","organizer_id":null,"door_time":null,"online_link":null,"event_type":null,"category_id":null,"age_restriction":null,"status":null}}
+[2025-04-29 16:23:52] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"mldjklmqdslmqdsfjkfqsdfjklmfqdsfjklmqdsfjklm","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"mldjklmqdslmqdsfjkfqsdfjklmfqdsfjklmqdsfjklm\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiD363.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:23:52] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"mldjklmqdslmqdsfjkfqsdfjklmfqdsfjklmqdsfjklm","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:23:52] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"mldjklmqdslmqdsfjkfqsdfjklmfqdsfjklmqdsfjklm"}
+[2025-04-29 16:23:57] [INFO] [UserID: not-logged-in] TF-IDF search executed - Data: {"query":"test","command":"python \"C:\\xampp\\htdocs\\lama/indexation/main.py\" \"test\" \"C:\\Users\\titou\\AppData\\Local\\Temp\\tfiE6EC.tmp\" 2>&1","return_code":1}
+[2025-04-29 16:23:57] [ERROR] [UserID: not-logged-in] TF-IDF search error: Python execution failed - Data: {"query":"test","return_code":1,"output":"Error parsing JSON data: Expecting value: line 1 column 1 (char 0)"}
+[2025-04-29 16:23:57] [WARNING] [UserID: not-logged-in] TF-IDF search failed, falling back to basic search - Data: {"query":"test"}

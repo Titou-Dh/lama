@@ -44,22 +44,22 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <span class="nav-link-text ms-1 text-black <?php echo ($current_page === 'events.php' || $current_page === 'attende-events.php' || $current_page === 'organiser-events.php') ? 'text-white ' : ''; ?>">Events</span>
                     </a>
                 </li>
-                <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && !$_SESSION['user_role']): ?>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $current_page === 'my-tickets.php' ? 'active' : ''; ?>" href="my-tickets.php">
-                            <div
-                                class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ticket-icon">
-                                    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
-                                    <path d="M13 5v2" />
-                                    <path d="M13 17v2" />
-                                    <path d="M13 11v2" />
-                                </svg>
-                            </div>
-                            <span class="nav-link-text ms-1 <?php echo $current_page === 'my-tickets.php' ? 'text-white ' : ''; ?>">My Tickets</span>
-                        </a>
-                    </li>
-                <?php endif; ?>
+
+                <li class="nav-item">
+                    <a class="nav-link <?php echo $current_page === 'my-tickets.php' ? 'active' : ''; ?>" href="my-tickets.php">
+                        <div
+                            class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ticket-icon">
+                                <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                                <path d="M13 5v2" />
+                                <path d="M13 17v2" />
+                                <path d="M13 11v2" />
+                            </svg>
+                        </div>
+                        <span class="nav-link-text ms-1 <?php echo $current_page === 'my-tickets.php' ? 'text-white ' : ''; ?>">My Tickets</span>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link <?php echo $current_page === 'create-event.php' ? 'active' : ''; ?>" href="create-event.php">
                         <div

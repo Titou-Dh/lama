@@ -5,11 +5,6 @@ include_once __DIR__ . "/../../../controller/order.php";
 
 checkSession();
 
-if (isOrganizer()) {
-    header("Location: /lama/view/pages/organizer/dashboard.php");
-    exit();
-}
-
 $stmt = $cnx->prepare("
     SELECT o.id as order_id, o.total_amount, o.status as order_status, o.created_at,
            oi.quantity, oi.price as paid_price, oi.attendee_name, oi.attendee_email,
