@@ -419,7 +419,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
                 </span>
               </div>
 
-              <a href="checkout.php?event_id=<?php echo $event['id']; ?>">
+              <a href="#">
                 <button class="btn-gradient w-full py-3 rounded-xl font-medium flex items-center justify-center">
                   <i class="fas fa-ticket-alt mr-2"></i> Register Now
                 </button>
