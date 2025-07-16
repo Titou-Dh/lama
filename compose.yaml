@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: .
+      target: builder
+    ports: 
+      - '80:80'
+    volumes:
+      - .:/var/www/html/
+    depends_on:
+      - db
+  
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lama_dev
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./lama_dev.sql:/docker-entrypoint-initdb.d/lama_dev.sql
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:
+    driver: local

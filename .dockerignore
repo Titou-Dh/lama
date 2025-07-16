@@ -1,0 +1,15 @@
+.git
+.gitignore
+README.md
+readme.md
+Dockerfile
+.dockerignore
+compose.yaml
+vendor/
+node_modules/
+.env.local
+.env.development
+.env.test
+.env.production
+*.log
+tests/logs/
